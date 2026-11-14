@@ -1,0 +1,315 @@
+{
+  "domain": "claims",
+  "description": "Claims for P&C, life and disability business: catastrophes, the claim (occurrence), involved parties, incidents (what was damaged or who was injured), exposures (one claimant under one coverage), the reserve/payment/recovery ledger, payments, recoveries, litigation, investigation, assignments, notes and workers' compensation detail. Health care claims are modeled separately in the health domain.",
+  "enums": {
+    "claim_status": { "description": "Status of a claim or exposure.", "values": ["DRAFT", "OPEN", "CLOSED", "REOPENED", "DENIED", "WITHDRAWN", "VOIDED"] },
+    "fnol_channel": { "description": "How first notice of loss was received.", "values": ["PHONE", "WEB", "MOBILE_APP", "AGENT", "EMAIL", "MAIL", "TELEMATICS", "EDI", "THIRD_PARTY_ADMINISTRATOR"] },
+    "coverage_verification_status": { "description": "Outcome of coverage verification.", "values": ["PENDING", "CONFIRMED", "RESERVATION_OF_RIGHTS", "DENIED", "PARTIAL"] },
+    "claim_party_role": { "description": "Role of a party on a claim.", "values": ["INSURED", "CLAIMANT", "REPORTER", "INSURED_DRIVER", "OTHER_DRIVER", "PASSENGER", "PEDESTRIAN", "INJURED_WORKER", "EMPLOYER", "WITNESS", "PROPERTY_OWNER", "BENEFICIARY", "CLAIMANT_ATTORNEY", "DEFENSE_ATTORNEY", "OTHER_CARRIER", "MEDICAL_PROVIDER", "REPAIR_FACILITY", "RENTAL_AGENCY", "CONTRACTOR", "INDEPENDENT_ADJUSTER", "APPRAISER", "EXPERT", "LIENHOLDER", "PUBLIC_ADJUSTER", "OTHER_VENDOR"] },
+    "claim_incident_type": { "description": "Kind of loss item on a claim.", "values": ["VEHICLE_DAMAGE", "PROPERTY_DAMAGE", "CONTENTS_LOSS", "BODILY_INJURY", "DEATH", "LOSS_OF_USE", "BUSINESS_INTERRUPTION", "FINANCIAL_LOSS", "DATA_BREACH", "OTHER"] },
+    "injury_severity": { "description": "Severity of an injury.", "values": ["NONE", "MINOR", "MODERATE", "SERIOUS", "SEVERE", "CATASTROPHIC", "FATAL"] },
+    "claim_transaction_type": {
+      "description": "Kind of entry in the claim financial ledger.",
+      "values": { "RESERVE": "Change in case reserve (signed)", "PAYMENT": "Payment made (positive) or voided/reversed (negative)", "RECOVERY_RESERVE": "Change in anticipated recovery (signed)", "RECOVERY": "Recovery received (positive) or reversed (negative)" }
+    },
+    "claim_cost_category": {
+      "description": "Statutory cost category of a claim financial entry.",
+      "values": { "INDEMNITY": "Loss paid to or on behalf of claimants", "MEDICAL": "Medical loss (workers' comp, PIP, med pay)", "DEFENSE_COST_CONTAINMENT": "Allocated expense: defense and cost containment (DCC)", "ADJUSTING_OTHER": "Adjusting and other expense (A&O)" }
+    },
+    "claim_recovery_type": { "description": "Source of a recovery.", "values": ["SUBROGATION", "SALVAGE", "DEDUCTIBLE", "CONTRIBUTION", "SECOND_INJURY_FUND", "OVERPAYMENT", "RESTITUTION", "OTHER"] },
+    "claim_payment_type": { "description": "Kind of claim payment.", "values": ["PARTIAL", "FINAL", "SUPPLEMENTAL", "ADVANCE", "RECURRING"] },
+    "claim_payment_status": { "description": "Status of a claim payment.", "values": ["REQUESTED", "PENDING_APPROVAL", "APPROVED", "ISSUED", "CLEARED", "VOIDED", "STOPPED", "REJECTED"] },
+    "recovery_status": { "description": "Status of a recovery effort.", "values": ["IDENTIFIED", "DEMAND_SENT", "NEGOTIATION", "ARBITRATION", "LITIGATION", "COLLECTED", "CLOSED_NO_RECOVERY"] },
+    "litigation_status": { "description": "Status of a legal matter.", "values": ["PRE_SUIT", "FILED", "DISCOVERY", "MEDIATION", "TRIAL", "APPEAL", "SETTLED", "JUDGMENT", "DISMISSED", "CLOSED"] },
+    "investigation_status": { "description": "Status of a special investigation.", "values": ["REFERRED", "ACCEPTED", "IN_PROGRESS", "CLOSED_FRAUD_CONFIRMED", "CLOSED_NO_FRAUD", "CLOSED_INCONCLUSIVE", "DECLINED"] },
+    "claim_assignment_role": { "description": "Role of a staff member on a claim.", "values": ["OWNER", "FIELD_ADJUSTER", "INJURY_ADJUSTER", "PROPERTY_ADJUSTER", "TOTAL_LOSS", "SUBROGATION", "SIU", "LITIGATION", "NURSE_CASE_MANAGER", "SUPERVISOR"] },
+    "wc_claim_type": { "description": "Workers' compensation claim classification.", "values": ["MEDICAL_ONLY", "TEMPORARY_TOTAL", "TEMPORARY_PARTIAL", "PERMANENT_PARTIAL", "PERMANENT_TOTAL", "FATALITY", "REPORT_ONLY"] }
+  },
+  "entities": [
+    {
+      "name": "catastrophe_event",
+      "description": "A catastrophe to which many claims are attributed, such as a named hurricane, wildfire or hailstorm.",
+      "primaryKey": ["catastrophe_event_id"],
+      "unique": [["catastrophe_code"]],
+      "attributes": [
+        { "name": "catastrophe_event_id", "type": "uuid", "required": true },
+        { "name": "catastrophe_code", "type": "string", "maxLength": 30, "required": true, "description": "Company catastrophe code." },
+        { "name": "pcs_serial_number", "type": "string", "maxLength": 20, "description": "Verisk PCS catastrophe serial number." },
+        { "name": "name", "type": "string", "required": true },
+        { "name": "cause_of_loss_code", "type": "string", "maxLength": 30, "references": "cause_of_loss.cause_of_loss_code" },
+        { "name": "start_date", "type": "date", "required": true },
+        { "name": "end_date", "type": "date" },
+        { "name": "affected_jurisdictions", "type": "string", "maxLength": 500, "description": "Comma-separated jurisdiction codes." }
+      ]
+    },
+    {
+      "name": "claim",
+      "description": "A demand for benefits arising from one loss occurrence under one policy. Supertype for line-specific claim detail.",
+      "primaryKey": ["claim_id"],
+      "unique": [["claim_number"]],
+      "attributes": [
+        { "name": "claim_id", "type": "uuid", "required": true },
+        { "name": "claim_number", "type": "string", "maxLength": 30, "required": true },
+        { "name": "policy_id", "type": "uuid", "references": "policy.policy_id", "description": "Null only while coverage is unverified at first notice." },
+        { "name": "policy_term_id", "type": "uuid", "references": "policy_term.policy_term_id", "description": "Term in force on the loss date (or report date for claims-made)." },
+        { "name": "line_of_business_code", "type": "string", "maxLength": 30, "references": "line_of_business.line_of_business_code" },
+        { "name": "claim_status", "type": "string", "enum": "claim_status", "required": true },
+        { "name": "loss_at", "type": "timestamp", "required": true, "description": "Date and time of loss." },
+        { "name": "loss_date_is_estimated", "type": "boolean" },
+        { "name": "reported_at", "type": "timestamp", "required": true, "description": "When the insurer first received notice." },
+        { "name": "claims_made_date", "type": "date", "description": "Date the claim was first made against the insured (claims-made coverage)." },
+        { "name": "fnol_channel", "type": "string", "enum": "fnol_channel" },
+        { "name": "cause_of_loss_code", "type": "string", "maxLength": 30, "references": "cause_of_loss.cause_of_loss_code" },
+        { "name": "loss_description", "type": "text" },
+        { "name": "loss_address_id", "type": "uuid", "references": "address.address_id" },
+        { "name": "loss_jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code", "description": "State where the loss occurred." },
+        { "name": "catastrophe_event_id", "type": "uuid", "references": "catastrophe_event.catastrophe_event_id" },
+        { "name": "coverage_verification_status", "type": "string", "enum": "coverage_verification_status" },
+        { "name": "insured_fault_percent", "type": "percent" },
+        { "name": "police_report_number", "type": "string", "maxLength": 50 },
+        { "name": "is_in_litigation", "type": "boolean" },
+        { "name": "is_large_loss", "type": "boolean" },
+        { "name": "handling_office_code", "type": "string", "maxLength": 30 },
+        { "name": "third_party_administrator_party_id", "type": "uuid", "references": "party.party_id" },
+        { "name": "closed_at", "type": "timestamp" },
+        { "name": "reopened_at", "type": "timestamp" }
+      ]
+    },
+    {
+      "name": "claim_party",
+      "description": "A party involved in a claim in a given role.",
+      "primaryKey": ["claim_party_id"],
+      "attributes": [
+        { "name": "claim_party_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "party_id", "type": "uuid", "required": true, "references": "party.party_id" },
+        { "name": "claim_party_role", "type": "string", "enum": "claim_party_role", "required": true },
+        { "name": "represented_by_claim_party_id", "type": "uuid", "references": "claim_party.claim_party_id", "description": "Attorney or public adjuster representing this party." },
+        { "name": "other_carrier_claim_number", "type": "string", "maxLength": 50 },
+        { "name": "is_medicare_beneficiary", "type": "boolean", "description": "Drives Medicare Secondary Payer (Section 111) reporting." },
+        { "name": "notes", "type": "text" }
+      ]
+    },
+    {
+      "name": "claim_incident",
+      "description": "One thing that was lost or damaged, or one person who was injured, in the occurrence: a damaged vehicle, a burned building, an injured passenger.",
+      "primaryKey": ["claim_incident_id"],
+      "attributes": [
+        { "name": "claim_incident_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "claim_incident_type", "type": "string", "enum": "claim_incident_type", "required": true },
+        { "name": "policy_risk_id", "type": "uuid", "references": "policy_risk.policy_risk_id", "description": "Insured risk involved, when the item is insured on the policy." },
+        { "name": "insurable_object_id", "type": "uuid", "references": "insurable_object.insurable_object_id", "description": "The damaged object, including third-party vehicles and property." },
+        { "name": "injured_claim_party_id", "type": "uuid", "references": "claim_party.claim_party_id" },
+        { "name": "owner_claim_party_id", "type": "uuid", "references": "claim_party.claim_party_id" },
+        { "name": "description", "type": "text" },
+        { "name": "damage_estimate_amount", "type": "money" },
+        { "name": "is_total_loss", "type": "boolean" },
+        { "name": "is_drivable", "type": "boolean" },
+        { "name": "point_of_impact", "type": "string", "maxLength": 50 },
+        { "name": "injury_severity", "type": "string", "enum": "injury_severity", "sensitivity": "PHI" },
+        { "name": "injury_description", "type": "text", "sensitivity": "PHI" },
+        { "name": "body_part_code_value_id", "type": "uuid", "references": "code_value.code_value_id", "sensitivity": "PHI", "description": "WCIO part-of-body code." },
+        { "name": "nature_of_injury_code_value_id", "type": "uuid", "references": "code_value.code_value_id", "sensitivity": "PHI", "description": "WCIO nature-of-injury code." },
+        { "name": "received_medical_treatment", "type": "boolean", "sensitivity": "PHI" }
+      ]
+    },
+    {
+      "name": "claim_exposure",
+      "description": "One claimant's claim under one coverage (also called a feature or sub-claim). The level at which reserves are set, payments are made and losses are reported by coverage and statutory line.",
+      "primaryKey": ["claim_exposure_id"],
+      "unique": [["claim_id", "exposure_number"]],
+      "attributes": [
+        { "name": "claim_exposure_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "exposure_number", "type": "integer", "required": true },
+        { "name": "claimant_claim_party_id", "type": "uuid", "required": true, "references": "claim_party.claim_party_id" },
+        { "name": "policy_coverage_id", "type": "uuid", "references": "policy_coverage.policy_coverage_id" },
+        { "name": "coverage_definition_id", "type": "uuid", "required": true, "references": "coverage_definition.coverage_definition_id" },
+        { "name": "claim_incident_id", "type": "uuid", "references": "claim_incident.claim_incident_id" },
+        { "name": "exposure_status", "type": "string", "enum": "claim_status", "required": true },
+        { "name": "jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code", "description": "State the loss is reported in for statutory purposes." },
+        { "name": "asl_code", "type": "string", "maxLength": 10, "references": "annual_statement_line.asl_code" },
+        { "name": "is_first_party", "type": "boolean" },
+        { "name": "deductible_applied_amount", "type": "money" },
+        { "name": "denial_reason", "type": "string", "maxLength": 200 },
+        { "name": "opened_at", "type": "timestamp", "required": true },
+        { "name": "closed_at", "type": "timestamp" }
+      ]
+    },
+    {
+      "name": "claim_financial_transaction",
+      "description": "The claim ledger: every reserve change, payment and recovery as a signed amount by exposure and cost category. Paid, outstanding and incurred amounts as of any date are sums over this entity.",
+      "primaryKey": ["claim_financial_transaction_id"],
+      "attributes": [
+        { "name": "claim_financial_transaction_id", "type": "uuid", "required": true },
+        { "name": "claim_exposure_id", "type": "uuid", "required": true, "references": "claim_exposure.claim_exposure_id" },
+        { "name": "claim_transaction_type", "type": "string", "enum": "claim_transaction_type", "required": true },
+        { "name": "claim_cost_category", "type": "string", "enum": "claim_cost_category", "required": true },
+        { "name": "cost_type_code", "type": "string", "maxLength": 50, "description": "Detailed cost type: REPAIR, RENTAL, TOWING, ATTORNEY_FEE, IME, TEMPORARY_TOTAL_DISABILITY, ..." },
+        { "name": "amount", "type": "money", "required": true },
+        { "name": "transaction_at", "type": "timestamp", "required": true },
+        { "name": "accounting_date", "type": "date", "required": true },
+        { "name": "claim_payment_id", "type": "uuid", "references": "claim_payment.claim_payment_id" },
+        { "name": "claim_recovery_id", "type": "uuid", "references": "claim_recovery.claim_recovery_id" },
+        { "name": "reverses_transaction_id", "type": "uuid", "references": "claim_financial_transaction.claim_financial_transaction_id" },
+        { "name": "service_from_date", "type": "date", "description": "Start of the period a benefit or expense covers." },
+        { "name": "service_to_date", "type": "date" },
+        { "name": "entered_by_staff_member_id", "type": "uuid", "references": "staff_member.staff_member_id" },
+        { "name": "comment", "type": "string", "maxLength": 500 }
+      ]
+    },
+    {
+      "name": "claim_payment",
+      "description": "A payment issued on a claim to one or more payees. Its allocation to exposures and cost categories is in the claim ledger; the instrument is a disbursement.",
+      "primaryKey": ["claim_payment_id"],
+      "attributes": [
+        { "name": "claim_payment_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "claim_payment_type", "type": "string", "enum": "claim_payment_type", "required": true },
+        { "name": "claim_payment_status", "type": "string", "enum": "claim_payment_status", "required": true },
+        { "name": "amount", "type": "money", "required": true },
+        { "name": "disbursement_id", "type": "uuid", "references": "disbursement.disbursement_id" },
+        { "name": "requested_by_staff_member_id", "type": "uuid", "references": "staff_member.staff_member_id" },
+        { "name": "approved_by_staff_member_id", "type": "uuid", "references": "staff_member.staff_member_id" },
+        { "name": "requested_at", "type": "timestamp", "required": true },
+        { "name": "approved_at", "type": "timestamp" },
+        { "name": "invoice_number", "type": "string", "maxLength": 50, "description": "Vendor invoice being paid." },
+        { "name": "memo", "type": "string", "maxLength": 500 },
+        { "name": "is_tax_reportable", "type": "boolean", "description": "Reportable on IRS Form 1099." }
+      ]
+    },
+    {
+      "name": "claim_payment_payee",
+      "description": "A payee named on a claim payment.",
+      "primaryKey": ["claim_payment_payee_id"],
+      "unique": [["claim_payment_id", "party_id"]],
+      "attributes": [
+        { "name": "claim_payment_payee_id", "type": "uuid", "required": true },
+        { "name": "claim_payment_id", "type": "uuid", "required": true, "references": "claim_payment.claim_payment_id" },
+        { "name": "party_id", "type": "uuid", "required": true, "references": "party.party_id" },
+        { "name": "is_primary_payee", "type": "boolean", "required": true }
+      ]
+    },
+    {
+      "name": "claim_recovery",
+      "description": "An effort to recover claim costs from a responsible third party, salvage, the insured's deductible or another source.",
+      "primaryKey": ["claim_recovery_id"],
+      "attributes": [
+        { "name": "claim_recovery_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "claim_recovery_type", "type": "string", "enum": "claim_recovery_type", "required": true },
+        { "name": "recovery_status", "type": "string", "enum": "recovery_status", "required": true },
+        { "name": "from_party_id", "type": "uuid", "references": "party.party_id", "description": "Responsible party, their carrier or the salvage buyer." },
+        { "name": "adverse_fault_percent", "type": "percent" },
+        { "name": "demand_amount", "type": "money" },
+        { "name": "demand_sent_on", "type": "date" },
+        { "name": "statute_of_limitations_date", "type": "date" },
+        { "name": "arbitration_forum_reference", "type": "string", "maxLength": 50 },
+        { "name": "recovery_vendor_party_id", "type": "uuid", "references": "party.party_id" },
+        { "name": "closed_on", "type": "date" }
+      ]
+    },
+    {
+      "name": "claim_litigation",
+      "description": "A lawsuit or other legal proceeding connected to a claim.",
+      "primaryKey": ["claim_litigation_id"],
+      "attributes": [
+        { "name": "claim_litigation_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "claim_exposure_id", "type": "uuid", "references": "claim_exposure.claim_exposure_id" },
+        { "name": "litigation_status", "type": "string", "enum": "litigation_status", "required": true },
+        { "name": "case_number", "type": "string", "maxLength": 50 },
+        { "name": "court_name", "type": "string" },
+        { "name": "venue_jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "caption", "type": "string", "maxLength": 500 },
+        { "name": "plaintiff_attorney_claim_party_id", "type": "uuid", "references": "claim_party.claim_party_id" },
+        { "name": "defense_attorney_claim_party_id", "type": "uuid", "references": "claim_party.claim_party_id" },
+        { "name": "filed_on", "type": "date" },
+        { "name": "served_on", "type": "date" },
+        { "name": "trial_date", "type": "date" },
+        { "name": "demand_amount", "type": "money" },
+        { "name": "offer_amount", "type": "money" },
+        { "name": "resolution_amount", "type": "money" },
+        { "name": "resolved_on", "type": "date" },
+        { "name": "is_coverage_litigation", "type": "boolean", "description": "Suit against the insurer over coverage or claim handling." }
+      ]
+    },
+    {
+      "name": "claim_investigation",
+      "description": "A special investigation of suspected fraud on a claim.",
+      "primaryKey": ["claim_investigation_id"],
+      "attributes": [
+        { "name": "claim_investigation_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "investigation_status", "type": "string", "enum": "investigation_status", "required": true },
+        { "name": "referral_source", "type": "string", "maxLength": 30, "description": "ADJUSTER, MODEL, HOTLINE, NICB, ..." },
+        { "name": "fraud_score", "type": "decimal" },
+        { "name": "indicators", "type": "text", "description": "Fraud indicators observed." },
+        { "name": "investigator_staff_member_id", "type": "uuid", "references": "staff_member.staff_member_id" },
+        { "name": "referred_on", "type": "date", "required": true },
+        { "name": "closed_on", "type": "date" },
+        { "name": "reported_to_authorities_on", "type": "date", "description": "State fraud bureau / NICB report date." },
+        { "name": "savings_amount", "type": "money" }
+      ]
+    },
+    {
+      "name": "claim_assignment",
+      "description": "Assignment of a staff member to a claim or exposure over a period.",
+      "primaryKey": ["claim_assignment_id"],
+      "attributes": [
+        { "name": "claim_assignment_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "claim_exposure_id", "type": "uuid", "references": "claim_exposure.claim_exposure_id" },
+        { "name": "staff_member_id", "type": "uuid", "required": true, "references": "staff_member.staff_member_id" },
+        { "name": "claim_assignment_role", "type": "string", "enum": "claim_assignment_role", "required": true },
+        { "name": "assigned_at", "type": "timestamp", "required": true },
+        { "name": "unassigned_at", "type": "timestamp" }
+      ]
+    },
+    {
+      "name": "claim_note",
+      "description": "A file note or diary entry on a claim.",
+      "primaryKey": ["claim_note_id"],
+      "attributes": [
+        { "name": "claim_note_id", "type": "uuid", "required": true },
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "claim_exposure_id", "type": "uuid", "references": "claim_exposure.claim_exposure_id" },
+        { "name": "topic", "type": "string", "maxLength": 50, "description": "COVERAGE, LIABILITY, DAMAGES, MEDICAL, RESERVE, SETTLEMENT, CONTACT, ..." },
+        { "name": "note_text", "type": "text", "required": true },
+        { "name": "author_staff_member_id", "type": "uuid", "references": "staff_member.staff_member_id" },
+        { "name": "written_at", "type": "timestamp", "required": true },
+        { "name": "is_confidential", "type": "boolean", "description": "Privileged or restricted (legal, SIU, medical)." },
+        { "name": "follow_up_due_on", "type": "date" },
+        { "name": "follow_up_completed_at", "type": "timestamp" }
+      ]
+    },
+    {
+      "name": "workers_comp_claim_detail",
+      "description": "Workers' compensation specific attributes of a claim.",
+      "subtypeOf": "claim",
+      "primaryKey": ["claim_id"],
+      "attributes": [
+        { "name": "claim_id", "type": "uuid", "required": true, "references": "claim.claim_id" },
+        { "name": "wc_claim_type", "type": "string", "enum": "wc_claim_type", "required": true },
+        { "name": "injured_worker_party_id", "type": "uuid", "required": true, "references": "person.party_id" },
+        { "name": "jurisdiction_claim_number", "type": "string", "maxLength": 50, "description": "Number assigned by the state workers' compensation agency." },
+        { "name": "benefit_jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code", "description": "State whose benefits apply." },
+        { "name": "employer_notified_on", "type": "date" },
+        { "name": "class_code_value_id", "type": "uuid", "references": "code_value.code_value_id", "description": "Class code of the injured worker." },
+        { "name": "cause_of_injury_code_value_id", "type": "uuid", "references": "code_value.code_value_id", "description": "WCIO cause-of-injury code." },
+        { "name": "hire_date", "type": "date" },
+        { "name": "occupation", "type": "string" },
+        { "name": "average_weekly_wage_amount", "type": "money", "sensitivity": "SPI" },
+        { "name": "compensation_rate_amount", "type": "money" },
+        { "name": "first_day_of_disability", "type": "date" },
+        { "name": "return_to_work_date", "type": "date" },
+        { "name": "is_modified_duty", "type": "boolean" },
+        { "name": "maximum_medical_improvement_date", "type": "date" },
+        { "name": "impairment_rating_percent", "type": "percent", "sensitivity": "PHI" },
+        { "name": "is_compensability_accepted", "type": "boolean" },
+        { "name": "first_report_of_injury_filed_on", "type": "date", "description": "FROI EDI filing date." }
+      ]
+    }
+  ]
+}

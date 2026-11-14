@@ -1,0 +1,95 @@
+{
+  "domain": "distribution",
+  "description": "Producers (agents, agencies, brokers, MGAs), their licenses, carrier appointments, agreements and commission schedules.",
+  "enums": {
+    "producer_type": { "description": "Kind of distribution intermediary.", "values": { "AGENT": "Individual licensed agent", "AGENCY": "Independent or captive agency", "BROKER": "", "MGA": "Managing general agent", "MGU": "Managing general underwriter", "WHOLESALER": "", "GENERAL_AGENT": "Life/health general agent", "DIRECT": "Carrier direct channel (call center, web)", "EXCHANGE": "Health insurance marketplace" } },
+    "producer_status": { "description": "Status of a producer relationship.", "values": ["PROSPECT", "ACTIVE", "SUSPENDED", "TERMINATED"] },
+    "license_status": { "description": "Status of a license or appointment.", "values": ["PENDING", "ACTIVE", "EXPIRED", "SUSPENDED", "REVOKED", "TERMINATED"] },
+    "commission_basis": { "description": "Business event a commission rate applies to.", "values": ["NEW_BUSINESS", "RENEWAL", "FIRST_YEAR", "TRAIL", "OVERRIDE", "CONTINGENT", "BONUS"] }
+  },
+  "entities": [
+    {
+      "name": "producer",
+      "description": "A person or organization that sells or services insurance on behalf of the insurer. Hierarchies (agent within agency within MGA) are expressed through parent_producer_id.",
+      "primaryKey": ["producer_id"],
+      "unique": [["producer_code"]],
+      "attributes": [
+        { "name": "producer_id", "type": "uuid", "required": true },
+        { "name": "party_id", "type": "uuid", "required": true, "references": "party.party_id" },
+        { "name": "producer_code", "type": "string", "maxLength": 30, "required": true, "description": "Company-assigned producer number." },
+        { "name": "producer_type", "type": "string", "enum": "producer_type", "required": true },
+        { "name": "producer_status", "type": "string", "enum": "producer_status", "required": true },
+        { "name": "parent_producer_id", "type": "uuid", "references": "producer.producer_id" },
+        { "name": "national_producer_number", "type": "string", "maxLength": 20, "description": "NIPR National Producer Number." },
+        { "name": "appointed_on", "type": "date" },
+        { "name": "terminated_on", "type": "date" }
+      ]
+    },
+    {
+      "name": "producer_license",
+      "description": "A state insurance license held by a producer.",
+      "primaryKey": ["producer_license_id"],
+      "attributes": [
+        { "name": "producer_license_id", "type": "uuid", "required": true },
+        { "name": "producer_id", "type": "uuid", "required": true, "references": "producer.producer_id" },
+        { "name": "jurisdiction_code", "type": "string", "maxLength": 6, "required": true, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "license_number", "type": "string", "maxLength": 50, "required": true },
+        { "name": "license_class", "type": "string", "maxLength": 50, "description": "E.g. Producer, Surplus Lines, Adjuster." },
+        { "name": "lines_of_authority", "type": "string", "maxLength": 500, "description": "Comma-separated lines of authority (Property, Casualty, Life, Health, Variable, ...)." },
+        { "name": "is_resident_license", "type": "boolean" },
+        { "name": "license_status", "type": "string", "enum": "license_status", "required": true },
+        { "name": "issued_on", "type": "date" },
+        { "name": "expires_on", "type": "date" }
+      ]
+    },
+    {
+      "name": "producer_appointment",
+      "description": "Appointment of a producer by a writing company in a state, authorizing the producer to act for that company.",
+      "primaryKey": ["producer_appointment_id"],
+      "attributes": [
+        { "name": "producer_appointment_id", "type": "uuid", "required": true },
+        { "name": "producer_id", "type": "uuid", "required": true, "references": "producer.producer_id" },
+        { "name": "insurer_id", "type": "uuid", "required": true, "references": "insurer.insurer_id" },
+        { "name": "jurisdiction_code", "type": "string", "maxLength": 6, "required": true, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "line_of_business_code", "type": "string", "maxLength": 30, "references": "line_of_business.line_of_business_code" },
+        { "name": "appointment_status", "type": "string", "enum": "license_status", "required": true },
+        { "name": "effective_on", "type": "date", "required": true },
+        { "name": "terminated_on", "type": "date" }
+      ]
+    },
+    {
+      "name": "producer_agreement",
+      "description": "Contract between a producer and the insurer that governs authority and compensation.",
+      "primaryKey": ["producer_agreement_id"],
+      "unique": [["agreement_number"]],
+      "attributes": [
+        { "name": "producer_agreement_id", "type": "uuid", "required": true },
+        { "name": "producer_id", "type": "uuid", "required": true, "references": "producer.producer_id" },
+        { "name": "insurer_id", "type": "uuid", "references": "insurer.insurer_id" },
+        { "name": "agreement_number", "type": "string", "maxLength": 50, "required": true },
+        { "name": "has_binding_authority", "type": "boolean" },
+        { "name": "effective_on", "type": "date", "required": true },
+        { "name": "terminated_on", "type": "date" }
+      ]
+    },
+    {
+      "name": "commission_schedule",
+      "description": "Commission rate that applies under a producer agreement for a product or line, by business event and policy year.",
+      "primaryKey": ["commission_schedule_id"],
+      "attributes": [
+        { "name": "commission_schedule_id", "type": "uuid", "required": true },
+        { "name": "producer_agreement_id", "type": "uuid", "required": true, "references": "producer_agreement.producer_agreement_id" },
+        { "name": "product_id", "type": "uuid", "references": "product.product_id" },
+        { "name": "line_of_business_code", "type": "string", "maxLength": 30, "references": "line_of_business.line_of_business_code" },
+        { "name": "jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "commission_basis", "type": "string", "enum": "commission_basis", "required": true },
+        { "name": "policy_year_from", "type": "integer", "description": "First policy year the rate applies to (life/annuity first-year vs renewal scales)." },
+        { "name": "policy_year_to", "type": "integer" },
+        { "name": "commission_percent", "type": "percent" },
+        { "name": "flat_amount", "type": "money", "description": "Per-policy or per-member-per-month amount when not a percentage." },
+        { "name": "effective_on", "type": "date", "required": true },
+        { "name": "expires_on", "type": "date" }
+      ]
+    }
+  ]
+}

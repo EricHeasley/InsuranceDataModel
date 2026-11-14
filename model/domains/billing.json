@@ -1,0 +1,245 @@
+{
+  "domain": "billing",
+  "description": "Money owed and exchanged with customers and payees: billing accounts, payment plans, invoices, incoming payments and their application, adjustments, delinquency, outgoing disbursements and producer commissions.",
+  "enums": {
+    "bill_method": { "description": "Who is billed and how.", "values": { "DIRECT_BILL": "Insurer bills the insured", "AGENCY_BILL": "Producer collects and remits net of commission", "LIST_BILL": "One bill to a group or employer for many members", "PAYROLL_DEDUCTION": "", "MORTGAGEE_BILL": "Billed to the mortgage servicer's escrow", "PAY_AS_YOU_GO": "Premium reported and paid with each payroll (workers' comp)", "PREMIUM_FINANCE": "Paid by a premium finance company" } },
+    "billing_account_status": { "description": "Status of a billing account.", "values": ["ACTIVE", "DELINQUENT", "SUSPENDED", "COLLECTIONS", "CLOSED"] },
+    "billing_frequency": { "description": "Installment frequency.", "values": ["FULL_PAY", "SEMI_ANNUAL", "QUARTERLY", "MONTHLY", "BIWEEKLY", "WEEKLY", "PER_PAYROLL"] },
+    "invoice_status": { "description": "Status of an invoice.", "values": ["PLANNED", "BILLED", "PARTIALLY_PAID", "PAID", "PAST_DUE", "CANCELLED", "WRITTEN_OFF"] },
+    "payment_method": { "description": "Instrument used for a payment or disbursement.", "values": ["ACH", "CREDIT_CARD", "DEBIT_CARD", "CHECK", "WIRE", "CASH", "LOCKBOX", "DIGITAL_WALLET", "VIRTUAL_CARD", "PUSH_TO_DEBIT", "INTERNAL_TRANSFER"] },
+    "payment_status": { "description": "Status of an incoming payment.", "values": ["PENDING", "SETTLED", "RETURNED", "REVERSED", "REFUNDED", "SUSPENSE"] },
+    "payment_instrument_status": { "description": "Status of a stored payment instrument.", "values": ["ACTIVE", "EXPIRED", "REVOKED", "FAILED_VERIFICATION"] },
+    "billing_adjustment_type": { "description": "Kind of non-cash adjustment to a billing account.", "values": ["WRITE_OFF", "FEE_WAIVER", "LATE_FEE", "NSF_FEE", "REINSTATEMENT_FEE", "SMALL_BALANCE", "TRANSFER", "CREDIT"] },
+    "delinquency_event_type": { "description": "Step in the delinquency process.", "values": ["PAST_DUE_NOTICE", "NOTICE_OF_CANCELLATION", "GRACE_PERIOD_START", "CANCELLATION_REQUESTED", "LAPSE_NOTICE", "COLLECTIONS_REFERRAL", "CURED"] },
+    "disbursement_type": { "description": "Purpose of an outgoing payment.", "values": ["CLAIM_PAYMENT", "PREMIUM_REFUND", "COMMISSION", "ANNUITY_PAYOUT", "CONTRACT_WITHDRAWAL", "LOAN_PROCEEDS", "DIVIDEND", "PROVIDER_REMITTANCE", "REINSURANCE_SETTLEMENT", "VENDOR_PAYMENT", "ESCHEATMENT"] },
+    "disbursement_status": { "description": "Status of an outgoing payment.", "values": ["PENDING", "ISSUED", "CLEARED", "VOIDED", "STOPPED", "RETURNED", "STALE_DATED", "ESCHEATED"] },
+    "commission_transaction_type": { "description": "Kind of commission entry.", "values": ["EARNED", "CHARGEBACK", "ADVANCE", "ADVANCE_RECOVERY", "BONUS", "ADJUSTMENT"] }
+  },
+  "entities": [
+    {
+      "name": "billing_account",
+      "description": "An account through which a payor is billed for one or more policies.",
+      "primaryKey": ["billing_account_id"],
+      "unique": [["account_number"]],
+      "attributes": [
+        { "name": "billing_account_id", "type": "uuid", "required": true },
+        { "name": "account_number", "type": "string", "maxLength": 30, "required": true },
+        { "name": "payor_party_id", "type": "uuid", "required": true, "references": "party.party_id" },
+        { "name": "bill_method", "type": "string", "enum": "bill_method", "required": true },
+        { "name": "billing_account_status", "type": "string", "enum": "billing_account_status", "required": true },
+        { "name": "currency_code", "type": "string", "maxLength": 3, "required": true, "references": "currency.currency_code" },
+        { "name": "producer_id", "type": "uuid", "references": "producer.producer_id", "description": "Remitting producer for agency-bill accounts." },
+        { "name": "billing_address_id", "type": "uuid", "references": "address.address_id" },
+        { "name": "preferred_due_day", "type": "integer", "description": "Day of month invoices fall due." },
+        { "name": "is_paperless", "type": "boolean" },
+        { "name": "autopay_payment_instrument_id", "type": "uuid", "references": "payment_instrument.payment_instrument_id" }
+      ]
+    },
+    {
+      "name": "payment_plan",
+      "description": "An installment schedule offered to payors.",
+      "primaryKey": ["payment_plan_id"],
+      "unique": [["plan_code"]],
+      "attributes": [
+        { "name": "payment_plan_id", "type": "uuid", "required": true },
+        { "name": "plan_code", "type": "string", "maxLength": 30, "required": true },
+        { "name": "name", "type": "string", "required": true },
+        { "name": "billing_frequency", "type": "string", "enum": "billing_frequency", "required": true },
+        { "name": "installment_count", "type": "integer" },
+        { "name": "down_payment_percent", "type": "percent" },
+        { "name": "installment_fee_amount", "type": "money" },
+        { "name": "days_billed_before_due", "type": "integer" }
+      ]
+    },
+    {
+      "name": "billing_account_policy",
+      "description": "Assignment of a policy to a billing account and payment plan over a period.",
+      "primaryKey": ["billing_account_policy_id"],
+      "attributes": [
+        { "name": "billing_account_policy_id", "type": "uuid", "required": true },
+        { "name": "billing_account_id", "type": "uuid", "required": true, "references": "billing_account.billing_account_id" },
+        { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
+        { "name": "payment_plan_id", "type": "uuid", "references": "payment_plan.payment_plan_id" },
+        { "name": "effective_date", "type": "date", "required": true },
+        { "name": "end_date", "type": "date" }
+      ]
+    },
+    {
+      "name": "invoice",
+      "description": "A bill or installment notice issued on a billing account.",
+      "primaryKey": ["invoice_id"],
+      "unique": [["invoice_number"]],
+      "attributes": [
+        { "name": "invoice_id", "type": "uuid", "required": true },
+        { "name": "billing_account_id", "type": "uuid", "required": true, "references": "billing_account.billing_account_id" },
+        { "name": "invoice_number", "type": "string", "maxLength": 30, "required": true },
+        { "name": "invoice_status", "type": "string", "enum": "invoice_status", "required": true },
+        { "name": "invoice_date", "type": "date", "required": true },
+        { "name": "due_date", "type": "date", "required": true },
+        { "name": "period_start_date", "type": "date" },
+        { "name": "period_end_date", "type": "date" },
+        { "name": "total_amount", "type": "money", "required": true },
+        { "name": "document_id", "type": "uuid", "references": "document.document_id" }
+      ]
+    },
+    {
+      "name": "invoice_line",
+      "description": "A charge on an invoice: an installment of premium, a fee or a tax for one policy, traceable to the premium transaction it bills.",
+      "primaryKey": ["invoice_line_id"],
+      "attributes": [
+        { "name": "invoice_line_id", "type": "uuid", "required": true },
+        { "name": "invoice_id", "type": "uuid", "required": true, "references": "invoice.invoice_id" },
+        { "name": "policy_id", "type": "uuid", "references": "policy.policy_id" },
+        { "name": "premium_transaction_id", "type": "uuid", "references": "premium_transaction.premium_transaction_id" },
+        { "name": "enrollment_id", "type": "uuid", "references": "enrollment.enrollment_id", "description": "Member line on a list bill." },
+        { "name": "premium_charge_type", "type": "string", "enum": "premium_charge_type", "required": true },
+        { "name": "installment_number", "type": "integer" },
+        { "name": "description", "type": "string", "maxLength": 200 },
+        { "name": "amount", "type": "money", "required": true }
+      ]
+    },
+    {
+      "name": "payment_instrument",
+      "description": "A tokenized bank account or card a party has authorized for payments or payouts. Raw account and card numbers are never stored.",
+      "primaryKey": ["payment_instrument_id"],
+      "attributes": [
+        { "name": "payment_instrument_id", "type": "uuid", "required": true },
+        { "name": "party_id", "type": "uuid", "required": true, "references": "party.party_id" },
+        { "name": "payment_method", "type": "string", "enum": "payment_method", "required": true },
+        { "name": "payment_instrument_status", "type": "string", "enum": "payment_instrument_status", "required": true },
+        { "name": "token", "type": "string", "maxLength": 200, "required": true, "sensitivity": "PCI", "description": "Token issued by the payment processor or vault." },
+        { "name": "last_four", "type": "string", "maxLength": 4, "sensitivity": "PCI" },
+        { "name": "institution_name", "type": "string", "maxLength": 100 },
+        { "name": "card_brand", "type": "string", "maxLength": 20 },
+        { "name": "expiry_month", "type": "integer" },
+        { "name": "expiry_year", "type": "integer" },
+        { "name": "authorization_document_id", "type": "uuid", "references": "document.document_id" }
+      ]
+    },
+    {
+      "name": "payment",
+      "description": "Money received from or on behalf of a payor.",
+      "primaryKey": ["payment_id"],
+      "attributes": [
+        { "name": "payment_id", "type": "uuid", "required": true },
+        { "name": "billing_account_id", "type": "uuid", "references": "billing_account.billing_account_id", "description": "Null while unidentified cash sits in suspense." },
+        { "name": "payer_party_id", "type": "uuid", "references": "party.party_id" },
+        { "name": "payment_method", "type": "string", "enum": "payment_method", "required": true },
+        { "name": "payment_status", "type": "string", "enum": "payment_status", "required": true },
+        { "name": "payment_instrument_id", "type": "uuid", "references": "payment_instrument.payment_instrument_id" },
+        { "name": "amount", "type": "money", "required": true },
+        { "name": "received_at", "type": "timestamp", "required": true },
+        { "name": "deposit_date", "type": "date" },
+        { "name": "accounting_date", "type": "date" },
+        { "name": "reference_number", "type": "string", "maxLength": 50, "description": "Check number, processor transaction ID or trace number." },
+        { "name": "batch_number", "type": "string", "maxLength": 50 },
+        { "name": "reverses_payment_id", "type": "uuid", "references": "payment.payment_id" },
+        { "name": "return_reason_code", "type": "string", "maxLength": 20, "description": "ACH return or chargeback reason." }
+      ]
+    },
+    {
+      "name": "payment_application",
+      "description": "Application of part of a payment to an invoice line or directly to a policy.",
+      "primaryKey": ["payment_application_id"],
+      "attributes": [
+        { "name": "payment_application_id", "type": "uuid", "required": true },
+        { "name": "payment_id", "type": "uuid", "required": true, "references": "payment.payment_id" },
+        { "name": "invoice_line_id", "type": "uuid", "references": "invoice_line.invoice_line_id" },
+        { "name": "policy_id", "type": "uuid", "references": "policy.policy_id" },
+        { "name": "amount", "type": "money", "required": true },
+        { "name": "applied_at", "type": "timestamp", "required": true },
+        { "name": "reverses_payment_application_id", "type": "uuid", "references": "payment_application.payment_application_id" }
+      ]
+    },
+    {
+      "name": "billing_adjustment",
+      "description": "A non-cash change to what a billing account owes: write-off, waived or assessed fee, transfer.",
+      "primaryKey": ["billing_adjustment_id"],
+      "attributes": [
+        { "name": "billing_adjustment_id", "type": "uuid", "required": true },
+        { "name": "billing_account_id", "type": "uuid", "required": true, "references": "billing_account.billing_account_id" },
+        { "name": "policy_id", "type": "uuid", "references": "policy.policy_id" },
+        { "name": "invoice_line_id", "type": "uuid", "references": "invoice_line.invoice_line_id" },
+        { "name": "billing_adjustment_type", "type": "string", "enum": "billing_adjustment_type", "required": true },
+        { "name": "amount", "type": "money", "required": true, "description": "Signed: positive increases the amount owed." },
+        { "name": "adjusted_at", "type": "timestamp", "required": true },
+        { "name": "accounting_date", "type": "date" },
+        { "name": "reason", "type": "string", "maxLength": 200 },
+        { "name": "approved_by_staff_member_id", "type": "uuid", "references": "staff_member.staff_member_id" }
+      ]
+    },
+    {
+      "name": "delinquency_event",
+      "description": "A step in handling a past-due account, such as a notice of cancellation for non-payment.",
+      "primaryKey": ["delinquency_event_id"],
+      "attributes": [
+        { "name": "delinquency_event_id", "type": "uuid", "required": true },
+        { "name": "billing_account_id", "type": "uuid", "required": true, "references": "billing_account.billing_account_id" },
+        { "name": "policy_id", "type": "uuid", "references": "policy.policy_id" },
+        { "name": "delinquency_event_type", "type": "string", "enum": "delinquency_event_type", "required": true },
+        { "name": "event_date", "type": "date", "required": true },
+        { "name": "past_due_amount", "type": "money" },
+        { "name": "cure_by_date", "type": "date", "description": "Date by which payment avoids cancellation or lapse." },
+        { "name": "notice_document_id", "type": "uuid", "references": "document.document_id" },
+        { "name": "policy_transaction_id", "type": "uuid", "references": "policy_transaction.policy_transaction_id", "description": "Resulting cancellation or lapse transaction." }
+      ]
+    },
+    {
+      "name": "disbursement",
+      "description": "Money paid out by the insurer for any purpose: claim payment, premium refund, commission, annuity payout, provider remittance.",
+      "primaryKey": ["disbursement_id"],
+      "attributes": [
+        { "name": "disbursement_id", "type": "uuid", "required": true },
+        { "name": "disbursement_type", "type": "string", "enum": "disbursement_type", "required": true },
+        { "name": "disbursement_status", "type": "string", "enum": "disbursement_status", "required": true },
+        { "name": "payee_party_id", "type": "uuid", "required": true, "references": "party.party_id" },
+        { "name": "payee_name_printed", "type": "string", "maxLength": 500, "description": "Payee line as issued, including joint payees." },
+        { "name": "payment_method", "type": "string", "enum": "payment_method", "required": true },
+        { "name": "payment_instrument_id", "type": "uuid", "references": "payment_instrument.payment_instrument_id" },
+        { "name": "mailing_address_id", "type": "uuid", "references": "address.address_id" },
+        { "name": "amount", "type": "money", "required": true },
+        { "name": "currency_code", "type": "string", "maxLength": 3, "required": true, "references": "currency.currency_code" },
+        { "name": "issued_on", "type": "date" },
+        { "name": "cleared_on", "type": "date" },
+        { "name": "voided_on", "type": "date" },
+        { "name": "reference_number", "type": "string", "maxLength": 50, "description": "Check number or EFT trace number." },
+        { "name": "billing_account_id", "type": "uuid", "references": "billing_account.billing_account_id", "description": "Account refunded, for premium refunds." },
+        { "name": "replaces_disbursement_id", "type": "uuid", "references": "disbursement.disbursement_id", "description": "Disbursement this one reissues." }
+      ]
+    },
+    {
+      "name": "commission_statement",
+      "description": "Periodic statement of commissions earned by and payable to a producer.",
+      "primaryKey": ["commission_statement_id"],
+      "attributes": [
+        { "name": "commission_statement_id", "type": "uuid", "required": true },
+        { "name": "producer_id", "type": "uuid", "required": true, "references": "producer.producer_id" },
+        { "name": "period_start_date", "type": "date", "required": true },
+        { "name": "period_end_date", "type": "date", "required": true },
+        { "name": "total_amount", "type": "money", "required": true },
+        { "name": "disbursement_id", "type": "uuid", "references": "disbursement.disbursement_id" },
+        { "name": "issued_on", "type": "date" }
+      ]
+    },
+    {
+      "name": "commission_transaction",
+      "description": "Commission earned or charged back for a producer on a premium transaction or payment.",
+      "primaryKey": ["commission_transaction_id"],
+      "attributes": [
+        { "name": "commission_transaction_id", "type": "uuid", "required": true },
+        { "name": "producer_id", "type": "uuid", "required": true, "references": "producer.producer_id" },
+        { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
+        { "name": "premium_transaction_id", "type": "uuid", "references": "premium_transaction.premium_transaction_id" },
+        { "name": "payment_application_id", "type": "uuid", "references": "payment_application.payment_application_id", "description": "Collected premium that triggered commission, when paid on a collected basis." },
+        { "name": "commission_schedule_id", "type": "uuid", "references": "commission_schedule.commission_schedule_id" },
+        { "name": "commission_transaction_type", "type": "string", "enum": "commission_transaction_type", "required": true },
+        { "name": "commission_basis", "type": "string", "enum": "commission_basis" },
+        { "name": "commissionable_premium_amount", "type": "money" },
+        { "name": "commission_percent", "type": "percent" },
+        { "name": "amount", "type": "money", "required": true },
+        { "name": "accounting_date", "type": "date", "required": true },
+        { "name": "commission_statement_id", "type": "uuid", "references": "commission_statement.commission_statement_id" }
+      ]
+    }
+  ]
+}

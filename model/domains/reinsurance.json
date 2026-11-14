@@ -1,0 +1,176 @@
+{
+  "domain": "reinsurance",
+  "description": "Ceded and assumed reinsurance: treaties and facultative certificates, their layers and participants, the business they cover, cessions of premium and loss, and periodic settlement statements.",
+  "enums": {
+    "reinsurance_contract_type": { "description": "Treaty or facultative.", "values": { "TREATY": "Covers a defined book of business automatically", "FACULTATIVE": "Covers one policy or risk by individual negotiation" } },
+    "reinsurance_direction": { "description": "Whether the enterprise cedes or assumes.", "values": ["CEDED", "ASSUMED"] },
+    "reinsurance_form": {
+      "description": "Structure of reinsurance protection.",
+      "values": { "QUOTA_SHARE": "", "SURPLUS_SHARE": "", "PER_RISK_EXCESS": "", "PER_OCCURRENCE_EXCESS": "", "CATASTROPHE_EXCESS": "", "AGGREGATE_STOP_LOSS": "", "CLASH": "", "YEARLY_RENEWABLE_TERM": "Life YRT", "COINSURANCE": "Life coinsurance", "MODIFIED_COINSURANCE": "Life modco", "FUNDS_WITHHELD": "", "LOSS_PORTFOLIO_TRANSFER": "", "ADVERSE_DEVELOPMENT_COVER": "" }
+    },
+    "reinsurance_basis": { "description": "Which losses attach to a contract period.", "values": ["LOSSES_OCCURRING", "RISKS_ATTACHING", "CLAIMS_MADE", "IN_FORCE_NEW_AND_RENEWAL"] },
+    "reinsurance_contract_status": { "description": "Status of a reinsurance contract.", "values": ["QUOTED", "BOUND", "IN_FORCE", "EXPIRED", "CANCELLED", "RUN_OFF", "COMMUTED"] },
+    "scope_inclusion": { "description": "Whether a scope row includes or excludes business.", "values": ["INCLUDE", "EXCLUDE"] },
+    "loss_cession_type": { "description": "Kind of ceded loss amount.", "values": ["PAID", "CASE_RESERVE", "RECOVERY"] },
+    "reinsurance_statement_status": { "description": "Status of a reinsurance account statement.", "values": ["DRAFT", "ISSUED", "AGREED", "DISPUTED", "SETTLED"] }
+  },
+  "entities": [
+    {
+      "name": "reinsurance_contract",
+      "description": "A reinsurance treaty or facultative certificate for one contract period.",
+      "primaryKey": ["reinsurance_contract_id"],
+      "unique": [["contract_number"]],
+      "attributes": [
+        { "name": "reinsurance_contract_id", "type": "uuid", "required": true },
+        { "name": "contract_number", "type": "string", "maxLength": 50, "required": true },
+        { "name": "name", "type": "string", "required": true },
+        { "name": "reinsurance_contract_type", "type": "string", "enum": "reinsurance_contract_type", "required": true },
+        { "name": "reinsurance_direction", "type": "string", "enum": "reinsurance_direction", "required": true },
+        { "name": "reinsurance_form", "type": "string", "enum": "reinsurance_form", "required": true },
+        { "name": "reinsurance_basis", "type": "string", "enum": "reinsurance_basis", "required": true },
+        { "name": "reinsurance_contract_status", "type": "string", "enum": "reinsurance_contract_status", "required": true },
+        { "name": "cedent_insurer_id", "type": "uuid", "required": true, "references": "insurer.insurer_id", "description": "Ceding company (an internal insurer for ceded contracts)." },
+        { "name": "broker_party_id", "type": "uuid", "references": "party.party_id", "description": "Reinsurance intermediary." },
+        { "name": "currency_code", "type": "string", "maxLength": 3, "required": true, "references": "currency.currency_code" },
+        { "name": "effective_date", "type": "date", "required": true },
+        { "name": "expiration_date", "type": "date", "description": "Null for continuous contracts." },
+        { "name": "renewal_of_contract_id", "type": "uuid", "references": "reinsurance_contract.reinsurance_contract_id" },
+        { "name": "is_inuring_to_other_contracts", "type": "boolean", "description": "Recoveries reduce the loss subject to other contracts." },
+        { "name": "includes_alae", "type": "string", "maxLength": 30, "description": "Treatment of allocated expense: PRO_RATA, INCLUDED_IN_LIMIT, EXCLUDED." },
+        { "name": "contract_document_id", "type": "uuid", "references": "document.document_id" }
+      ]
+    },
+    {
+      "name": "reinsurance_layer",
+      "description": "A layer or section of a reinsurance contract with its own retention, limit and pricing. Proportional contracts have a single layer carrying the ceded share.",
+      "primaryKey": ["reinsurance_layer_id"],
+      "unique": [["reinsurance_contract_id", "layer_number"]],
+      "attributes": [
+        { "name": "reinsurance_layer_id", "type": "uuid", "required": true },
+        { "name": "reinsurance_contract_id", "type": "uuid", "required": true, "references": "reinsurance_contract.reinsurance_contract_id" },
+        { "name": "layer_number", "type": "integer", "required": true },
+        { "name": "attachment_point_amount", "type": "money", "description": "Retention the layer sits above." },
+        { "name": "limit_amount", "type": "money" },
+        { "name": "aggregate_limit_amount", "type": "money" },
+        { "name": "aggregate_deductible_amount", "type": "money" },
+        { "name": "ceded_share_percent", "type": "percent", "description": "Share ceded (proportional) or placed (excess)." },
+        { "name": "maximum_line_count", "type": "decimal", "description": "Number of lines for surplus share." },
+        { "name": "ceding_commission_percent", "type": "percent" },
+        { "name": "has_sliding_scale_commission", "type": "boolean" },
+        { "name": "profit_commission_percent", "type": "percent" },
+        { "name": "reinstatement_count", "type": "integer" },
+        { "name": "reinstatement_premium_percent", "type": "percent" },
+        { "name": "rate_on_subject_premium_percent", "type": "percent" },
+        { "name": "deposit_premium_amount", "type": "money" },
+        { "name": "minimum_premium_amount", "type": "money" },
+        { "name": "estimated_subject_premium_amount", "type": "money" }
+      ]
+    },
+    {
+      "name": "reinsurance_participant",
+      "description": "A reinsurer's participation in a layer.",
+      "primaryKey": ["reinsurance_participant_id"],
+      "unique": [["reinsurance_layer_id", "reinsurer_party_id"]],
+      "attributes": [
+        { "name": "reinsurance_participant_id", "type": "uuid", "required": true },
+        { "name": "reinsurance_layer_id", "type": "uuid", "required": true, "references": "reinsurance_layer.reinsurance_layer_id" },
+        { "name": "reinsurer_party_id", "type": "uuid", "required": true, "references": "organization.party_id" },
+        { "name": "signed_share_percent", "type": "percent", "required": true, "description": "Share of the layer." },
+        { "name": "is_authorized", "type": "boolean", "description": "Authorized or certified reinsurer in the cedent's domicile (Schedule F treatment)." },
+        { "name": "collateral_type", "type": "string", "maxLength": 30, "description": "LETTER_OF_CREDIT, TRUST, FUNDS_WITHHELD." },
+        { "name": "collateral_amount", "type": "money" },
+        { "name": "financial_strength_rating", "type": "string", "maxLength": 10 }
+      ]
+    },
+    {
+      "name": "reinsurance_scope",
+      "description": "Business included in or excluded from a reinsurance contract by line, statutory line, state or product.",
+      "primaryKey": ["reinsurance_scope_id"],
+      "attributes": [
+        { "name": "reinsurance_scope_id", "type": "uuid", "required": true },
+        { "name": "reinsurance_contract_id", "type": "uuid", "required": true, "references": "reinsurance_contract.reinsurance_contract_id" },
+        { "name": "scope_inclusion", "type": "string", "enum": "scope_inclusion", "required": true },
+        { "name": "line_of_business_code", "type": "string", "maxLength": 30, "references": "line_of_business.line_of_business_code" },
+        { "name": "asl_code", "type": "string", "maxLength": 10, "references": "annual_statement_line.asl_code" },
+        { "name": "jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "product_id", "type": "uuid", "references": "product.product_id" },
+        { "name": "cause_of_loss_code", "type": "string", "maxLength": 30, "references": "cause_of_loss.cause_of_loss_code" },
+        { "name": "description", "type": "string", "maxLength": 500 }
+      ]
+    },
+    {
+      "name": "reinsurance_policy_cession",
+      "description": "Attachment of a policy or coverage to a reinsurance layer: every facultative placement, and treaty cessions where the share varies by risk (surplus share, life automatic cessions).",
+      "primaryKey": ["reinsurance_policy_cession_id"],
+      "attributes": [
+        { "name": "reinsurance_policy_cession_id", "type": "uuid", "required": true },
+        { "name": "reinsurance_layer_id", "type": "uuid", "required": true, "references": "reinsurance_layer.reinsurance_layer_id" },
+        { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
+        { "name": "policy_coverage_id", "type": "uuid", "references": "policy_coverage.policy_coverage_id" },
+        { "name": "policy_risk_id", "type": "uuid", "references": "policy_risk.policy_risk_id" },
+        { "name": "ceded_percent", "type": "percent" },
+        { "name": "retained_amount", "type": "money" },
+        { "name": "ceded_amount", "type": "money", "description": "Ceded limit or net amount at risk." },
+        { "name": "certificate_number", "type": "string", "maxLength": 50, "description": "Facultative certificate number." },
+        { "name": "effective_date", "type": "date", "required": true },
+        { "name": "end_date", "type": "date" }
+      ]
+    },
+    {
+      "name": "reinsurance_premium_cession",
+      "description": "Premium and commission ceded to (or assumed under) a layer, at policy or bulk level.",
+      "primaryKey": ["reinsurance_premium_cession_id"],
+      "attributes": [
+        { "name": "reinsurance_premium_cession_id", "type": "uuid", "required": true },
+        { "name": "reinsurance_layer_id", "type": "uuid", "required": true, "references": "reinsurance_layer.reinsurance_layer_id" },
+        { "name": "premium_transaction_id", "type": "uuid", "references": "premium_transaction.premium_transaction_id", "description": "Null for bulk entries such as deposit, adjustment and reinstatement premium." },
+        { "name": "policy_id", "type": "uuid", "references": "policy.policy_id" },
+        { "name": "premium_type", "type": "string", "maxLength": 30, "required": true, "description": "CEDED_WRITTEN, DEPOSIT, ADJUSTMENT, REINSTATEMENT, MINIMUM." },
+        { "name": "ceded_premium_amount", "type": "money", "required": true },
+        { "name": "ceding_commission_amount", "type": "money" },
+        { "name": "earning_start_date", "type": "date" },
+        { "name": "earning_end_date", "type": "date" },
+        { "name": "accounting_date", "type": "date", "required": true },
+        { "name": "reinsurance_statement_id", "type": "uuid", "references": "reinsurance_statement.reinsurance_statement_id" }
+      ]
+    },
+    {
+      "name": "reinsurance_loss_cession",
+      "description": "Loss and expense ceded to (or assumed under) a layer, traceable to the claim ledger where computed per claim.",
+      "primaryKey": ["reinsurance_loss_cession_id"],
+      "attributes": [
+        { "name": "reinsurance_loss_cession_id", "type": "uuid", "required": true },
+        { "name": "reinsurance_layer_id", "type": "uuid", "required": true, "references": "reinsurance_layer.reinsurance_layer_id" },
+        { "name": "claim_id", "type": "uuid", "references": "claim.claim_id" },
+        { "name": "claim_financial_transaction_id", "type": "uuid", "references": "claim_financial_transaction.claim_financial_transaction_id" },
+        { "name": "catastrophe_event_id", "type": "uuid", "references": "catastrophe_event.catastrophe_event_id", "description": "Event for occurrence-level cessions." },
+        { "name": "loss_cession_type", "type": "string", "enum": "loss_cession_type", "required": true },
+        { "name": "claim_cost_category", "type": "string", "enum": "claim_cost_category", "required": true },
+        { "name": "ceded_amount", "type": "money", "required": true },
+        { "name": "accounting_date", "type": "date", "required": true },
+        { "name": "reinsurance_statement_id", "type": "uuid", "references": "reinsurance_statement.reinsurance_statement_id" }
+      ]
+    },
+    {
+      "name": "reinsurance_statement",
+      "description": "Periodic account between cedent and a reinsurer for a contract, netting premium, commission and losses to a balance due.",
+      "primaryKey": ["reinsurance_statement_id"],
+      "attributes": [
+        { "name": "reinsurance_statement_id", "type": "uuid", "required": true },
+        { "name": "reinsurance_contract_id", "type": "uuid", "required": true, "references": "reinsurance_contract.reinsurance_contract_id" },
+        { "name": "reinsurance_participant_id", "type": "uuid", "references": "reinsurance_participant.reinsurance_participant_id" },
+        { "name": "reinsurance_statement_status", "type": "string", "enum": "reinsurance_statement_status", "required": true },
+        { "name": "period_start_date", "type": "date", "required": true },
+        { "name": "period_end_date", "type": "date", "required": true },
+        { "name": "premium_amount", "type": "money" },
+        { "name": "commission_amount", "type": "money" },
+        { "name": "paid_loss_amount", "type": "money" },
+        { "name": "balance_due_amount", "type": "money", "required": true, "description": "Positive when due to the reinsurer." },
+        { "name": "due_date", "type": "date" },
+        { "name": "settled_on", "type": "date" },
+        { "name": "payment_id", "type": "uuid", "references": "payment.payment_id" },
+        { "name": "disbursement_id", "type": "uuid", "references": "disbursement.disbursement_id" }
+      ]
+    }
+  ]
+}

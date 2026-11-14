@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schema/domain.schema.json",
+  "title": "Insurance data model: domain file",
+  "type": "object",
+  "required": ["domain", "description", "entities"],
+  "additionalProperties": false,
+  "properties": {
+    "domain": { "$ref": "#/$defs/snakeName" },
+    "description": { "type": "string", "minLength": 1 },
+    "enums": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/snakeName" },
+      "additionalProperties": { "$ref": "#/$defs/enum" }
+    },
+    "entities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entity" } }
+  },
+  "$defs": {
+    "snakeName": { "type": "string", "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*$" },
+    "enumCode": { "type": "string", "pattern": "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$" },
+    "enum": {
+      "type": "object",
+      "required": ["description", "values"],
+      "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "values": {
+          "description": "Either a list of codes, or a map of code to description.",
+          "oneOf": [
+            { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/enumCode" } },
+            { "type": "object", "minProperties": 1, "propertyNames": { "$ref": "#/$defs/enumCode" }, "additionalProperties": { "type": "string" } }
+          ]
+        }
+      }
+    },
+    "entity": {
+      "type": "object",
+      "required": ["name", "description", "primaryKey", "attributes"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "#/$defs/snakeName" },
+        "description": { "type": "string", "minLength": 1 },
+        "subtypeOf": { "$ref": "#/$defs/snakeName", "description": "Supertype entity; the subtype shares its primary key." },
+        "primaryKey": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/snakeName" } },
+        "unique": { "type": "array", "items": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/snakeName" } } },
+        "mixins": { "type": "array", "items": { "type": "string" }, "description": "Overrides the manifest's defaultMixins." },
+        "attributes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/attribute" } }
+      }
+    },
+    "attribute": {
+      "type": "object",
+      "required": ["name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "#/$defs/snakeName" },
+        "type": { "enum": ["uuid", "string", "text", "integer", "decimal", "money", "percent", "rate", "date", "timestamp", "boolean", "json"] },
+        "required": { "type": "boolean", "default": false },
+        "maxLength": { "type": "integer", "minimum": 1 },
+        "enum": { "$ref": "#/$defs/snakeName", "description": "Name of an enum defined in any domain file." },
+        "references": { "type": "string", "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$", "description": "Foreign key target as entity.attribute." },
+        "description": { "type": "string" },
+        "sensitivity": { "enum": ["PII", "PHI", "PCI", "SPI"] }
+      }
+    }
+  }
+}

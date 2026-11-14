@@ -1,0 +1,199 @@
+{
+  "domain": "pc_commercial",
+  "description": "Commercial lines detail: business operations, commercial property and auto rating detail, classification exposures (general liability, workers' compensation), premium audit, professional and cyber liability, certificates of insurance and surety bonds.",
+  "enums": {
+    "exposure_basis": { "description": "Measure of exposure premium is based on.", "values": ["PAYROLL", "GROSS_SALES", "AREA", "UNITS", "ADMISSIONS", "TOTAL_COST", "EMPLOYEE_COUNT", "VEHICLE_COUNT", "REVENUE", "MILES", "PER_CAPITA", "FLAT", "OTHER"] },
+    "commercial_vehicle_use": { "description": "ISO commercial auto use class.", "values": ["SERVICE", "RETAIL", "COMMERCIAL"] },
+    "radius_of_operation": { "description": "Commercial auto radius class.", "values": { "LOCAL": "Up to 50 miles", "INTERMEDIATE": "51 to 200 miles", "LONG_DISTANCE": "Over 200 miles" } },
+    "audit_type": { "description": "Kind of premium audit.", "values": ["FINAL", "INTERIM", "PRELIMINARY", "REVISED"] },
+    "audit_method": { "description": "How a premium audit is performed.", "values": ["PHYSICAL", "PHONE", "MAIL", "VIRTUAL", "WAIVED", "ESTIMATED"] },
+    "audit_status": { "description": "Status of a premium audit.", "values": ["ORDERED", "IN_PROGRESS", "COMPLETED", "DISPUTED", "NON_COMPLIANT", "WAIVED"] },
+    "bond_type": { "description": "Class of surety or fidelity bond.", "values": ["CONTRACT_BID", "CONTRACT_PERFORMANCE", "CONTRACT_PAYMENT", "LICENSE_PERMIT", "COURT", "PUBLIC_OFFICIAL", "FIDUCIARY", "FIDELITY", "MISCELLANEOUS"] }
+  },
+  "entities": [
+    {
+      "name": "business_operation",
+      "description": "The operations of a business as an object of insurance for liability, workers' compensation, professional, cyber and similar coverages.",
+      "subtypeOf": "insurable_object",
+      "primaryKey": ["insurable_object_id"],
+      "attributes": [
+        { "name": "insurable_object_id", "type": "uuid", "required": true, "references": "insurable_object.insurable_object_id" },
+        { "name": "operations_description", "type": "text" },
+        { "name": "naics_code_value_id", "type": "uuid", "references": "code_value.code_value_id" },
+        { "name": "years_in_business", "type": "integer" },
+        { "name": "annual_revenue_amount", "type": "money" },
+        { "name": "annual_payroll_amount", "type": "money" },
+        { "name": "full_time_employee_count", "type": "integer" },
+        { "name": "part_time_employee_count", "type": "integer" },
+        { "name": "uses_subcontractors", "type": "boolean" }
+      ]
+    },
+    {
+      "name": "commercial_property_risk",
+      "description": "Policy-specific rating detail for a building or business personal property at a location on a commercial property, BOP or package policy.",
+      "subtypeOf": "policy_risk",
+      "primaryKey": ["policy_risk_id"],
+      "attributes": [
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "policy_risk.policy_risk_id" },
+        { "name": "building_number", "type": "integer" },
+        { "name": "occupancy_code_value_id", "type": "uuid", "references": "code_value.code_value_id", "description": "ISO occupancy / class code." },
+        { "name": "occupancy_description", "type": "string", "maxLength": 200 },
+        { "name": "protection_class", "type": "string", "maxLength": 5 },
+        { "name": "building_value_amount", "type": "money" },
+        { "name": "business_personal_property_value_amount", "type": "money" },
+        { "name": "business_income_value_amount", "type": "money" },
+        { "name": "valuation_method", "type": "string", "enum": "valuation_method" },
+        { "name": "coinsurance_percent", "type": "percent" },
+        { "name": "is_owner_occupied", "type": "boolean" },
+        { "name": "occupied_percent", "type": "percent" },
+        { "name": "is_vacant", "type": "boolean" },
+        { "name": "wind_hail_excluded", "type": "boolean" },
+        { "name": "earthquake_zone", "type": "string", "maxLength": 10 },
+        { "name": "wind_tier", "type": "string", "maxLength": 10 },
+        { "name": "last_inspection_date", "type": "date" }
+      ]
+    },
+    {
+      "name": "commercial_auto_risk",
+      "description": "Policy-specific rating detail for a vehicle on a commercial auto policy.",
+      "subtypeOf": "policy_risk",
+      "primaryKey": ["policy_risk_id"],
+      "attributes": [
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "policy_risk.policy_risk_id" },
+        { "name": "vehicle_class_code_value_id", "type": "uuid", "references": "code_value.code_value_id", "description": "ISO commercial auto classification code." },
+        { "name": "commercial_vehicle_use", "type": "string", "enum": "commercial_vehicle_use" },
+        { "name": "radius_of_operation", "type": "string", "enum": "radius_of_operation" },
+        { "name": "ownership_type", "type": "string", "enum": "ownership_type" },
+        { "name": "garaging_address_id", "type": "uuid", "references": "address.address_id" },
+        { "name": "stated_amount", "type": "money" },
+        { "name": "is_fleet", "type": "boolean" },
+        { "name": "covered_auto_symbol", "type": "string", "maxLength": 20, "description": "Covered auto designation symbols (1-9, 19)." },
+        { "name": "has_interstate_filing", "type": "boolean", "description": "Federal or state motor carrier filing (e.g. MCS-90) required." },
+        { "name": "usdot_number", "type": "string", "maxLength": 20 }
+      ]
+    },
+    {
+      "name": "classification_exposure",
+      "description": "A rating classification and its exposure amount for a risk and state: a general liability class with its sales or payroll, or a workers' compensation class with its payroll. Estimated at inception, replaced by audited amounts at audit.",
+      "primaryKey": ["classification_exposure_id"],
+      "mixins": ["audit", "policy_versioned"],
+      "attributes": [
+        { "name": "classification_exposure_id", "type": "uuid", "required": true },
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "policy_risk.policy_risk_id" },
+        { "name": "policy_coverage_id", "type": "uuid", "references": "policy_coverage.policy_coverage_id" },
+        { "name": "class_code_value_id", "type": "uuid", "required": true, "references": "code_value.code_value_id", "description": "NCCI/state bureau class code or ISO GL class code." },
+        { "name": "jurisdiction_code", "type": "string", "maxLength": 6, "required": true, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "exposure_basis", "type": "string", "enum": "exposure_basis", "required": true },
+        { "name": "estimated_exposure_amount", "type": "decimal", "required": true },
+        { "name": "audited_exposure_amount", "type": "decimal" },
+        { "name": "rate", "type": "rate", "description": "Rate per unit of exposure (e.g. per $100 payroll, per $1,000 sales)." },
+        { "name": "rate_per_units", "type": "integer", "description": "Units of exposure the rate applies to: 100, 1000, ..." },
+        { "name": "is_if_any", "type": "boolean", "description": "Class listed on an 'if any' basis with no estimated exposure." },
+        { "name": "premium_audit_id", "type": "uuid", "references": "premium_audit.premium_audit_id", "description": "Audit that established the audited exposure." }
+      ]
+    },
+    {
+      "name": "workers_comp_policy_detail",
+      "description": "Workers' compensation specific attributes of a policy.",
+      "subtypeOf": "policy",
+      "primaryKey": ["policy_id"],
+      "attributes": [
+        { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
+        { "name": "bureau_risk_id", "type": "string", "maxLength": 20, "description": "NCCI or state bureau risk identification number." },
+        { "name": "rating_bureau", "type": "string", "maxLength": 30, "description": "NCCI or independent bureau (WCIRB, NYCIRB, PCRB, ...)." },
+        { "name": "anniversary_rating_date", "type": "date" },
+        { "name": "is_experience_rated", "type": "boolean" },
+        { "name": "has_owner_officer_exclusions", "type": "boolean" },
+        { "name": "is_assigned_risk", "type": "boolean" },
+        { "name": "is_retrospectively_rated", "type": "boolean" },
+        { "name": "deductible_program_type", "type": "string", "maxLength": 30, "description": "NONE, SMALL_DEDUCTIBLE, LARGE_DEDUCTIBLE." },
+        { "name": "employee_leasing_arrangement", "type": "string", "maxLength": 30, "description": "PEO / employee leasing arrangement, if any." }
+      ]
+    },
+    {
+      "name": "premium_audit",
+      "description": "An audit of actual exposures for an auditable policy term, producing additional or return premium through a PREMIUM_AUDIT policy transaction.",
+      "primaryKey": ["premium_audit_id"],
+      "attributes": [
+        { "name": "premium_audit_id", "type": "uuid", "required": true },
+        { "name": "policy_term_id", "type": "uuid", "required": true, "references": "policy_term.policy_term_id" },
+        { "name": "audit_type", "type": "string", "enum": "audit_type", "required": true },
+        { "name": "audit_method", "type": "string", "enum": "audit_method" },
+        { "name": "audit_status", "type": "string", "enum": "audit_status", "required": true },
+        { "name": "audit_period_start_date", "type": "date", "required": true },
+        { "name": "audit_period_end_date", "type": "date", "required": true },
+        { "name": "ordered_on", "type": "date" },
+        { "name": "completed_on", "type": "date" },
+        { "name": "auditor_staff_member_id", "type": "uuid", "references": "staff_member.staff_member_id" },
+        { "name": "audit_vendor_party_id", "type": "uuid", "references": "party.party_id" },
+        { "name": "policy_transaction_id", "type": "uuid", "references": "policy_transaction.policy_transaction_id", "description": "Transaction that booked the audit result." }
+      ]
+    },
+    {
+      "name": "professional_liability_risk",
+      "description": "Policy-specific rating detail for professional, management (D&O, EPL, fiduciary) and errors & omissions liability.",
+      "subtypeOf": "policy_risk",
+      "primaryKey": ["policy_risk_id"],
+      "attributes": [
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "policy_risk.policy_risk_id" },
+        { "name": "profession_code_value_id", "type": "uuid", "references": "code_value.code_value_id" },
+        { "name": "professional_count", "type": "integer", "description": "Number of rated professionals (attorneys, physicians, architects, ...)." },
+        { "name": "annual_fees_amount", "type": "money" },
+        { "name": "total_assets_amount", "type": "money" },
+        { "name": "is_publicly_traded", "type": "boolean" },
+        { "name": "prior_acts_date", "type": "date" },
+        { "name": "defense_inside_limits", "type": "boolean", "description": "Whether defense costs erode the limit." }
+      ]
+    },
+    {
+      "name": "cyber_risk",
+      "description": "Policy-specific rating detail for cyber liability and privacy coverage.",
+      "subtypeOf": "policy_risk",
+      "primaryKey": ["policy_risk_id"],
+      "attributes": [
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "policy_risk.policy_risk_id" },
+        { "name": "sensitive_record_count", "type": "integer", "description": "Number of PII/PHI/PCI records held." },
+        { "name": "annual_online_revenue_amount", "type": "money" },
+        { "name": "has_multi_factor_authentication", "type": "boolean" },
+        { "name": "has_endpoint_detection", "type": "boolean" },
+        { "name": "has_offline_backups", "type": "boolean" },
+        { "name": "has_incident_response_plan", "type": "boolean" },
+        { "name": "pci_compliance_level", "type": "string", "maxLength": 10 },
+        { "name": "security_rating_score", "type": "decimal", "description": "External security posture score." },
+        { "name": "security_assessed_on", "type": "date" }
+      ]
+    },
+    {
+      "name": "certificate_of_insurance",
+      "description": "Evidence of coverage issued to a third party (ACORD 25/28 style).",
+      "primaryKey": ["certificate_of_insurance_id"],
+      "attributes": [
+        { "name": "certificate_of_insurance_id", "type": "uuid", "required": true },
+        { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
+        { "name": "holder_party_id", "type": "uuid", "required": true, "references": "party.party_id" },
+        { "name": "certificate_number", "type": "string", "maxLength": 50 },
+        { "name": "issued_on", "type": "date", "required": true },
+        { "name": "description_of_operations", "type": "text" },
+        { "name": "issued_by_producer_id", "type": "uuid", "references": "producer.producer_id" },
+        { "name": "document_id", "type": "uuid", "references": "document.document_id" }
+      ]
+    },
+    {
+      "name": "surety_bond",
+      "description": "Surety or fidelity bond specific attributes of a policy. Principal and obligee are policy parties.",
+      "subtypeOf": "policy",
+      "primaryKey": ["policy_id"],
+      "attributes": [
+        { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
+        { "name": "bond_type", "type": "string", "enum": "bond_type", "required": true },
+        { "name": "penal_sum_amount", "type": "money", "required": true },
+        { "name": "contract_amount", "type": "money" },
+        { "name": "obligation_description", "type": "text" },
+        { "name": "is_continuous", "type": "boolean", "description": "Continuous until cancelled rather than a fixed term." },
+        { "name": "collateral_amount", "type": "money" },
+        { "name": "indemnity_agreement_document_id", "type": "uuid", "references": "document.document_id" },
+        { "name": "released_on", "type": "date" }
+      ]
+    }
+  ]
+}

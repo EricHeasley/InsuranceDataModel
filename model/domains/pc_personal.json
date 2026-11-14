@@ -1,0 +1,194 @@
+{
+  "domain": "pc_personal",
+  "description": "Personal lines detail: vehicles, drivers and their records, dwellings, watercraft and scheduled personal property. Vehicle, structure and scheduled item are shared with commercial lines.",
+  "enums": {
+    "vehicle_type": { "description": "Class of vehicle.", "values": ["PRIVATE_PASSENGER", "PICKUP_VAN", "MOTORCYCLE", "MOTORHOME", "TRAILER", "LIGHT_TRUCK", "MEDIUM_TRUCK", "HEAVY_TRUCK", "EXTRA_HEAVY_TRUCK", "TRACTOR", "BUS", "ANTIQUE", "OFF_ROAD", "OTHER"] },
+    "vehicle_use": { "description": "How a personal vehicle is used.", "values": ["PLEASURE", "COMMUTE", "BUSINESS", "FARM", "RIDESHARE"] },
+    "ownership_type": { "description": "How the insured holds the object.", "values": ["OWNED", "FINANCED", "LEASED", "NON_OWNED", "HIRED"] },
+    "driver_status": { "description": "How a driver is treated on the policy.", "values": ["RATED", "EXCLUDED", "LISTED_NOT_RATED", "PERMIT"] },
+    "driver_incident_type": { "description": "Kind of driving record entry.", "values": ["AT_FAULT_ACCIDENT", "NOT_AT_FAULT_ACCIDENT", "MINOR_VIOLATION", "MAJOR_VIOLATION", "DUI", "SUSPENSION", "COMPREHENSIVE_CLAIM"] },
+    "construction_type": { "description": "Structural construction.", "values": { "FRAME": "ISO class 1", "JOISTED_MASONRY": "ISO class 2", "NON_COMBUSTIBLE": "ISO class 3", "MASONRY_NON_COMBUSTIBLE": "ISO class 4", "MODIFIED_FIRE_RESISTIVE": "ISO class 5", "FIRE_RESISTIVE": "ISO class 6", "MANUFACTURED": "Mobile or manufactured home", "OTHER": "" } },
+    "roof_type": { "description": "Roof covering material.", "values": ["ASPHALT_SHINGLE", "ARCHITECTURAL_SHINGLE", "WOOD_SHAKE", "TILE", "SLATE", "METAL", "FLAT_BUILT_UP", "MEMBRANE", "OTHER"] },
+    "dwelling_occupancy": { "description": "Who occupies a dwelling.", "values": ["OWNER_PRIMARY", "OWNER_SECONDARY", "SEASONAL", "TENANT", "VACANT", "UNDER_CONSTRUCTION"] },
+    "residence_type": { "description": "Kind of residence.", "values": ["SINGLE_FAMILY", "TWO_TO_FOUR_FAMILY", "CONDO_UNIT", "TOWNHOUSE", "APARTMENT", "MOBILE_HOME"] },
+    "homeowners_form": { "description": "Homeowners policy form type.", "values": { "HO2": "Broad form", "HO3": "Special form", "HO4": "Tenants (renters)", "HO5": "Comprehensive form", "HO6": "Condominium unit owners", "HO8": "Modified coverage", "DP1": "Dwelling fire basic", "DP3": "Dwelling fire special" } },
+    "valuation_method": { "description": "Basis of loss settlement.", "values": ["REPLACEMENT_COST", "ACTUAL_CASH_VALUE", "AGREED_VALUE", "STATED_AMOUNT", "FUNCTIONAL_REPLACEMENT_COST", "MARKET_VALUE"] }
+  },
+  "entities": [
+    {
+      "name": "vehicle",
+      "description": "A motor vehicle or trailer, personal or commercial.",
+      "subtypeOf": "insurable_object",
+      "primaryKey": ["insurable_object_id"],
+      "attributes": [
+        { "name": "insurable_object_id", "type": "uuid", "required": true, "references": "insurable_object.insurable_object_id" },
+        { "name": "vin", "type": "string", "maxLength": 17, "description": "Vehicle identification number." },
+        { "name": "model_year", "type": "integer" },
+        { "name": "make", "type": "string", "maxLength": 50 },
+        { "name": "model", "type": "string", "maxLength": 50 },
+        { "name": "body_style", "type": "string", "maxLength": 50 },
+        { "name": "vehicle_type", "type": "string", "enum": "vehicle_type", "required": true },
+        { "name": "gross_vehicle_weight", "type": "integer", "description": "Pounds." },
+        { "name": "cost_new_amount", "type": "money" },
+        { "name": "symbol_code", "type": "string", "maxLength": 10, "description": "ISO or company vehicle rating symbol." },
+        { "name": "has_anti_theft_device", "type": "boolean" },
+        { "name": "has_advanced_driver_assistance", "type": "boolean" },
+        { "name": "registration_jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "license_plate", "type": "string", "maxLength": 15, "sensitivity": "PII" }
+      ]
+    },
+    {
+      "name": "structure",
+      "description": "A building: a dwelling insured on a homeowners policy or a building insured on a commercial property policy.",
+      "subtypeOf": "insurable_object",
+      "primaryKey": ["insurable_object_id"],
+      "attributes": [
+        { "name": "insurable_object_id", "type": "uuid", "required": true, "references": "insurable_object.insurable_object_id" },
+        { "name": "year_built", "type": "integer" },
+        { "name": "construction_type", "type": "string", "enum": "construction_type" },
+        { "name": "story_count", "type": "integer" },
+        { "name": "square_footage", "type": "integer" },
+        { "name": "unit_count", "type": "integer" },
+        { "name": "roof_type", "type": "string", "enum": "roof_type" },
+        { "name": "roof_year", "type": "integer", "description": "Year the roof was last replaced." },
+        { "name": "foundation_type", "type": "string", "maxLength": 30 },
+        { "name": "heating_type", "type": "string", "maxLength": 30 },
+        { "name": "electrical_updated_year", "type": "integer" },
+        { "name": "plumbing_updated_year", "type": "integer" },
+        { "name": "is_sprinklered", "type": "boolean" },
+        { "name": "has_central_fire_alarm", "type": "boolean" },
+        { "name": "has_central_burglar_alarm", "type": "boolean" },
+        { "name": "flood_zone", "type": "string", "maxLength": 10, "description": "FEMA flood zone." },
+        { "name": "distance_to_coast_miles", "type": "decimal" },
+        { "name": "wildfire_risk_score", "type": "decimal" }
+      ]
+    },
+    {
+      "name": "watercraft",
+      "description": "A boat or personal watercraft.",
+      "subtypeOf": "insurable_object",
+      "primaryKey": ["insurable_object_id"],
+      "attributes": [
+        { "name": "insurable_object_id", "type": "uuid", "required": true, "references": "insurable_object.insurable_object_id" },
+        { "name": "hull_identification_number", "type": "string", "maxLength": 20 },
+        { "name": "model_year", "type": "integer" },
+        { "name": "make", "type": "string", "maxLength": 50 },
+        { "name": "model", "type": "string", "maxLength": 50 },
+        { "name": "watercraft_type", "type": "string", "maxLength": 30, "description": "SAILBOAT, POWERBOAT, PWC, YACHT, ..." },
+        { "name": "length_feet", "type": "decimal" },
+        { "name": "hull_material", "type": "string", "maxLength": 30 },
+        { "name": "propulsion_type", "type": "string", "maxLength": 30 },
+        { "name": "horsepower", "type": "integer" },
+        { "name": "maximum_speed_mph", "type": "integer" }
+      ]
+    },
+    {
+      "name": "scheduled_item",
+      "description": "An individually described item of property: jewelry, fine art, a musical instrument, contractor's equipment, a cargo shipment.",
+      "subtypeOf": "insurable_object",
+      "primaryKey": ["insurable_object_id"],
+      "attributes": [
+        { "name": "insurable_object_id", "type": "uuid", "required": true, "references": "insurable_object.insurable_object_id" },
+        { "name": "item_category", "type": "string", "maxLength": 50, "required": true, "description": "JEWELRY, FINE_ART, FURS, CAMERAS, MUSICAL_INSTRUMENT, CONTRACTORS_EQUIPMENT, EDP, CARGO, ..." },
+        { "name": "manufacturer", "type": "string", "maxLength": 100 },
+        { "name": "serial_number", "type": "string", "maxLength": 100 },
+        { "name": "appraised_value_amount", "type": "money" },
+        { "name": "appraisal_date", "type": "date" },
+        { "name": "appraisal_document_id", "type": "uuid", "references": "document.document_id" }
+      ]
+    },
+    {
+      "name": "personal_auto_risk",
+      "description": "Policy-specific rating detail for a vehicle on a personal auto policy.",
+      "subtypeOf": "policy_risk",
+      "primaryKey": ["policy_risk_id"],
+      "attributes": [
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "policy_risk.policy_risk_id" },
+        { "name": "vehicle_use", "type": "string", "enum": "vehicle_use" },
+        { "name": "annual_mileage", "type": "integer" },
+        { "name": "commute_miles_one_way", "type": "integer" },
+        { "name": "ownership_type", "type": "string", "enum": "ownership_type" },
+        { "name": "garaging_address_id", "type": "uuid", "references": "address.address_id" },
+        { "name": "valuation_method", "type": "string", "enum": "valuation_method" },
+        { "name": "is_telematics_enrolled", "type": "boolean" },
+        { "name": "telematics_score", "type": "decimal" }
+      ]
+    },
+    {
+      "name": "policy_driver",
+      "description": "A driver listed on an auto policy, with rating characteristics.",
+      "primaryKey": ["policy_driver_id"],
+      "mixins": ["audit", "policy_versioned"],
+      "attributes": [
+        { "name": "policy_driver_id", "type": "uuid", "required": true },
+        { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
+        { "name": "party_id", "type": "uuid", "required": true, "references": "person.party_id" },
+        { "name": "driver_status", "type": "string", "enum": "driver_status", "required": true },
+        { "name": "relationship_to_insured", "type": "string", "maxLength": 30 },
+        { "name": "license_jurisdiction_code", "type": "string", "maxLength": 6, "references": "jurisdiction.jurisdiction_code" },
+        { "name": "first_licensed_date", "type": "date" },
+        { "name": "has_good_student_discount", "type": "boolean" },
+        { "name": "has_defensive_driver_course", "type": "boolean" },
+        { "name": "requires_financial_responsibility_filing", "type": "boolean", "description": "SR-22 / FR-44 filing required." },
+        { "name": "insurance_score_tier", "type": "string", "maxLength": 20, "sensitivity": "SPI" }
+      ]
+    },
+    {
+      "name": "driver_incident",
+      "description": "An accident, violation or claim on a driver's record used in rating, from an MVR, CLUE report or self-report.",
+      "primaryKey": ["driver_incident_id"],
+      "attributes": [
+        { "name": "driver_incident_id", "type": "uuid", "required": true },
+        { "name": "policy_driver_id", "type": "uuid", "required": true, "references": "policy_driver.policy_driver_id" },
+        { "name": "driver_incident_type", "type": "string", "enum": "driver_incident_type", "required": true },
+        { "name": "incident_date", "type": "date", "required": true },
+        { "name": "conviction_date", "type": "date" },
+        { "name": "violation_code", "type": "string", "maxLength": 30 },
+        { "name": "description", "type": "string", "maxLength": 500 },
+        { "name": "source", "type": "string", "maxLength": 30, "description": "MVR, CLUE, SELF_REPORTED, INTERNAL_CLAIM." },
+        { "name": "paid_amount", "type": "money" },
+        { "name": "is_chargeable", "type": "boolean", "description": "Whether the incident is surcharged." }
+      ]
+    },
+    {
+      "name": "vehicle_driver_assignment",
+      "description": "Assignment of a driver to a vehicle for rating.",
+      "primaryKey": ["vehicle_driver_assignment_id"],
+      "mixins": ["audit", "policy_versioned"],
+      "attributes": [
+        { "name": "vehicle_driver_assignment_id", "type": "uuid", "required": true },
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "personal_auto_risk.policy_risk_id" },
+        { "name": "policy_driver_id", "type": "uuid", "required": true, "references": "policy_driver.policy_driver_id" },
+        { "name": "is_principal_operator", "type": "boolean", "required": true },
+        { "name": "usage_percent", "type": "percent" }
+      ]
+    },
+    {
+      "name": "dwelling_risk",
+      "description": "Policy-specific rating detail for a dwelling or residence on a homeowners, condo, renters or dwelling fire policy.",
+      "subtypeOf": "policy_risk",
+      "primaryKey": ["policy_risk_id"],
+      "attributes": [
+        { "name": "policy_risk_id", "type": "uuid", "required": true, "references": "policy_risk.policy_risk_id" },
+        { "name": "homeowners_form", "type": "string", "enum": "homeowners_form" },
+        { "name": "residence_type", "type": "string", "enum": "residence_type" },
+        { "name": "dwelling_occupancy", "type": "string", "enum": "dwelling_occupancy" },
+        { "name": "replacement_cost_amount", "type": "money", "description": "Estimated cost to rebuild." },
+        { "name": "replacement_cost_estimated_on", "type": "date" },
+        { "name": "valuation_method", "type": "string", "enum": "valuation_method" },
+        { "name": "protection_class", "type": "string", "maxLength": 5, "description": "Public protection classification." },
+        { "name": "distance_to_fire_station_miles", "type": "decimal" },
+        { "name": "distance_to_hydrant_feet", "type": "integer" },
+        { "name": "purchase_date", "type": "date" },
+        { "name": "has_swimming_pool", "type": "boolean" },
+        { "name": "has_trampoline", "type": "boolean" },
+        { "name": "has_wood_stove", "type": "boolean" },
+        { "name": "has_restricted_dog_breed", "type": "boolean" },
+        { "name": "has_wind_mitigation_features", "type": "boolean" },
+        { "name": "has_water_leak_detection", "type": "boolean" },
+        { "name": "household_member_count", "type": "integer" },
+        { "name": "home_business_description", "type": "string", "maxLength": 200 }
+      ]
+    }
+  ]
+}
