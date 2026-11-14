@@ -1,47 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/personal_auto_risk.schema.json",
   "title": "personal_auto_risk",
   "description": "Policy-specific rating detail for a vehicle on a personal auto policy.",
+  "type": "object",
   "x-primaryKey": ["policy_risk_id"],
   "x-subtypeOf": "policy_risk",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
-    },
-    "vehicle_use": {
-      "$ref": "enums/vehicle_use.schema.json"
-    },
-    "annual_mileage": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "commute_miles_one_way": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "ownership_type": {
-      "$ref": "enums/ownership_type.schema.json"
-    },
-    "garaging_address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "address.address_id"
-    },
-    "valuation_method": {
-      "$ref": "enums/valuation_method.schema.json"
-    },
-    "is_telematics_enrolled": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "telematics_score": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    }
-  },
   "required": ["policy_risk_id"],
-  "unevaluatedProperties": false
+  "properties": {
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
+    "vehicle_use": { "type": "string", "enum": ["PLEASURE", "COMMUTE", "BUSINESS", "FARM", "RIDESHARE"] },
+    "annual_mileage": { "type": "integer" },
+    "commute_miles_one_way": { "type": "integer" },
+    "ownership_type": { "type": "string", "enum": ["OWNED", "FINANCED", "LEASED", "NON_OWNED", "HIRED"] },
+    "garaging_address_id": { "type": "string", "format": "uuid", "x-references": "address.address_id" },
+    "valuation_method": {
+      "type": "string",
+      "enum": [
+        "REPLACEMENT_COST", "ACTUAL_CASH_VALUE", "AGREED_VALUE", "STATED_AMOUNT", "FUNCTIONAL_REPLACEMENT_COST",
+        "MARKET_VALUE"
+      ]
+    },
+    "is_telematics_enrolled": { "type": "boolean" },
+    "telematics_score": { "type": "number", "format": "decimal" }
+  },
+  "additionalProperties": false
 }

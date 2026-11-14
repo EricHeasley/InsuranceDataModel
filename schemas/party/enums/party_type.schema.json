@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/party_type.schema.json",
-  "title": "party_type",
-  "description": "Kind of party.",
-  "type": "string",
-  "enum": ["PERSON", "ORGANIZATION"]
-}

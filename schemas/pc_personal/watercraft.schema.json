@@ -1,59 +1,23 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/watercraft.schema.json",
   "title": "watercraft",
   "description": "A boat or personal watercraft.",
+  "type": "object",
   "x-primaryKey": ["insurable_object_id"],
   "x-subtypeOf": "insurable_object",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "insurable_object_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurable_object.insurable_object_id"
-    },
-    "hull_identification_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20
-    },
-    "model_year": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "make": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "model": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "watercraft_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "SAILBOAT, POWERBOAT, PWC, YACHT, ..."
-    },
-    "length_feet": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "hull_material": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "propulsion_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "horsepower": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "maximum_speed_mph": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    }
-  },
   "required": ["insurable_object_id"],
-  "unevaluatedProperties": false
+  "properties": {
+    "insurable_object_id": { "type": "string", "format": "uuid", "x-references": "insurable_object.insurable_object_id" },
+    "hull_identification_number": { "type": "string", "maxLength": 20 },
+    "model_year": { "type": "integer" },
+    "make": { "type": "string", "maxLength": 50 },
+    "model": { "type": "string", "maxLength": 50 },
+    "watercraft_type": { "type": "string", "maxLength": 30, "description": "SAILBOAT, POWERBOAT, PWC, YACHT, ..." },
+    "length_feet": { "type": "number", "format": "decimal" },
+    "hull_material": { "type": "string", "maxLength": 30 },
+    "propulsion_type": { "type": "string", "maxLength": 30 },
+    "horsepower": { "type": "integer" },
+    "maximum_speed_mph": { "type": "integer" }
+  },
+  "additionalProperties": false
 }

@@ -1,76 +1,54 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_transaction.schema.json",
   "title": "policy_transaction",
   "description": "A dated change to a policy: new business, endorsement, renewal, cancellation, reinstatement, audit and so on. The unit of policy versioning and the source of all written premium.",
+  "type": "object",
   "x-primaryKey": ["policy_transaction_id"],
   "x-unique": [
     ["policy_term_id", "sequence_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "required": [
+    "policy_transaction_id", "policy_term_id", "sequence_number", "policy_transaction_type",
+    "policy_transaction_status", "effective_date", "processed_at"
   ],
   "properties": {
-    "policy_transaction_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_term_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_term.policy_term_id"
-    },
-    "sequence_number": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Order of processing within the term."
-    },
+    "policy_transaction_id": { "type": "string", "format": "uuid" },
+    "policy_term_id": { "type": "string", "format": "uuid", "x-references": "policy_term.policy_term_id" },
+    "sequence_number": { "type": "integer", "description": "Order of processing within the term." },
     "policy_transaction_type": {
-      "$ref": "enums/policy_transaction_type.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "NEW_BUSINESS" },
+        { "const": "ENDORSEMENT", "description": "Mid-term change" },
+        { "const": "RENEWAL" },
+        { "const": "CANCELLATION" },
+        { "const": "REINSTATEMENT" },
+        { "const": "REWRITE" },
+        { "const": "NON_RENEWAL" },
+        { "const": "PREMIUM_AUDIT", "description": "Final or interim audit adjustment" },
+        { "const": "EXTENSION", "description": "Term extension" },
+        { "const": "LAPSE" },
+        { "const": "SURRENDER" },
+        { "const": "CONVERSION" },
+        { "const": "MATURITY" },
+        { "const": "ANNUITIZATION" },
+        { "const": "DEATH" },
+        { "const": "RESCISSION" },
+        { "const": "ANNIVERSARY", "description": "Scheduled anniversary processing on continuous contracts" }
+      ]
     },
-    "policy_transaction_status": {
-      "$ref": "enums/policy_transaction_status.schema.json"
-    },
-    "effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Business date the change takes effect."
-    },
-    "processed_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp",
-      "description": "When the change was recorded (transaction time)."
-    },
-    "accounting_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Date the transaction is booked for financial reporting."
-    },
+    "policy_transaction_status": { "type": "string", "enum": ["DRAFT", "QUOTED", "BOUND", "ISSUED", "REVERSED", "VOIDED"] },
+    "effective_date": { "type": "string", "format": "date", "description": "Business date the change takes effect." },
+    "processed_at": { "type": "string", "format": "date-time", "description": "When the change was recorded (transaction time)." },
+    "accounting_date": { "type": "string", "format": "date", "description": "Date the transaction is booked for financial reporting." },
     "is_out_of_sequence": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "type": "boolean",
       "description": "True when effective earlier than a previously processed transaction in the term."
     },
-    "reverses_transaction_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_transaction.policy_transaction_id"
-    },
-    "reason_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "description": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    },
-    "processed_by_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    }
+    "reverses_transaction_id": { "type": "string", "format": "uuid", "x-references": "policy_transaction.policy_transaction_id" },
+    "reason_code": { "type": "string", "maxLength": 50 },
+    "description": { "type": "string" },
+    "processed_by_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" }
   },
-  "required": [
-    "policy_transaction_id",
-    "policy_term_id",
-    "sequence_number",
-    "policy_transaction_type",
-    "policy_transaction_status",
-    "effective_date",
-    "processed_at"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/marital_status.schema.json",
-  "title": "marital_status",
-  "description": "Marital status.",
-  "type": "string",
-  "enum": ["SINGLE", "MARRIED", "DOMESTIC_PARTNER", "DIVORCED", "SEPARATED", "WIDOWED", "UNKNOWN"]
-}

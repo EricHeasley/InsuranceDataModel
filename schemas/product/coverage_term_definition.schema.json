@@ -1,65 +1,41 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/coverage_term_definition.schema.json",
   "title": "coverage_term_definition",
   "description": "A limit, deductible, coinsurance, waiting period or other quantitative term that a coverage can carry, with its allowed range.",
+  "type": "object",
   "x-primaryKey": ["coverage_term_definition_id"],
   "x-unique": [
     ["coverage_definition_id", "term_code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "required": [
+    "coverage_term_definition_id", "coverage_definition_id", "term_code", "name", "coverage_term_type",
+    "coverage_term_basis", "term_value_type", "is_required"
   ],
   "properties": {
-    "coverage_term_definition_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "coverage_definition_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "coverage_definition.coverage_definition_id"
-    },
-    "term_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
+    "coverage_term_definition_id": { "type": "string", "format": "uuid" },
+    "coverage_definition_id": { "type": "string", "format": "uuid", "x-references": "coverage_definition.coverage_definition_id" },
+    "term_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
     "coverage_term_type": {
-      "$ref": "enums/coverage_term_type.schema.json"
+      "type": "string",
+      "enum": [
+        "LIMIT", "SUBLIMIT", "DEDUCTIBLE", "SELF_INSURED_RETENTION", "COINSURANCE", "COPAY", "OUT_OF_POCKET_MAX",
+        "WAITING_PERIOD", "ELIMINATION_PERIOD", "BENEFIT_PERIOD", "BENEFIT_AMOUNT", "FACE_AMOUNT", "OPTION"
+      ]
     },
     "coverage_term_basis": {
-      "$ref": "enums/coverage_term_basis.schema.json"
+      "type": "string",
+      "enum": [
+        "PER_OCCURRENCE", "PER_CLAIM", "PER_PERSON", "PER_ACCIDENT", "PER_ITEM", "PER_LOCATION", "PER_DAY",
+        "PER_WEEK", "PER_MONTH", "PER_VISIT", "AGGREGATE", "POLICY_PERIOD", "CALENDAR_YEAR", "LIFETIME",
+        "NOT_APPLICABLE"
+      ]
     },
-    "term_value_type": {
-      "$ref": "enums/term_value_type.schema.json"
-    },
-    "default_value": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "minimum_value": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "maximum_value": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "is_required": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    }
+    "term_value_type": { "type": "string", "enum": ["AMOUNT", "PERCENT", "DAYS", "MONTHS", "COUNT", "CODE"] },
+    "default_value": { "type": "number", "format": "decimal" },
+    "minimum_value": { "type": "number", "format": "decimal" },
+    "maximum_value": { "type": "number", "format": "decimal" },
+    "is_required": { "type": "boolean" }
   },
-  "required": [
-    "coverage_term_definition_id",
-    "coverage_definition_id",
-    "term_code",
-    "name",
-    "coverage_term_type",
-    "coverage_term_basis",
-    "term_value_type",
-    "is_required"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

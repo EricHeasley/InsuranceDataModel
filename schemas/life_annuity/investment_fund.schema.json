@@ -1,57 +1,34 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/investment_fund.schema.json",
   "title": "investment_fund",
   "description": "An investment option available within life and annuity products: fixed account, variable subaccount or index crediting strategy.",
+  "type": "object",
   "x-primaryKey": ["investment_fund_id"],
   "x-unique": [
     ["fund_code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["investment_fund_id", "fund_code", "name", "fund_type"],
   "properties": {
-    "investment_fund_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "fund_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
+    "investment_fund_id": { "type": "string", "format": "uuid" },
+    "fund_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
     "fund_type": {
-      "$ref": "enums/fund_type.schema.json"
+      "type": "string",
+      "enum": [
+        "FIXED_ACCOUNT", "VARIABLE_SUBACCOUNT", "INDEXED_STRATEGY", "MVA_GUARANTEE_PERIOD", "LOAN_COLLATERAL_ACCOUNT",
+        "DOLLAR_COST_AVERAGING"
+      ]
     },
-    "underlying_cusip": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 9
-    },
-    "index_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 100,
-      "description": "Reference index for indexed strategies."
-    },
+    "underlying_cusip": { "type": "string", "maxLength": 9 },
+    "index_name": { "type": "string", "maxLength": 100, "description": "Reference index for indexed strategies." },
     "crediting_method": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 50,
       "description": "ANNUAL_POINT_TO_POINT, MONTHLY_AVERAGE, ... for indexed strategies."
     },
-    "expense_ratio_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "opened_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "closed_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "expense_ratio_percent": { "type": "number", "format": "percent" },
+    "opened_on": { "type": "string", "format": "date" },
+    "closed_on": { "type": "string", "format": "date" }
   },
-  "required": ["investment_fund_id", "fund_code", "name", "fund_type"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

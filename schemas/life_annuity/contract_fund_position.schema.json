@@ -1,71 +1,28 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/contract_fund_position.schema.json",
   "title": "contract_fund_position",
   "description": "Holding of a contract in a fund as of a valuation date, including index strategy terms for the current segment.",
+  "type": "object",
   "x-primaryKey": ["contract_fund_position_id"],
   "x-unique": [
     ["policy_id", "investment_fund_id", "valuation_date", "segment_start_date"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["contract_fund_position_id", "policy_id", "investment_fund_id", "valuation_date", "position_value_amount"],
   "properties": {
-    "contract_fund_position_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "investment_fund_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "investment_fund.investment_fund_id"
-    },
-    "valuation_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "unit_count": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "unit_value": {
-      "$ref": "../common/types.schema.json#/$defs/rate"
-    },
-    "position_value_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "segment_start_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Start of the index or guarantee segment."
-    },
-    "segment_end_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "credited_rate_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "cap_rate_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "participation_rate_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "spread_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "buffer_or_floor_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    }
+    "contract_fund_position_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "investment_fund_id": { "type": "string", "format": "uuid", "x-references": "investment_fund.investment_fund_id" },
+    "valuation_date": { "type": "string", "format": "date" },
+    "unit_count": { "type": "number", "format": "decimal" },
+    "unit_value": { "type": "number", "format": "rate" },
+    "position_value_amount": { "type": "number", "format": "money" },
+    "segment_start_date": { "type": "string", "format": "date", "description": "Start of the index or guarantee segment." },
+    "segment_end_date": { "type": "string", "format": "date" },
+    "credited_rate_percent": { "type": "number", "format": "percent" },
+    "cap_rate_percent": { "type": "number", "format": "percent" },
+    "participation_rate_percent": { "type": "number", "format": "percent" },
+    "spread_percent": { "type": "number", "format": "percent" },
+    "buffer_or_floor_percent": { "type": "number", "format": "percent" }
   },
-  "required": [
-    "contract_fund_position_id",
-    "policy_id",
-    "investment_fund_id",
-    "valuation_date",
-    "position_value_amount"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

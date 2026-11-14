@@ -1,67 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/product.schema.json",
   "title": "product",
   "description": "An insurance product offered to the market, such as a personal auto program, a businessowners policy, a 20-year level term life plan or a deferred indexed annuity.",
+  "type": "object",
   "x-primaryKey": ["product_id"],
   "x-unique": [
     ["product_code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["product_id", "product_code", "name", "line_of_business_code", "market_type", "product_status"],
   "properties": {
-    "product_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "product_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "line_of_business.line_of_business_code"
-    },
+    "product_id": { "type": "string", "format": "uuid" },
+    "product_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
+    "line_of_business_code": { "type": "string", "maxLength": 30, "x-references": "line_of_business.line_of_business_code" },
     "market_type": {
-      "$ref": "enums/market_type.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "ADMITTED" },
+        { "const": "SURPLUS_LINES", "description": "Excess & surplus lines" },
+        { "const": "RESIDUAL", "description": "Assigned risk / FAIR plan / residual market" },
+        { "const": "SELF_FUNDED", "description": "Administrative services only (health)" },
+        { "const": "GOVERNMENT", "description": "Medicare, Medicaid, NFIP and similar programs" }
+      ]
     },
-    "product_status": {
-      "$ref": "enums/product_status.schema.json"
-    },
+    "product_status": { "type": "string", "enum": ["DRAFT", "FILED", "ACTIVE", "CLOSED_TO_NEW_BUSINESS", "RETIRED"] },
     "is_package": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "type": "boolean",
       "description": "True when the product bundles multiple lines (e.g. BOP, commercial package)."
     },
-    "is_group": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "True when sold as a group master contract with certificates or members."
-    },
-    "default_term_months": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Standard policy term length; null for continuous contracts."
-    },
-    "introduced_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "retired_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "is_group": { "type": "boolean", "description": "True when sold as a group master contract with certificates or members." },
+    "default_term_months": { "type": "integer", "description": "Standard policy term length; null for continuous contracts." },
+    "introduced_on": { "type": "string", "format": "date" },
+    "retired_on": { "type": "string", "format": "date" }
   },
-  "required": [
-    "product_id",
-    "product_code",
-    "name",
-    "line_of_business_code",
-    "market_type",
-    "product_status"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

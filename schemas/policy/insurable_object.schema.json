@@ -1,41 +1,44 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/insurable_object.schema.json",
   "title": "insurable_object",
   "description": "A real-world thing, person or activity exposed to loss, independent of any policy. Supertype for line-specific objects (vehicle, structure, watercraft, scheduled item, business operation). The same object can be insured on successive or multiple policies.",
-  "x-primaryKey": ["insurable_object_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["insurable_object_id"],
+  "required": ["insurable_object_id", "insurable_object_type"],
   "properties": {
-    "insurable_object_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
+    "insurable_object_id": { "type": "string", "format": "uuid" },
     "insurable_object_type": {
-      "$ref": "enums/insurable_object_type.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "VEHICLE" },
+        { "const": "STRUCTURE", "description": "Dwelling or commercial building" },
+        { "const": "PERSON", "description": "A life or health risk" },
+        {
+          "const": "BUSINESS_OPERATION",
+          "description": "Business operations at a location (liability, workers' comp, cyber, professional)"
+        },
+        { "const": "SCHEDULED_ITEM", "description": "Scheduled personal or business property, equipment, cargo" },
+        { "const": "WATERCRAFT" },
+        { "const": "AIRCRAFT" },
+        { "const": "ANIMAL", "description": "Pet or livestock" },
+        { "const": "BOND_OBLIGATION", "description": "Surety or fidelity obligation" },
+        { "const": "OTHER" }
+      ]
     },
-    "description": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
-    },
+    "description": { "type": "string", "maxLength": 500 },
     "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "The person (object type PERSON) or organization (BUSINESS_OPERATION) that is the subject of insurance.",
       "x-references": "party.party_id"
     },
     "address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Fixed location of the object, if it has one.",
       "x-references": "address.address_id"
     },
-    "additional_attributes": {
-      "$ref": "../common/types.schema.json#/$defs/json",
-      "description": "Characteristics of specialty objects with no dedicated subtype entity."
-    }
+    "additional_attributes": { "type": "object", "description": "Characteristics of specialty objects with no dedicated subtype entity." }
   },
-  "required": ["insurable_object_id", "insurable_object_type"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

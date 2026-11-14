@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/quote_status.schema.json",
-  "title": "quote_status",
-  "description": "Status of a quote.",
-  "type": "string",
-  "enum": ["DRAFT", "RATED", "PRESENTED", "ACCEPTED", "BOUND", "DECLINED", "EXPIRED"]
-}

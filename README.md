@@ -1,24 +1,21 @@
 # InsuranceDataModel
 
-A normalized operational data model for insurance carriers, covering P&C personal, P&C commercial, life & annuity, and health lines under US market conventions. The model is a set of standard JSON Schema (draft 2020-12) files, one per entity; everything else in the repository is generated from them.
+A normalized operational data model for insurance carriers, covering P&C personal, P&C commercial, life & annuity, and health lines under US market conventions. The model is a set of plain JSON Schema (draft 2020-12) files, one per entity; everything else in the repository is generated from them.
 
-Version 0.1.0: 12 domains, 137 entities, 135 code lists.
+Version 0.1.0: 12 domains, 137 entities.
 
 ## What is here
 
 | Path | Contents |
 |---|---|
-| `schemas/<domain>/<entity>.schema.json` | **The model.** One JSON Schema per entity: attributes, types, required fields, keys, foreign keys |
-| `schemas/<domain>/enums/<code_list>.schema.json` | One JSON Schema per code list |
-| `schemas/common/` | Shared logical types (`types.schema.json`) and attribute groups (`audit`, `policy_versioned`) |
+| `schemas/<domain>/<entity>.schema.json` | **The model.** One plain, self-contained JSON Schema per entity, e.g. `schemas/policy/policy.schema.json` |
 | `schemas/catalog.json` | Name, version, conventions and the ordered list of domains (not a schema) |
-| `tools/validate.py` | Checks every schema is valid and resolves, and that keys, references, types and code lists are consistent |
+| `tools/validate.py` | Checks every schema is valid and that keys, references and code values are consistent |
 | `tools/check_record.py` | Validates your own JSON records against an entity's schema |
 | `tools/build.py` | Regenerates everything under `dist/` and `docs/` |
 | `dist/insurance-data-model.schema.json` | Generated: all entity schemas bundled in one file |
-| `dist/insurance-data-model.json` | Generated: the whole model in one resolved file, for tools to consume |
 | `dist/postgres/schema.sql` | Generated: PostgreSQL DDL |
-| `docs/data-dictionary.md` | Generated: every entity, attribute and code list |
+| `docs/data-dictionary.md` | Generated: every entity, attribute and code value |
 | `docs/diagrams.md` | Generated: Mermaid ER diagram per domain, plus domain dependencies |
 
 ## Domains
@@ -62,36 +59,42 @@ The full conventions (naming, money, percent, time) are in `schemas/catalog.json
 
 ## Schema files
 
-Each entity is an ordinary JSON Schema, so any JSON Schema tool can validate records against it. `schemas/policy/policy_coverage.schema.json` (abridged):
+An entity is an ordinary JSON Schema: a list of properties, each with a type, and a list of required ones. Nothing is shared or referenced between files, so a schema can be read, copied and used on its own. `schemas/policy/policy.schema.json` (abridged):
 
 ```json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_coverage.schema.json",
-  "title": "policy_coverage",
-  "description": "A coverage, benefit or rider in force on a policy, either at policy level or for one risk.",
-  "x-primaryKey": ["policy_coverage_id"],
+  "title": "policy",
+  "description": "An insurance contract between an insurer and a policyholder...",
   "type": "object",
-  "allOf": [
-    { "$ref": "../common/audit.schema.json" },
-    { "$ref": "../common/policy_versioned.schema.json" }
-  ],
+  "x-primaryKey": ["policy_id"],
+  "x-unique": [["policy_number"]],
+  "required": ["policy_id", "policy_number", "product_id", "policy_status", "original_inception_date"],
   "properties": {
-    "policy_coverage_id": { "$ref": "../common/types.schema.json#/$defs/uuid" },
-    "policy_id": { "$ref": "../common/types.schema.json#/$defs/uuid", "x-references": "policy.policy_id" },
-    "coverage_trigger": { "$ref": "enums/coverage_trigger.schema.json" }
+    "policy_id": { "type": "string", "format": "uuid" },
+    "policy_number": { "type": "string", "maxLength": 30 },
+    "product_id": { "type": "string", "format": "uuid", "x-references": "product.product_id" },
+    "policy_status": {
+      "type": "string",
+      "oneOf": [
+        { "const": "PENDING", "description": "Bound or applied for, not yet in force" },
+        { "const": "IN_FORCE" },
+        { "const": "CANCELLED" }
+      ]
+    },
+    "original_inception_date": { "type": "string", "format": "date" },
+    "is_assumed_business": { "type": "boolean" }
   },
-  "required": ["policy_coverage_id", "policy_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }
 ```
 
-- Types are `$ref`s to the logical types in `common/types.schema.json` (`uuid`, `string`, `text`, `integer`, `decimal`, `money`, `percent`, `rate`, `date`, `timestamp`, `boolean`, `json`). Each type carries its PostgreSQL column type as `x-postgres`. Strings always give `maxLength`.
-- Code lists are `$ref`s to `enums/<name>.schema.json`, which hold the allowed values (`enum`, or `oneOf` of `const` + `description` when the values are documented).
-- Mixins are `allOf` references: every entity gets `audit`; policy contents also get `policy_versioned`.
-- An optional attribute is simply left out of a record when it has no value. A required one must be present.
-- Entity-level extensions: `x-primaryKey`, `x-unique` (alternate keys) and `x-subtypeOf` (shares the supertype's primary key). Attribute-level: `x-references` (foreign key, `entity.attribute`) and `x-sensitivity` (`PII`, `PHI`, `PCI` or `SPI`). Validators ignore `x-` keywords; `tools/` and the generated SQL and docs use them.
-- The file name, `title` and `$id` must agree, and a file lives in the directory of its domain.
+- **Types** are plain JSON Schema. `uuid`, `date` and `date-time` are string formats. A number must say what kind: `format` is `money` (18,2), `percent` (9,4; 12.5 means 12.5%), `rate` (18,8) or `decimal` (18,6). A string with `maxLength` becomes `varchar`; without it, `text`. An object property becomes `jsonb`.
+- **Code values** are `enum`, or `oneOf` of `const` + `description` when the values are explained. Values are UPPER_SNAKE_CASE.
+- **Optional properties** are left out of a record when they have no value.
+- **Four extra keywords** carry what JSON Schema has no word for. Validators ignore them; the tools use them to produce SQL, docs and diagrams: `x-primaryKey` and `x-unique` (alternate keys) on the entity, `x-subtypeOf` for a subtype that shares its supertype's key, and `x-references` (`entity.attribute`) for a foreign key. `x-sensitivity` tags a property `PII`, `PHI`, `PCI` or `SPI`.
+- **Audit columns** (`created_at`, `created_by`, `updated_at`, `updated_by`, `row_version`) are not in the schemas. `tools/build.py` adds them to every table in the SQL.
+- The file name must equal `title`, and a file lives in the directory of its domain.
 
 ## Working with it
 
@@ -102,9 +105,7 @@ python3 tools/build.py                            # regenerate dist/ and docs/
 python3 tools/build.py --check                    # fail if generated files are stale
 ```
 
-`validate.py` and `build.py` run on the Python 3.9+ standard library alone. If `jsonschema` 4.18+ is installed, `validate.py` also checks that every schema is valid draft 2020-12, that every `$ref` resolves, and that a minimal record is accepted while unknown or missing attributes are rejected. `check_record.py` needs `jsonschema`.
-
-To validate records from your own code, load every file under `schemas/` into a `referencing.Registry` keyed by `$id` (see `tools/check_record.py`), since entity schemas `$ref` the shared type, mixin and code-list files.
+`validate.py` and `build.py` run on the Python 3.9+ standard library alone. If `jsonschema` is installed, `validate.py` also checks that every schema is valid draft 2020-12, that a minimal record is accepted, and that unknown or missing attributes are rejected. `check_record.py` needs `jsonschema`. You can also point any JSON Schema validator straight at one schema file.
 
 To change the model, edit files under `schemas/`, run `validate.py`, then `build.py`, and commit both source and generated files.
 

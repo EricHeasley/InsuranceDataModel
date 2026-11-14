@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/nonforfeiture_option.schema.json",
-  "title": "nonforfeiture_option",
-  "description": "Automatic option on lapse of a cash-value policy.",
-  "type": "string",
-  "enum": ["CASH_SURRENDER", "REDUCED_PAID_UP", "EXTENDED_TERM", "AUTOMATIC_PREMIUM_LOAN"]
-}

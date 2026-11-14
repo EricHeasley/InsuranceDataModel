@@ -1,59 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/billing_adjustment.schema.json",
   "title": "billing_adjustment",
   "description": "A non-cash change to what a billing account owes: write-off, waived or assessed fee, transfer.",
-  "x-primaryKey": ["billing_adjustment_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["billing_adjustment_id"],
+  "required": ["billing_adjustment_id", "billing_account_id", "billing_adjustment_type", "amount", "adjusted_at"],
   "properties": {
-    "billing_adjustment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "billing_account_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "billing_account.billing_account_id"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "invoice_line_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "invoice_line.invoice_line_id"
-    },
+    "billing_adjustment_id": { "type": "string", "format": "uuid" },
+    "billing_account_id": { "type": "string", "format": "uuid", "x-references": "billing_account.billing_account_id" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "invoice_line_id": { "type": "string", "format": "uuid", "x-references": "invoice_line.invoice_line_id" },
     "billing_adjustment_type": {
-      "$ref": "enums/billing_adjustment_type.schema.json"
+      "type": "string",
+      "enum": ["WRITE_OFF", "FEE_WAIVER", "LATE_FEE", "NSF_FEE", "REINSTATEMENT_FEE", "SMALL_BALANCE", "TRANSFER", "CREDIT"]
     },
-    "amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Signed: positive increases the amount owed."
-    },
-    "adjusted_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "accounting_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "reason": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 200
-    },
-    "approved_by_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    }
+    "amount": { "type": "number", "format": "money", "description": "Signed: positive increases the amount owed." },
+    "adjusted_at": { "type": "string", "format": "date-time" },
+    "accounting_date": { "type": "string", "format": "date" },
+    "reason": { "type": "string", "maxLength": 200 },
+    "approved_by_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" }
   },
-  "required": [
-    "billing_adjustment_id",
-    "billing_account_id",
-    "billing_adjustment_type",
-    "amount",
-    "adjusted_at"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

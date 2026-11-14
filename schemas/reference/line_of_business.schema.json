@@ -1,33 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/line_of_business.schema.json",
   "title": "line_of_business",
   "description": "Hierarchical line of business as managed by the company (e.g. Personal Auto, Homeowners, Workers' Compensation, Term Life, Group Medical).",
-  "x-primaryKey": ["line_of_business_code"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "lob_category": {
-      "$ref": "enums/lob_category.schema.json"
-    },
-    "parent_line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "line_of_business.line_of_business_code"
-    }
-  },
+  "x-primaryKey": ["line_of_business_code"],
   "required": ["line_of_business_code", "name", "lob_category"],
-  "unevaluatedProperties": false
+  "properties": {
+    "line_of_business_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
+    "lob_category": {
+      "type": "string",
+      "oneOf": [
+        { "const": "PC_PERSONAL", "description": "Personal property & casualty" },
+        { "const": "PC_COMMERCIAL", "description": "Commercial property & casualty" },
+        { "const": "LIFE", "description": "Life insurance" },
+        { "const": "ANNUITY", "description": "Annuities" },
+        { "const": "HEALTH", "description": "Medical, dental, vision" },
+        { "const": "ACCIDENT_HEALTH", "description": "Disability, accident, long-term care, supplemental" }
+      ]
+    },
+    "parent_line_of_business_code": { "type": "string", "maxLength": 30, "x-references": "line_of_business.line_of_business_code" }
+  },
+  "additionalProperties": false
 }

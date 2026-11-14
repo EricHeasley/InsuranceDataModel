@@ -1,50 +1,23 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/underwriting_decision.schema.json",
   "title": "underwriting_decision",
   "description": "A recorded underwriting decision on a submission or policy transaction.",
-  "x-primaryKey": ["underwriting_decision_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "underwriting_decision_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "submission_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "submission.submission_id"
-    },
-    "policy_transaction_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_transaction.policy_transaction_id"
-    },
-    "underwriting_decision_type": {
-      "$ref": "enums/underwriting_decision_type.schema.json"
-    },
-    "is_automated": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "True when decided by rules or a model without human review."
-    },
-    "decided_by_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    },
-    "decided_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "reason_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "description": "Reason given, including adverse action reasons."
-    },
-    "conditions": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    }
-  },
+  "x-primaryKey": ["underwriting_decision_id"],
   "required": ["underwriting_decision_id", "underwriting_decision_type", "decided_at"],
-  "unevaluatedProperties": false
+  "properties": {
+    "underwriting_decision_id": { "type": "string", "format": "uuid" },
+    "submission_id": { "type": "string", "format": "uuid", "x-references": "submission.submission_id" },
+    "policy_transaction_id": { "type": "string", "format": "uuid", "x-references": "policy_transaction.policy_transaction_id" },
+    "underwriting_decision_type": {
+      "type": "string",
+      "enum": ["APPROVED", "APPROVED_WITH_CONDITIONS", "COUNTER_OFFER", "REFERRED", "POSTPONED", "DECLINED", "INCOMPLETE"]
+    },
+    "is_automated": { "type": "boolean", "description": "True when decided by rules or a model without human review." },
+    "decided_by_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" },
+    "decided_at": { "type": "string", "format": "date-time" },
+    "reason_code": { "type": "string", "maxLength": 50, "description": "Reason given, including adverse action reasons." },
+    "conditions": { "type": "string" }
+  },
+  "additionalProperties": false
 }

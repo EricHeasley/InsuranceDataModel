@@ -1,92 +1,50 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/health_plan.schema.json",
   "title": "health_plan",
   "description": "A benefit plan design offered under a health product for a plan year.",
+  "type": "object",
   "x-primaryKey": ["health_plan_id"],
   "x-unique": [
     ["plan_code", "plan_year"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["health_plan_id", "product_id", "plan_code", "plan_year", "name", "health_plan_type", "market_segment"],
   "properties": {
-    "health_plan_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "product_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "product.product_id"
-    },
-    "plan_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "plan_year": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
+    "health_plan_id": { "type": "string", "format": "uuid" },
+    "product_id": { "type": "string", "format": "uuid", "x-references": "product.product_id" },
+    "plan_code": { "type": "string", "maxLength": 30 },
+    "plan_year": { "type": "integer" },
+    "name": { "type": "string", "maxLength": 255 },
     "health_plan_type": {
-      "$ref": "enums/health_plan_type.schema.json"
+      "type": "string",
+      "enum": [
+        "HMO", "PPO", "EPO", "POS", "HDHP", "INDEMNITY", "DENTAL_PPO", "DENTAL_HMO", "VISION", "MEDICARE_SUPPLEMENT",
+        "MEDICARE_ADVANTAGE", "PART_D", "SHORT_TERM_DISABILITY", "LONG_TERM_DISABILITY", "LONG_TERM_CARE", "ACCIDENT",
+        "CRITICAL_ILLNESS", "HOSPITAL_INDEMNITY"
+      ]
     },
     "market_segment": {
-      "$ref": "enums/market_segment.schema.json"
+      "type": "string",
+      "enum": ["INDIVIDUAL", "SMALL_GROUP", "LARGE_GROUP", "SELF_FUNDED", "MEDICARE", "MEDICAID", "STUDENT", "ASSOCIATION"]
     },
-    "metal_tier": {
-      "$ref": "enums/metal_tier.schema.json"
-    },
+    "metal_tier": { "type": "string", "enum": ["CATASTROPHIC", "BRONZE", "SILVER", "GOLD", "PLATINUM", "NOT_APPLICABLE"] },
     "hios_plan_id": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 20,
       "description": "CMS HIOS standard component ID with variant, for ACA plans."
     },
     "cms_contract_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 20,
       "description": "Medicare Advantage / Part D contract and plan benefit package."
     },
-    "provider_network_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider_network.provider_network_id"
-    },
-    "individual_deductible_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "family_deductible_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "individual_out_of_pocket_max_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "family_out_of_pocket_max_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "is_hsa_eligible": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "actuarial_value_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "accumulator_period": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20,
-      "description": "CALENDAR_YEAR or PLAN_YEAR."
-    }
+    "provider_network_id": { "type": "string", "format": "uuid", "x-references": "provider_network.provider_network_id" },
+    "individual_deductible_amount": { "type": "number", "format": "money" },
+    "family_deductible_amount": { "type": "number", "format": "money" },
+    "individual_out_of_pocket_max_amount": { "type": "number", "format": "money" },
+    "family_out_of_pocket_max_amount": { "type": "number", "format": "money" },
+    "is_hsa_eligible": { "type": "boolean" },
+    "actuarial_value_percent": { "type": "number", "format": "percent" },
+    "accumulator_period": { "type": "string", "maxLength": 20, "description": "CALENDAR_YEAR or PLAN_YEAR." }
   },
-  "required": [
-    "health_plan_id",
-    "product_id",
-    "plan_code",
-    "plan_year",
-    "name",
-    "health_plan_type",
-    "market_segment"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

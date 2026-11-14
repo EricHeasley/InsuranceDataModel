@@ -1,72 +1,74 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/coverage_definition.schema.json",
   "title": "coverage_definition",
   "description": "A coverage, benefit or rider a product can provide, e.g. Bodily Injury Liability, Dwelling (Coverage A), Employers Liability, Waiver of Premium rider, Guaranteed Lifetime Withdrawal Benefit.",
+  "type": "object",
   "x-primaryKey": ["coverage_definition_id"],
   "x-unique": [
     ["product_id", "coverage_code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["coverage_definition_id", "product_id", "coverage_code", "name", "coverage_category", "is_mandatory"],
   "properties": {
-    "coverage_definition_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "product_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "product.product_id"
-    },
-    "coverage_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
+    "coverage_definition_id": { "type": "string", "format": "uuid" },
+    "product_id": { "type": "string", "format": "uuid", "x-references": "product.product_id" },
+    "coverage_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
     "coverage_category": {
-      "$ref": "enums/coverage_category.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "LIABILITY", "description": "Third-party bodily injury / property damage / financial loss" },
+        { "const": "PROPERTY", "description": "First-party damage to property" },
+        { "const": "MEDICAL_PAYMENTS", "description": "No-fault medical, PIP, med pay" },
+        { "const": "TIME_ELEMENT", "description": "Business income, loss of use, additional living expense" },
+        { "const": "WORKERS_COMP", "description": "Statutory workers' compensation benefits" },
+        { "const": "DEATH_BENEFIT", "description": "Life insurance base coverage" },
+        { "const": "LIVING_BENEFIT", "description": "Annuity and life living-benefit guarantees" },
+        { "const": "RIDER", "description": "Optional life/annuity rider" },
+        { "const": "HEALTH_BENEFIT", "description": "Medical, dental, vision benefit package" },
+        { "const": "INCOME_REPLACEMENT", "description": "Disability and long-term care" },
+        { "const": "SURETY", "description": "Bond obligation" },
+        { "const": "OTHER" }
+      ]
     },
     "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 30,
       "description": "Sub-line within a package product.",
       "x-references": "line_of_business.line_of_business_code"
     },
     "asl_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 10,
       "description": "Default statutory line for premium and loss.",
       "x-references": "annual_statement_line.asl_code"
     },
     "applies_to_object_type": {
-      "$ref": "../policy/enums/insurable_object_type.schema.json",
+      "type": "string",
+      "oneOf": [
+        { "const": "VEHICLE" },
+        { "const": "STRUCTURE", "description": "Dwelling or commercial building" },
+        { "const": "PERSON", "description": "A life or health risk" },
+        {
+          "const": "BUSINESS_OPERATION",
+          "description": "Business operations at a location (liability, workers' comp, cyber, professional)"
+        },
+        { "const": "SCHEDULED_ITEM", "description": "Scheduled personal or business property, equipment, cargo" },
+        { "const": "WATERCRAFT" },
+        { "const": "AIRCRAFT" },
+        { "const": "ANIMAL", "description": "Pet or livestock" },
+        { "const": "BOND_OBLIGATION", "description": "Surety or fidelity obligation" },
+        { "const": "OTHER" }
+      ],
       "description": "Kind of risk this coverage attaches to; null for policy-level coverages."
     },
-    "is_mandatory": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "is_rider": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
+    "is_mandatory": { "type": "boolean" },
+    "is_rider": { "type": "boolean" },
     "parent_coverage_definition_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Base coverage this sub-coverage or rider depends on.",
       "x-references": "coverage_definition.coverage_definition_id"
     }
   },
-  "required": [
-    "coverage_definition_id",
-    "product_id",
-    "coverage_code",
-    "name",
-    "coverage_category",
-    "is_mandatory"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

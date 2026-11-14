@@ -1,81 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_litigation.schema.json",
   "title": "claim_litigation",
   "description": "A lawsuit or other legal proceeding connected to a claim.",
-  "x-primaryKey": ["claim_litigation_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "claim_litigation_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
-    "claim_exposure_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_exposure.claim_exposure_id"
-    },
-    "litigation_status": {
-      "$ref": "enums/litigation_status.schema.json"
-    },
-    "case_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "court_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "venue_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "caption": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
-    },
-    "plaintiff_attorney_claim_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_party.claim_party_id"
-    },
-    "defense_attorney_claim_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_party.claim_party_id"
-    },
-    "filed_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "served_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "trial_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "demand_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "offer_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "resolution_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "resolved_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "is_coverage_litigation": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Suit against the insurer over coverage or claim handling."
-    }
-  },
+  "x-primaryKey": ["claim_litigation_id"],
   "required": ["claim_litigation_id", "claim_id", "litigation_status"],
-  "unevaluatedProperties": false
+  "properties": {
+    "claim_litigation_id": { "type": "string", "format": "uuid" },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
+    "claim_exposure_id": { "type": "string", "format": "uuid", "x-references": "claim_exposure.claim_exposure_id" },
+    "litigation_status": {
+      "type": "string",
+      "enum": ["PRE_SUIT", "FILED", "DISCOVERY", "MEDIATION", "TRIAL", "APPEAL", "SETTLED", "JUDGMENT", "DISMISSED", "CLOSED"]
+    },
+    "case_number": { "type": "string", "maxLength": 50 },
+    "court_name": { "type": "string", "maxLength": 255 },
+    "venue_jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "caption": { "type": "string", "maxLength": 500 },
+    "plaintiff_attorney_claim_party_id": { "type": "string", "format": "uuid", "x-references": "claim_party.claim_party_id" },
+    "defense_attorney_claim_party_id": { "type": "string", "format": "uuid", "x-references": "claim_party.claim_party_id" },
+    "filed_on": { "type": "string", "format": "date" },
+    "served_on": { "type": "string", "format": "date" },
+    "trial_date": { "type": "string", "format": "date" },
+    "demand_amount": { "type": "number", "format": "money" },
+    "offer_amount": { "type": "number", "format": "money" },
+    "resolution_amount": { "type": "number", "format": "money" },
+    "resolved_on": { "type": "string", "format": "date" },
+    "is_coverage_litigation": { "type": "boolean", "description": "Suit against the insurer over coverage or claim handling." }
+  },
+  "additionalProperties": false
 }

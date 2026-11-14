@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/enums/scope_inclusion.schema.json",
-  "title": "scope_inclusion",
-  "description": "Whether a scope row includes or excludes business.",
-  "type": "string",
-  "enum": ["INCLUDE", "EXCLUDE"]
-}

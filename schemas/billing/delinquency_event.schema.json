@@ -1,50 +1,31 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/delinquency_event.schema.json",
   "title": "delinquency_event",
   "description": "A step in handling a past-due account, such as a notice of cancellation for non-payment.",
-  "x-primaryKey": ["delinquency_event_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["delinquency_event_id"],
+  "required": ["delinquency_event_id", "billing_account_id", "delinquency_event_type", "event_date"],
   "properties": {
-    "delinquency_event_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "billing_account_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "billing_account.billing_account_id"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
+    "delinquency_event_id": { "type": "string", "format": "uuid" },
+    "billing_account_id": { "type": "string", "format": "uuid", "x-references": "billing_account.billing_account_id" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
     "delinquency_event_type": {
-      "$ref": "enums/delinquency_event_type.schema.json"
+      "type": "string",
+      "enum": [
+        "PAST_DUE_NOTICE", "NOTICE_OF_CANCELLATION", "GRACE_PERIOD_START", "CANCELLATION_REQUESTED", "LAPSE_NOTICE",
+        "COLLECTIONS_REFERRAL", "CURED"
+      ]
     },
-    "event_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "past_due_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "cure_by_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Date by which payment avoids cancellation or lapse."
-    },
-    "notice_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    },
+    "event_date": { "type": "string", "format": "date" },
+    "past_due_amount": { "type": "number", "format": "money" },
+    "cure_by_date": { "type": "string", "format": "date", "description": "Date by which payment avoids cancellation or lapse." },
+    "notice_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" },
     "policy_transaction_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Resulting cancellation or lapse transaction.",
       "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["delinquency_event_id", "billing_account_id", "delinquency_event_type", "event_date"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

@@ -1,71 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_payment.schema.json",
   "title": "claim_payment",
   "description": "A payment issued on a claim to one or more payees. Its allocation to exposures and cost categories is in the claim ledger; the instrument is a disbursement.",
-  "x-primaryKey": ["claim_payment_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["claim_payment_id"],
+  "required": ["claim_payment_id", "claim_id", "claim_payment_type", "claim_payment_status", "amount", "requested_at"],
   "properties": {
-    "claim_payment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
-    "claim_payment_type": {
-      "$ref": "enums/claim_payment_type.schema.json"
-    },
+    "claim_payment_id": { "type": "string", "format": "uuid" },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
+    "claim_payment_type": { "type": "string", "enum": ["PARTIAL", "FINAL", "SUPPLEMENTAL", "ADVANCE", "RECURRING"] },
     "claim_payment_status": {
-      "$ref": "enums/claim_payment_status.schema.json"
+      "type": "string",
+      "enum": ["REQUESTED", "PENDING_APPROVAL", "APPROVED", "ISSUED", "CLEARED", "VOIDED", "STOPPED", "REJECTED"]
     },
-    "amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "disbursement_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "disbursement.disbursement_id"
-    },
-    "requested_by_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    },
-    "approved_by_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    },
-    "requested_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "approved_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "invoice_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "description": "Vendor invoice being paid."
-    },
-    "memo": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
-    },
-    "is_tax_reportable": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Reportable on IRS Form 1099."
-    }
+    "amount": { "type": "number", "format": "money" },
+    "disbursement_id": { "type": "string", "format": "uuid", "x-references": "disbursement.disbursement_id" },
+    "requested_by_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" },
+    "approved_by_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" },
+    "requested_at": { "type": "string", "format": "date-time" },
+    "approved_at": { "type": "string", "format": "date-time" },
+    "invoice_number": { "type": "string", "maxLength": 50, "description": "Vendor invoice being paid." },
+    "memo": { "type": "string", "maxLength": 500 },
+    "is_tax_reportable": { "type": "boolean", "description": "Reportable on IRS Form 1099." }
   },
-  "required": [
-    "claim_payment_id",
-    "claim_id",
-    "claim_payment_type",
-    "claim_payment_status",
-    "amount",
-    "requested_at"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

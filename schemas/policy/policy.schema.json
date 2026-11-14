@@ -1,91 +1,78 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy.schema.json",
   "title": "policy",
   "description": "An insurance contract between an insurer and a policyholder, identified by a policy number that persists across renewals. For group business the master contract and each certificate are policies linked by master_policy_id.",
+  "type": "object",
   "x-primaryKey": ["policy_id"],
   "x-unique": [
     ["policy_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "required": [
+    "policy_id", "policy_number", "product_id", "insurer_id", "line_of_business_code", "policy_structure",
+    "policy_status", "governing_jurisdiction_code", "currency_code", "original_inception_date"
   ],
   "properties": {
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "product_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "product.product_id"
-    },
-    "insurer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "description": "Writing company.",
-      "x-references": "insurer.insurer_id"
-    },
-    "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "line_of_business.line_of_business_code"
-    },
+    "policy_id": { "type": "string", "format": "uuid" },
+    "policy_number": { "type": "string", "maxLength": 30 },
+    "product_id": { "type": "string", "format": "uuid", "x-references": "product.product_id" },
+    "insurer_id": { "type": "string", "format": "uuid", "description": "Writing company.", "x-references": "insurer.insurer_id" },
+    "line_of_business_code": { "type": "string", "maxLength": 30, "x-references": "line_of_business.line_of_business_code" },
     "policy_structure": {
-      "$ref": "enums/policy_structure.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "INDIVIDUAL", "description": "Stand-alone policy" },
+        {
+          "const": "GROUP_MASTER",
+          "description": "Group master contract issued to an employer, association or trust"
+        },
+        { "const": "CERTIFICATE", "description": "Certificate or member-level contract under a group master" }
+      ]
     },
     "master_policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Group master contract for a certificate.",
       "x-references": "policy.policy_id"
     },
     "policy_status": {
-      "$ref": "enums/policy_status.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "PENDING", "description": "Bound or applied for, not yet in force" },
+        { "const": "IN_FORCE" },
+        { "const": "CANCELLED" },
+        { "const": "EXPIRED", "description": "Term ended without renewal" },
+        { "const": "NON_RENEWED" },
+        { "const": "LAPSED", "description": "Terminated for non-payment after grace period (life/health)" },
+        { "const": "REDUCED_PAID_UP" },
+        { "const": "EXTENDED_TERM" },
+        { "const": "SURRENDERED" },
+        { "const": "MATURED" },
+        { "const": "ANNUITIZED" },
+        { "const": "DEATH_CLAIM", "description": "Terminated by death of the insured" },
+        { "const": "CONVERTED", "description": "Converted or exchanged to another policy" },
+        { "const": "RESCINDED" }
+      ]
     },
     "governing_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 6,
       "description": "State whose law and filings govern the contract (issue state).",
       "x-references": "jurisdiction.jurisdiction_code"
     },
-    "currency_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 3,
-      "x-references": "currency.currency_code"
-    },
+    "currency_code": { "type": "string", "maxLength": 3, "x-references": "currency.currency_code" },
     "original_inception_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
+      "type": "string",
+      "format": "date",
       "description": "First effective date of continuous coverage; issue date for life and annuity."
     },
-    "submission_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "submission.submission_id"
-    },
+    "submission_id": { "type": "string", "format": "uuid", "x-references": "submission.submission_id" },
     "replaces_policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Prior policy this one rewrote, converted from or replaced (including 1035 exchanges).",
       "x-references": "policy.policy_id"
     },
-    "is_assumed_business": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "True for policies acquired through assumption or book transfer."
-    }
+    "is_assumed_business": { "type": "boolean", "description": "True for policies acquired through assumption or book transfer." }
   },
-  "required": [
-    "policy_id",
-    "policy_number",
-    "product_id",
-    "insurer_id",
-    "line_of_business_code",
-    "policy_structure",
-    "policy_status",
-    "governing_jurisdiction_code",
-    "currency_code",
-    "original_inception_date"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

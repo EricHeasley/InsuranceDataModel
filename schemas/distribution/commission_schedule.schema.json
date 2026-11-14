@@ -1,61 +1,33 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/commission_schedule.schema.json",
   "title": "commission_schedule",
   "description": "Commission rate that applies under a producer agreement for a product or line, by business event and policy year.",
-  "x-primaryKey": ["commission_schedule_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["commission_schedule_id"],
+  "required": ["commission_schedule_id", "producer_agreement_id", "commission_basis", "effective_on"],
   "properties": {
-    "commission_schedule_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "producer_agreement_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "producer_agreement.producer_agreement_id"
-    },
-    "product_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "product.product_id"
-    },
-    "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "line_of_business.line_of_business_code"
-    },
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
+    "commission_schedule_id": { "type": "string", "format": "uuid" },
+    "producer_agreement_id": { "type": "string", "format": "uuid", "x-references": "producer_agreement.producer_agreement_id" },
+    "product_id": { "type": "string", "format": "uuid", "x-references": "product.product_id" },
+    "line_of_business_code": { "type": "string", "maxLength": 30, "x-references": "line_of_business.line_of_business_code" },
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
     "commission_basis": {
-      "$ref": "enums/commission_basis.schema.json"
+      "type": "string",
+      "enum": ["NEW_BUSINESS", "RENEWAL", "FIRST_YEAR", "TRAIL", "OVERRIDE", "CONTINGENT", "BONUS"]
     },
     "policy_year_from": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
+      "type": "integer",
       "description": "First policy year the rate applies to (life/annuity first-year vs renewal scales)."
     },
-    "policy_year_to": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "commission_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
+    "policy_year_to": { "type": "integer" },
+    "commission_percent": { "type": "number", "format": "percent" },
     "flat_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
+      "type": "number",
+      "format": "money",
       "description": "Per-policy or per-member-per-month amount when not a percentage."
     },
-    "effective_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "expires_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "effective_on": { "type": "string", "format": "date" },
+    "expires_on": { "type": "string", "format": "date" }
   },
-  "required": ["commission_schedule_id", "producer_agreement_id", "commission_basis", "effective_on"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

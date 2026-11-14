@@ -1,48 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/surety_bond.schema.json",
   "title": "surety_bond",
   "description": "Surety or fidelity bond specific attributes of a policy. Principal and obligee are policy parties.",
+  "type": "object",
   "x-primaryKey": ["policy_id"],
   "x-subtypeOf": "policy",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "bond_type": {
-      "$ref": "enums/bond_type.schema.json"
-    },
-    "penal_sum_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "contract_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "obligation_description": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    },
-    "is_continuous": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Continuous until cancelled rather than a fixed term."
-    },
-    "collateral_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "indemnity_agreement_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    },
-    "released_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
-  },
   "required": ["policy_id", "bond_type", "penal_sum_amount"],
-  "unevaluatedProperties": false
+  "properties": {
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "bond_type": {
+      "type": "string",
+      "enum": [
+        "CONTRACT_BID", "CONTRACT_PERFORMANCE", "CONTRACT_PAYMENT", "LICENSE_PERMIT", "COURT", "PUBLIC_OFFICIAL",
+        "FIDUCIARY", "FIDELITY", "MISCELLANEOUS"
+      ]
+    },
+    "penal_sum_amount": { "type": "number", "format": "money" },
+    "contract_amount": { "type": "number", "format": "money" },
+    "obligation_description": { "type": "string" },
+    "is_continuous": { "type": "boolean", "description": "Continuous until cancelled rather than a fixed term." },
+    "collateral_amount": { "type": "number", "format": "money" },
+    "indemnity_agreement_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" },
+    "released_on": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
 }

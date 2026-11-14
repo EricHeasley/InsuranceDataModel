@@ -1,79 +1,40 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/disability_claim_detail.schema.json",
   "title": "disability_claim_detail",
   "description": "Disability, long-term care and waiver specific attributes of a claim.",
+  "type": "object",
   "x-primaryKey": ["claim_id"],
   "x-subtypeOf": "claim",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["claim_id", "disability_type", "claimant_party_id", "disability_date"],
   "properties": {
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
     "disability_type": {
-      "$ref": "enums/disability_type.schema.json"
+      "type": "string",
+      "enum": ["SHORT_TERM", "LONG_TERM", "WAIVER_OF_PREMIUM", "LONG_TERM_CARE", "PAID_FAMILY_LEAVE"]
     },
-    "claimant_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "person.party_id"
-    },
-    "disability_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "last_day_worked": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "primary_diagnosis_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_value.code_value_id",
-      "x-sensitivity": "PHI"
-    },
-    "elimination_period_days": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "benefit_start_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "maximum_benefit_end_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "gross_benefit_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
+    "claimant_party_id": { "type": "string", "format": "uuid", "x-references": "person.party_id" },
+    "disability_date": { "type": "string", "format": "date" },
+    "last_day_worked": { "type": "string", "format": "date" },
+    "primary_diagnosis_code_value_id": { "type": "string", "format": "uuid", "x-references": "code_value.code_value_id", "x-sensitivity": "PHI" },
+    "elimination_period_days": { "type": "integer" },
+    "benefit_start_date": { "type": "string", "format": "date" },
+    "maximum_benefit_end_date": { "type": "string", "format": "date" },
+    "gross_benefit_amount": { "type": "number", "format": "money" },
     "benefit_frequency": {
-      "$ref": "../life_annuity/enums/premium_mode.schema.json"
+      "type": "string",
+      "enum": ["ANNUAL", "SEMI_ANNUAL", "QUARTERLY", "MONTHLY", "BIWEEKLY", "WEEKLY", "SINGLE", "FLEXIBLE"]
     },
-    "predisability_earnings_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "x-sensitivity": "SPI"
-    },
-    "offset_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Social Security, workers' comp and other income offsets."
-    },
+    "predisability_earnings_amount": { "type": "number", "format": "money", "x-sensitivity": "SPI" },
+    "offset_amount": { "type": "number", "format": "money", "description": "Social Security, workers' comp and other income offsets." },
     "own_occupation_end_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
+      "type": "string",
+      "format": "date",
       "description": "Date the definition of disability changes from own to any occupation."
     },
-    "expected_return_to_work_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "actual_return_to_work_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "is_work_related": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "ssdi_award_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "expected_return_to_work_date": { "type": "string", "format": "date" },
+    "actual_return_to_work_date": { "type": "string", "format": "date" },
+    "is_work_related": { "type": "boolean" },
+    "ssdi_award_date": { "type": "string", "format": "date" }
   },
-  "required": ["claim_id", "disability_type", "claimant_party_id", "disability_date"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

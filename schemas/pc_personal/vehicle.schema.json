@@ -1,73 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/vehicle.schema.json",
   "title": "vehicle",
   "description": "A motor vehicle or trailer, personal or commercial.",
+  "type": "object",
   "x-primaryKey": ["insurable_object_id"],
   "x-subtypeOf": "insurable_object",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "insurable_object_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurable_object.insurable_object_id"
-    },
-    "vin": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 17,
-      "description": "Vehicle identification number."
-    },
-    "model_year": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "make": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "model": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "body_style": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "vehicle_type": {
-      "$ref": "enums/vehicle_type.schema.json"
-    },
-    "gross_vehicle_weight": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Pounds."
-    },
-    "cost_new_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "symbol_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 10,
-      "description": "ISO or company vehicle rating symbol."
-    },
-    "has_anti_theft_device": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_advanced_driver_assistance": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "registration_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "license_plate": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 15,
-      "x-sensitivity": "PII"
-    }
-  },
   "required": ["insurable_object_id", "vehicle_type"],
-  "unevaluatedProperties": false
+  "properties": {
+    "insurable_object_id": { "type": "string", "format": "uuid", "x-references": "insurable_object.insurable_object_id" },
+    "vin": { "type": "string", "maxLength": 17, "description": "Vehicle identification number." },
+    "model_year": { "type": "integer" },
+    "make": { "type": "string", "maxLength": 50 },
+    "model": { "type": "string", "maxLength": 50 },
+    "body_style": { "type": "string", "maxLength": 50 },
+    "vehicle_type": {
+      "type": "string",
+      "enum": [
+        "PRIVATE_PASSENGER", "PICKUP_VAN", "MOTORCYCLE", "MOTORHOME", "TRAILER", "LIGHT_TRUCK", "MEDIUM_TRUCK",
+        "HEAVY_TRUCK", "EXTRA_HEAVY_TRUCK", "TRACTOR", "BUS", "ANTIQUE", "OFF_ROAD", "OTHER"
+      ]
+    },
+    "gross_vehicle_weight": { "type": "integer", "description": "Pounds." },
+    "cost_new_amount": { "type": "number", "format": "money" },
+    "symbol_code": { "type": "string", "maxLength": 10, "description": "ISO or company vehicle rating symbol." },
+    "has_anti_theft_device": { "type": "boolean" },
+    "has_advanced_driver_assistance": { "type": "boolean" },
+    "registration_jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "license_plate": { "type": "string", "maxLength": 15, "x-sensitivity": "PII" }
+  },
+  "additionalProperties": false
 }

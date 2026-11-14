@@ -1,33 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/cause_of_loss.schema.json",
   "title": "cause_of_loss",
   "description": "Peril or cause of loss (collision, fire, wind, theft, water damage, bodily injury, ...).",
-  "x-primaryKey": ["cause_of_loss_code"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "cause_of_loss_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "peril_group": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "Roll-up group, e.g. WEATHER, FIRE, LIABILITY, THEFT."
-    },
-    "is_catastrophe_peril": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    }
-  },
+  "x-primaryKey": ["cause_of_loss_code"],
   "required": ["cause_of_loss_code", "name"],
-  "unevaluatedProperties": false
+  "properties": {
+    "cause_of_loss_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
+    "peril_group": { "type": "string", "maxLength": 30, "description": "Roll-up group, e.g. WEATHER, FIRE, LIABILITY, THEFT." },
+    "is_catastrophe_peril": { "type": "boolean" }
+  },
+  "additionalProperties": false
 }

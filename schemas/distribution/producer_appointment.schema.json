@@ -1,54 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/producer_appointment.schema.json",
   "title": "producer_appointment",
   "description": "Appointment of a producer by a writing company in a state, authorizing the producer to act for that company.",
-  "x-primaryKey": ["producer_appointment_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["producer_appointment_id"],
+  "required": ["producer_appointment_id", "producer_id", "insurer_id", "jurisdiction_code", "appointment_status", "effective_on"],
   "properties": {
-    "producer_appointment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "producer.producer_id"
-    },
-    "insurer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurer.insurer_id"
-    },
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "line_of_business.line_of_business_code"
-    },
-    "appointment_status": {
-      "$ref": "enums/license_status.schema.json"
-    },
-    "effective_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "terminated_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "producer_appointment_id": { "type": "string", "format": "uuid" },
+    "producer_id": { "type": "string", "format": "uuid", "x-references": "producer.producer_id" },
+    "insurer_id": { "type": "string", "format": "uuid", "x-references": "insurer.insurer_id" },
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "line_of_business_code": { "type": "string", "maxLength": 30, "x-references": "line_of_business.line_of_business_code" },
+    "appointment_status": { "type": "string", "enum": ["PENDING", "ACTIVE", "EXPIRED", "SUSPENDED", "REVOKED", "TERMINATED"] },
+    "effective_on": { "type": "string", "format": "date" },
+    "terminated_on": { "type": "string", "format": "date" }
   },
-  "required": [
-    "producer_appointment_id",
-    "producer_id",
-    "insurer_id",
-    "jurisdiction_code",
-    "appointment_status",
-    "effective_on"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

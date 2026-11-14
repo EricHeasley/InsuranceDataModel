@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/payout_status.schema.json",
-  "title": "payout_status",
-  "description": "Status of a payout stream.",
-  "type": "string",
-  "enum": ["PENDING", "ACTIVE", "SUSPENDED", "COMPLETED", "TERMINATED"]
-}

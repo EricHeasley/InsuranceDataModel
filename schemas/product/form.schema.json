@@ -1,48 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/form.schema.json",
   "title": "form",
   "description": "A policy form, endorsement or notice edition (ISO, NCCI, ACORD or proprietary).",
+  "type": "object",
   "x-primaryKey": ["form_id"],
   "x-unique": [
     ["form_number", "edition"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "form_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "form_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "edition": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20,
-      "description": "Edition date as printed, e.g. 04 13."
-    },
-    "title": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "form_type": {
-      "$ref": "enums/form_type.schema.json"
-    },
-    "publisher": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "description": "ISO, NCCI, AAIS, ACORD or the company."
-    },
-    "template_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    }
-  },
   "required": ["form_id", "form_number", "edition", "title", "form_type"],
-  "unevaluatedProperties": false
+  "properties": {
+    "form_id": { "type": "string", "format": "uuid" },
+    "form_number": { "type": "string", "maxLength": 50 },
+    "edition": { "type": "string", "maxLength": 20, "description": "Edition date as printed, e.g. 04 13." },
+    "title": { "type": "string", "maxLength": 255 },
+    "form_type": {
+      "type": "string",
+      "enum": [
+        "POLICY_JACKET", "COVERAGE_FORM", "DECLARATIONS", "ENDORSEMENT", "RIDER", "NOTICE", "APPLICATION",
+        "CERTIFICATE"
+      ]
+    },
+    "publisher": { "type": "string", "maxLength": 50, "description": "ISO, NCCI, AAIS, ACORD or the company." },
+    "template_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" }
+  },
+  "additionalProperties": false
 }

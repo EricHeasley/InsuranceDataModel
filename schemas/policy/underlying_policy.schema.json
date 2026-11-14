@@ -1,62 +1,50 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/underlying_policy.schema.json",
   "title": "underlying_policy",
   "description": "A primary policy scheduled beneath an umbrella or excess policy, whether written by this insurer or another.",
-  "x-primaryKey": ["underlying_policy_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
-  ],
+  "x-primaryKey": ["underlying_policy_id"],
+  "required": ["underlying_policy_id", "policy_id", "effective_date", "added_by_transaction_id"],
   "properties": {
-    "underlying_policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
+    "underlying_policy_id": { "type": "string", "format": "uuid" },
     "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "The umbrella or excess policy.",
       "x-references": "policy.policy_id"
     },
     "internal_policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "The underlying policy when written by this insurer.",
       "x-references": "policy.policy_id"
     },
-    "carrier_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
+    "carrier_name": { "type": "string", "maxLength": 255 },
+    "underlying_policy_number": { "type": "string", "maxLength": 50 },
+    "line_of_business_code": { "type": "string", "maxLength": 30, "x-references": "line_of_business.line_of_business_code" },
+    "per_occurrence_limit_amount": { "type": "number", "format": "money" },
+    "aggregate_limit_amount": { "type": "number", "format": "money" },
+    "limits_description": { "type": "string", "maxLength": 200 },
+    "underlying_effective_date": { "type": "string", "format": "date" },
+    "underlying_expiration_date": { "type": "string", "format": "date" },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "underlying_policy_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "line_of_business.line_of_business_code"
-    },
-    "per_occurrence_limit_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "aggregate_limit_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "limits_description": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 200
-    },
-    "underlying_effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "underlying_expiration_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["underlying_policy_id", "policy_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

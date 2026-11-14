@@ -1,55 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/underwriting_requirement.schema.json",
   "title": "underwriting_requirement",
   "description": "A piece of evidence ordered for an underwriting case: paramedical exam, labs, attending physician statement, MIB check, prescription history, MVR, inspection report, financial statement.",
-  "x-primaryKey": ["underwriting_requirement_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["underwriting_requirement_id"],
+  "required": ["underwriting_requirement_id", "underwriting_case_id", "requirement_code", "requirement_status"],
   "properties": {
-    "underwriting_requirement_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "underwriting_case_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "underwriting_case.underwriting_case_id"
-    },
+    "underwriting_requirement_id": { "type": "string", "format": "uuid" },
+    "underwriting_case_id": { "type": "string", "format": "uuid", "x-references": "underwriting_case.underwriting_case_id" },
     "requirement_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 30,
       "description": "PARAMED, BLOOD, URINE, EKG, APS, MIB, RX, MVR, INSPECTION, FINANCIAL, ..."
     },
-    "requirement_status": {
-      "$ref": "enums/requirement_status.schema.json"
-    },
-    "vendor_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "ordered_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "received_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "result_summary": {
-      "$ref": "../common/types.schema.json#/$defs/text",
-      "x-sensitivity": "PHI"
-    },
-    "result_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    }
+    "requirement_status": { "type": "string", "enum": ["ORDERED", "RECEIVED", "REVIEWED", "WAIVED", "CANCELLED"] },
+    "vendor_party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "ordered_on": { "type": "string", "format": "date" },
+    "received_on": { "type": "string", "format": "date" },
+    "result_summary": { "type": "string", "x-sensitivity": "PHI" },
+    "result_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" }
   },
-  "required": [
-    "underwriting_requirement_id",
-    "underwriting_case_id",
-    "requirement_code",
-    "requirement_status"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

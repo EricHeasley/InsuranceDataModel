@@ -1,68 +1,31 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/coverage_insured.schema.json",
   "title": "coverage_insured",
   "description": "A person whose life is insured under a coverage or rider, with the underwriting class assigned to them.",
+  "type": "object",
   "x-primaryKey": ["coverage_insured_id"],
   "x-unique": [
     ["policy_coverage_id", "party_id"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["coverage_insured_id", "policy_coverage_id", "party_id", "insured_role", "issue_age"],
   "properties": {
-    "coverage_insured_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_coverage_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_coverage.policy_coverage_id"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "person.party_id"
-    },
-    "insured_role": {
-      "$ref": "enums/insured_role.schema.json"
-    },
-    "issue_age": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "age_basis": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20,
-      "description": "AGE_NEAREST or AGE_LAST birthday."
-    },
-    "rated_gender": {
-      "$ref": "../party/enums/gender.schema.json"
-    },
+    "coverage_insured_id": { "type": "string", "format": "uuid" },
+    "policy_coverage_id": { "type": "string", "format": "uuid", "x-references": "policy_coverage.policy_coverage_id" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "person.party_id" },
+    "insured_role": { "type": "string", "enum": ["PRIMARY", "JOINT", "SPOUSE", "CHILD", "OTHER_INSURED"] },
+    "issue_age": { "type": "integer" },
+    "age_basis": { "type": "string", "maxLength": 20, "description": "AGE_NEAREST or AGE_LAST birthday." },
+    "rated_gender": { "type": "string", "enum": ["FEMALE", "MALE", "NONBINARY", "UNKNOWN"] },
     "underwriting_class": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 30,
       "description": "PREFERRED_PLUS, PREFERRED, STANDARD_PLUS, STANDARD, SUBSTANDARD, ...",
       "x-sensitivity": "PHI"
     },
-    "tobacco_status": {
-      "$ref": "enums/tobacco_status.schema.json",
-      "x-sensitivity": "PHI"
-    },
-    "table_rating": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 5,
-      "description": "Substandard table (A-P or 1-16).",
-      "x-sensitivity": "PHI"
-    },
-    "flat_extra_per_thousand": {
-      "$ref": "../common/types.schema.json#/$defs/rate",
-      "x-sensitivity": "PHI"
-    },
-    "flat_extra_end_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "tobacco_status": { "type": "string", "enum": ["NON_TOBACCO", "TOBACCO", "UNISMOKE"], "x-sensitivity": "PHI" },
+    "table_rating": { "type": "string", "maxLength": 5, "description": "Substandard table (A-P or 1-16).", "x-sensitivity": "PHI" },
+    "flat_extra_per_thousand": { "type": "number", "format": "rate", "x-sensitivity": "PHI" },
+    "flat_extra_end_date": { "type": "string", "format": "date" }
   },
-  "required": ["coverage_insured_id", "policy_coverage_id", "party_id", "insured_role", "issue_age"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

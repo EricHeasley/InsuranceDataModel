@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/enums/vehicle_use.schema.json",
-  "title": "vehicle_use",
-  "description": "How a personal vehicle is used.",
-  "type": "string",
-  "enum": ["PLEASURE", "COMMUTE", "BUSINESS", "FARM", "RIDESHARE"]
-}

@@ -1,53 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/driver_incident.schema.json",
   "title": "driver_incident",
   "description": "An accident, violation or claim on a driver's record used in rating, from an MVR, CLUE report or self-report.",
-  "x-primaryKey": ["driver_incident_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "driver_incident_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_driver_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_driver.policy_driver_id"
-    },
-    "driver_incident_type": {
-      "$ref": "enums/driver_incident_type.schema.json"
-    },
-    "incident_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "conviction_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "violation_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "description": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
-    },
-    "source": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "MVR, CLUE, SELF_REPORTED, INTERNAL_CLAIM."
-    },
-    "paid_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "is_chargeable": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Whether the incident is surcharged."
-    }
-  },
+  "x-primaryKey": ["driver_incident_id"],
   "required": ["driver_incident_id", "policy_driver_id", "driver_incident_type", "incident_date"],
-  "unevaluatedProperties": false
+  "properties": {
+    "driver_incident_id": { "type": "string", "format": "uuid" },
+    "policy_driver_id": { "type": "string", "format": "uuid", "x-references": "policy_driver.policy_driver_id" },
+    "driver_incident_type": {
+      "type": "string",
+      "enum": [
+        "AT_FAULT_ACCIDENT", "NOT_AT_FAULT_ACCIDENT", "MINOR_VIOLATION", "MAJOR_VIOLATION", "DUI", "SUSPENSION",
+        "COMPREHENSIVE_CLAIM"
+      ]
+    },
+    "incident_date": { "type": "string", "format": "date" },
+    "conviction_date": { "type": "string", "format": "date" },
+    "violation_code": { "type": "string", "maxLength": 30 },
+    "description": { "type": "string", "maxLength": 500 },
+    "source": { "type": "string", "maxLength": 30, "description": "MVR, CLUE, SELF_REPORTED, INTERNAL_CLAIM." },
+    "paid_amount": { "type": "number", "format": "money" },
+    "is_chargeable": { "type": "boolean", "description": "Whether the incident is surcharged." }
+  },
+  "additionalProperties": false
 }

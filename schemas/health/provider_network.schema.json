@@ -1,40 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/provider_network.schema.json",
   "title": "provider_network",
   "description": "A contracted network of providers that plans use to define in-network benefits.",
+  "type": "object",
   "x-primaryKey": ["provider_network_id"],
   "x-unique": [
     ["network_code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "provider_network_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "network_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "network_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "MEDICAL, DENTAL, VISION, PHARMACY, BEHAVIORAL."
-    },
-    "is_leased": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Rented from a third-party network."
-    }
-  },
   "required": ["provider_network_id", "network_code", "name"],
-  "unevaluatedProperties": false
+  "properties": {
+    "provider_network_id": { "type": "string", "format": "uuid" },
+    "network_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
+    "network_type": { "type": "string", "maxLength": 30, "description": "MEDICAL, DENTAL, VISION, PHARMACY, BEHAVIORAL." },
+    "is_leased": { "type": "boolean", "description": "Rented from a third-party network." }
+  },
+  "additionalProperties": false
 }

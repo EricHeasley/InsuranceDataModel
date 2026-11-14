@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enums/claim_line_status.schema.json",
-  "title": "claim_line_status",
-  "description": "Adjudication status of a claim line.",
-  "type": "string",
-  "enum": ["PENDED", "APPROVED", "DENIED", "ADJUSTED"]
-}

@@ -1,46 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/payment_plan.schema.json",
   "title": "payment_plan",
   "description": "An installment schedule offered to payors.",
+  "type": "object",
   "x-primaryKey": ["payment_plan_id"],
   "x-unique": [
     ["plan_code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "payment_plan_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "plan_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "billing_frequency": {
-      "$ref": "enums/billing_frequency.schema.json"
-    },
-    "installment_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "down_payment_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "installment_fee_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "days_billed_before_due": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    }
-  },
   "required": ["payment_plan_id", "plan_code", "name", "billing_frequency"],
-  "unevaluatedProperties": false
+  "properties": {
+    "payment_plan_id": { "type": "string", "format": "uuid" },
+    "plan_code": { "type": "string", "maxLength": 30 },
+    "name": { "type": "string", "maxLength": 255 },
+    "billing_frequency": {
+      "type": "string",
+      "enum": ["FULL_PAY", "SEMI_ANNUAL", "QUARTERLY", "MONTHLY", "BIWEEKLY", "WEEKLY", "PER_PAYROLL"]
+    },
+    "installment_count": { "type": "integer" },
+    "down_payment_percent": { "type": "number", "format": "percent" },
+    "installment_fee_amount": { "type": "number", "format": "money" },
+    "days_billed_before_due": { "type": "integer" }
+  },
+  "additionalProperties": false
 }

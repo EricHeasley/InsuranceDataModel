@@ -1,58 +1,48 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_rating_modifier.schema.json",
   "title": "policy_rating_modifier",
   "description": "A discount, surcharge, experience modification, schedule credit or underwriting class applied in rating a policy, risk or coverage.",
-  "x-primaryKey": ["policy_rating_modifier_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
+  "x-primaryKey": ["policy_rating_modifier_id"],
+  "required": [
+    "policy_rating_modifier_id", "policy_id", "rating_modifier_type", "modifier_code", "effective_date",
+    "added_by_transaction_id"
   ],
   "properties": {
-    "policy_rating_modifier_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
-    },
-    "policy_coverage_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_coverage.policy_coverage_id"
-    },
+    "policy_rating_modifier_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
+    "policy_coverage_id": { "type": "string", "format": "uuid", "x-references": "policy_coverage.policy_coverage_id" },
     "rating_modifier_type": {
-      "$ref": "enums/rating_modifier_type.schema.json"
+      "type": "string",
+      "enum": [
+        "DISCOUNT", "SURCHARGE", "EXPERIENCE_MODIFICATION", "SCHEDULE_RATING", "IRPM", "TIER", "INSURANCE_SCORE",
+        "MULTI_POLICY", "LOSS_FREE", "PREMIUM_DISCOUNT", "RISK_CLASS", "TABLE_RATING", "FLAT_EXTRA", "OTHER"
+      ]
     },
-    "modifier_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
+    "modifier_code": { "type": "string", "maxLength": 50 },
+    "factor": { "type": "number", "format": "rate", "description": "Multiplicative factor, e.g. 0.85 experience mod." },
+    "amount": { "type": "number", "format": "money", "description": "Flat amount when the modifier is additive." },
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "justification": { "type": "string" },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "factor": {
-      "$ref": "../common/types.schema.json#/$defs/rate",
-      "description": "Multiplicative factor, e.g. 0.85 experience mod."
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Flat amount when the modifier is additive."
-    },
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "justification": {
-      "$ref": "../common/types.schema.json#/$defs/text"
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["policy_rating_modifier_id", "policy_id", "rating_modifier_type", "modifier_code"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

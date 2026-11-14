@@ -1,78 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_layer.schema.json",
   "title": "reinsurance_layer",
   "description": "A layer or section of a reinsurance contract with its own retention, limit and pricing. Proportional contracts have a single layer carrying the ceded share.",
+  "type": "object",
   "x-primaryKey": ["reinsurance_layer_id"],
   "x-unique": [
     ["reinsurance_contract_id", "layer_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "reinsurance_layer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "reinsurance_contract_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "reinsurance_contract.reinsurance_contract_id"
-    },
-    "layer_number": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "attachment_point_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Retention the layer sits above."
-    },
-    "limit_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "aggregate_limit_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "aggregate_deductible_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "ceded_share_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent",
-      "description": "Share ceded (proportional) or placed (excess)."
-    },
-    "maximum_line_count": {
-      "$ref": "../common/types.schema.json#/$defs/decimal",
-      "description": "Number of lines for surplus share."
-    },
-    "ceding_commission_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "has_sliding_scale_commission": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "profit_commission_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "reinstatement_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "reinstatement_premium_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "rate_on_subject_premium_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "deposit_premium_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "minimum_premium_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "estimated_subject_premium_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    }
-  },
   "required": ["reinsurance_layer_id", "reinsurance_contract_id", "layer_number"],
-  "unevaluatedProperties": false
+  "properties": {
+    "reinsurance_layer_id": { "type": "string", "format": "uuid" },
+    "reinsurance_contract_id": { "type": "string", "format": "uuid", "x-references": "reinsurance_contract.reinsurance_contract_id" },
+    "layer_number": { "type": "integer" },
+    "attachment_point_amount": { "type": "number", "format": "money", "description": "Retention the layer sits above." },
+    "limit_amount": { "type": "number", "format": "money" },
+    "aggregate_limit_amount": { "type": "number", "format": "money" },
+    "aggregate_deductible_amount": { "type": "number", "format": "money" },
+    "ceded_share_percent": { "type": "number", "format": "percent", "description": "Share ceded (proportional) or placed (excess)." },
+    "maximum_line_count": { "type": "number", "format": "decimal", "description": "Number of lines for surplus share." },
+    "ceding_commission_percent": { "type": "number", "format": "percent" },
+    "has_sliding_scale_commission": { "type": "boolean" },
+    "profit_commission_percent": { "type": "number", "format": "percent" },
+    "reinstatement_count": { "type": "integer" },
+    "reinstatement_premium_percent": { "type": "number", "format": "percent" },
+    "rate_on_subject_premium_percent": { "type": "number", "format": "percent" },
+    "deposit_premium_amount": { "type": "number", "format": "money" },
+    "minimum_premium_amount": { "type": "number", "format": "money" },
+    "estimated_subject_premium_amount": { "type": "number", "format": "money" }
+  },
+  "additionalProperties": false
 }

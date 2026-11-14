@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enums/metal_tier.schema.json",
-  "title": "metal_tier",
-  "description": "ACA actuarial value tier.",
-  "type": "string",
-  "enum": ["CATASTROPHIC", "BRONZE", "SILVER", "GOLD", "PLATINUM", "NOT_APPLICABLE"]
-}

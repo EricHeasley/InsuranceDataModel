@@ -1,26 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/country.schema.json",
   "title": "country",
   "description": "ISO 3166-1 country.",
-  "x-primaryKey": ["country_code"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "country_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 2,
-      "description": "ISO 3166-1 alpha-2 code."
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    }
-  },
+  "x-primaryKey": ["country_code"],
   "required": ["country_code", "name"],
-  "unevaluatedProperties": false
+  "properties": {
+    "country_code": { "type": "string", "maxLength": 2, "description": "ISO 3166-1 alpha-2 code." },
+    "name": { "type": "string", "maxLength": 255 }
+  },
+  "additionalProperties": false
 }

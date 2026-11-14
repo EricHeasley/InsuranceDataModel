@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/enums/ownership_type.schema.json",
-  "title": "ownership_type",
-  "description": "How the insured holds the object.",
-  "type": "string",
-  "enum": ["OWNED", "FINANCED", "LEASED", "NON_OWNED", "HIRED"]
-}

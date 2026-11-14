@@ -1,148 +1,70 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/health_claim.schema.json",
   "title": "health_claim",
   "description": "A claim for health care services submitted by a provider or member, as adjudicated. Adjustments are new claims that point to the claim they replace.",
+  "type": "object",
   "x-primaryKey": ["health_claim_id"],
   "x-unique": [
     ["claim_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "required": [
+    "health_claim_id", "claim_number", "health_claim_type", "health_claim_status", "enrollment_id", "received_date",
+    "service_from_date", "billed_amount"
   ],
   "properties": {
-    "health_claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
+    "health_claim_id": { "type": "string", "format": "uuid" },
+    "claim_number": { "type": "string", "maxLength": 30 },
     "health_claim_type": {
-      "$ref": "enums/health_claim_type.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "PROFESSIONAL", "description": "CMS-1500 / 837P" },
+        { "const": "INSTITUTIONAL", "description": "UB-04 / 837I" },
+        { "const": "DENTAL", "description": "ADA / 837D" },
+        { "const": "PHARMACY", "description": "NCPDP" },
+        { "const": "VISION" },
+        { "const": "MEMBER_REIMBURSEMENT" }
+      ]
     },
     "health_claim_status": {
-      "$ref": "enums/health_claim_status.schema.json"
+      "type": "string",
+      "enum": [
+        "RECEIVED", "PENDED", "IN_REVIEW", "ADJUDICATED", "PAID", "DENIED", "PARTIALLY_DENIED", "ADJUSTED",
+        "REVERSED", "VOIDED"
+      ]
     },
     "enrollment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Coverage span of the patient the claim is adjudicated under.",
       "x-references": "enrollment.enrollment_id"
     },
-    "billing_provider_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider.provider_id"
-    },
-    "rendering_provider_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider.provider_id"
-    },
-    "facility_provider_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider.provider_id"
-    },
-    "referring_provider_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider.provider_id"
-    },
-    "network_tier": {
-      "$ref": "enums/network_tier.schema.json"
-    },
-    "received_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "service_from_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "x-sensitivity": "PHI"
-    },
-    "service_to_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "x-sensitivity": "PHI"
-    },
-    "admission_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "x-sensitivity": "PHI"
-    },
-    "discharge_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "x-sensitivity": "PHI"
-    },
-    "type_of_bill": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 4,
-      "description": "UB-04 type of bill."
-    },
-    "place_of_service_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 2
-    },
-    "drg_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_value.code_value_id",
-      "x-sensitivity": "PHI"
-    },
-    "discharge_status_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 2
-    },
-    "claim_frequency_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 1,
-      "description": "1 original, 7 replacement, 8 void."
-    },
-    "replaces_health_claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "health_claim.health_claim_id"
-    },
-    "prior_authorization_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "prior_authorization.prior_authorization_id"
-    },
-    "submitter_claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "description": "Patient control number from the provider."
-    },
-    "billed_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "allowed_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "paid_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "member_responsibility_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "other_payer_paid_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "adjudicated_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "accounting_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "is_accident_related": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "accident_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "billing_provider_id": { "type": "string", "format": "uuid", "x-references": "provider.provider_id" },
+    "rendering_provider_id": { "type": "string", "format": "uuid", "x-references": "provider.provider_id" },
+    "facility_provider_id": { "type": "string", "format": "uuid", "x-references": "provider.provider_id" },
+    "referring_provider_id": { "type": "string", "format": "uuid", "x-references": "provider.provider_id" },
+    "network_tier": { "type": "string", "enum": ["IN_NETWORK", "PREFERRED", "OUT_OF_NETWORK", "ANY"] },
+    "received_date": { "type": "string", "format": "date" },
+    "service_from_date": { "type": "string", "format": "date", "x-sensitivity": "PHI" },
+    "service_to_date": { "type": "string", "format": "date", "x-sensitivity": "PHI" },
+    "admission_date": { "type": "string", "format": "date", "x-sensitivity": "PHI" },
+    "discharge_date": { "type": "string", "format": "date", "x-sensitivity": "PHI" },
+    "type_of_bill": { "type": "string", "maxLength": 4, "description": "UB-04 type of bill." },
+    "place_of_service_code": { "type": "string", "maxLength": 2 },
+    "drg_code_value_id": { "type": "string", "format": "uuid", "x-references": "code_value.code_value_id", "x-sensitivity": "PHI" },
+    "discharge_status_code": { "type": "string", "maxLength": 2 },
+    "claim_frequency_code": { "type": "string", "maxLength": 1, "description": "1 original, 7 replacement, 8 void." },
+    "replaces_health_claim_id": { "type": "string", "format": "uuid", "x-references": "health_claim.health_claim_id" },
+    "prior_authorization_id": { "type": "string", "format": "uuid", "x-references": "prior_authorization.prior_authorization_id" },
+    "submitter_claim_id": { "type": "string", "maxLength": 50, "description": "Patient control number from the provider." },
+    "billed_amount": { "type": "number", "format": "money" },
+    "allowed_amount": { "type": "number", "format": "money" },
+    "paid_amount": { "type": "number", "format": "money" },
+    "member_responsibility_amount": { "type": "number", "format": "money" },
+    "other_payer_paid_amount": { "type": "number", "format": "money" },
+    "adjudicated_at": { "type": "string", "format": "date-time" },
+    "accounting_date": { "type": "string", "format": "date" },
+    "is_accident_related": { "type": "boolean" },
+    "accident_date": { "type": "string", "format": "date" }
   },
-  "required": [
-    "health_claim_id",
-    "claim_number",
-    "health_claim_type",
-    "health_claim_status",
-    "enrollment_id",
-    "received_date",
-    "service_from_date",
-    "billed_amount"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

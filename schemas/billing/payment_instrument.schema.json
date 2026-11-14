@@ -1,65 +1,33 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/payment_instrument.schema.json",
   "title": "payment_instrument",
   "description": "A tokenized bank account or card a party has authorized for payments or payouts. Raw account and card numbers are never stored.",
-  "x-primaryKey": ["payment_instrument_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["payment_instrument_id"],
+  "required": ["payment_instrument_id", "party_id", "payment_method", "payment_instrument_status", "token"],
   "properties": {
-    "payment_instrument_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
+    "payment_instrument_id": { "type": "string", "format": "uuid" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
     "payment_method": {
-      "$ref": "enums/payment_method.schema.json"
+      "type": "string",
+      "enum": [
+        "ACH", "CREDIT_CARD", "DEBIT_CARD", "CHECK", "WIRE", "CASH", "LOCKBOX", "DIGITAL_WALLET", "VIRTUAL_CARD",
+        "PUSH_TO_DEBIT", "INTERNAL_TRANSFER"
+      ]
     },
-    "payment_instrument_status": {
-      "$ref": "enums/payment_instrument_status.schema.json"
-    },
+    "payment_instrument_status": { "type": "string", "enum": ["ACTIVE", "EXPIRED", "REVOKED", "FAILED_VERIFICATION"] },
     "token": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 200,
       "description": "Token issued by the payment processor or vault.",
       "x-sensitivity": "PCI"
     },
-    "last_four": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 4,
-      "x-sensitivity": "PCI"
-    },
-    "institution_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 100
-    },
-    "card_brand": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20
-    },
-    "expiry_month": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "expiry_year": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "authorization_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    }
+    "last_four": { "type": "string", "maxLength": 4, "x-sensitivity": "PCI" },
+    "institution_name": { "type": "string", "maxLength": 100 },
+    "card_brand": { "type": "string", "maxLength": 20 },
+    "expiry_month": { "type": "integer" },
+    "expiry_year": { "type": "integer" },
+    "authorization_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" }
   },
-  "required": [
-    "payment_instrument_id",
-    "party_id",
-    "payment_method",
-    "payment_instrument_status",
-    "token"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

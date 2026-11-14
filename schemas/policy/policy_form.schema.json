@@ -1,43 +1,35 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_form.schema.json",
   "title": "policy_form",
   "description": "A form or endorsement attached to a policy.",
-  "x-primaryKey": ["policy_form_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
-  ],
+  "x-primaryKey": ["policy_form_id"],
+  "required": ["policy_form_id", "policy_id", "form_id", "effective_date", "added_by_transaction_id"],
   "properties": {
-    "policy_form_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
+    "policy_form_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "form_id": { "type": "string", "format": "uuid", "x-references": "form.form_id" },
+    "policy_coverage_id": { "type": "string", "format": "uuid", "x-references": "policy_coverage.policy_coverage_id" },
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
+    "variable_data": { "type": "object", "description": "Fill-in values for manuscript or schedule fields on the form." },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "form_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "form.form_id"
-    },
-    "policy_coverage_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_coverage.policy_coverage_id"
-    },
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
-    },
-    "variable_data": {
-      "$ref": "../common/types.schema.json#/$defs/json",
-      "description": "Fill-in values for manuscript or schedule fields on the form."
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["policy_form_id", "policy_id", "form_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

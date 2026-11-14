@@ -1,85 +1,60 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_incident.schema.json",
   "title": "claim_incident",
   "description": "One thing that was lost or damaged, or one person who was injured, in the occurrence: a damaged vehicle, a burned building, an injured passenger.",
-  "x-primaryKey": ["claim_incident_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["claim_incident_id"],
+  "required": ["claim_incident_id", "claim_id", "claim_incident_type"],
   "properties": {
-    "claim_incident_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
+    "claim_incident_id": { "type": "string", "format": "uuid" },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
     "claim_incident_type": {
-      "$ref": "enums/claim_incident_type.schema.json"
+      "type": "string",
+      "enum": [
+        "VEHICLE_DAMAGE", "PROPERTY_DAMAGE", "CONTENTS_LOSS", "BODILY_INJURY", "DEATH", "LOSS_OF_USE",
+        "BUSINESS_INTERRUPTION", "FINANCIAL_LOSS", "DATA_BREACH", "OTHER"
+      ]
     },
     "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Insured risk involved, when the item is insured on the policy.",
       "x-references": "policy_risk.policy_risk_id"
     },
     "insurable_object_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "The damaged object, including third-party vehicles and property.",
       "x-references": "insurable_object.insurable_object_id"
     },
-    "injured_claim_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_party.claim_party_id"
-    },
-    "owner_claim_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_party.claim_party_id"
-    },
-    "description": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    },
-    "damage_estimate_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "is_total_loss": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "is_drivable": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "point_of_impact": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
+    "injured_claim_party_id": { "type": "string", "format": "uuid", "x-references": "claim_party.claim_party_id" },
+    "owner_claim_party_id": { "type": "string", "format": "uuid", "x-references": "claim_party.claim_party_id" },
+    "description": { "type": "string" },
+    "damage_estimate_amount": { "type": "number", "format": "money" },
+    "is_total_loss": { "type": "boolean" },
+    "is_drivable": { "type": "boolean" },
+    "point_of_impact": { "type": "string", "maxLength": 50 },
     "injury_severity": {
-      "$ref": "enums/injury_severity.schema.json",
+      "type": "string",
+      "enum": ["NONE", "MINOR", "MODERATE", "SERIOUS", "SEVERE", "CATASTROPHIC", "FATAL"],
       "x-sensitivity": "PHI"
     },
-    "injury_description": {
-      "$ref": "../common/types.schema.json#/$defs/text",
-      "x-sensitivity": "PHI"
-    },
+    "injury_description": { "type": "string", "x-sensitivity": "PHI" },
     "body_part_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "WCIO part-of-body code.",
       "x-references": "code_value.code_value_id",
       "x-sensitivity": "PHI"
     },
     "nature_of_injury_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "WCIO nature-of-injury code.",
       "x-references": "code_value.code_value_id",
       "x-sensitivity": "PHI"
     },
-    "received_medical_treatment": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "x-sensitivity": "PHI"
-    }
+    "received_medical_treatment": { "type": "boolean", "x-sensitivity": "PHI" }
   },
-  "required": ["claim_incident_id", "claim_id", "claim_incident_type"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

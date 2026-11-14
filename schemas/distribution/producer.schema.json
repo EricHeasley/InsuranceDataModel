@@ -1,53 +1,36 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/producer.schema.json",
   "title": "producer",
   "description": "A person or organization that sells or services insurance on behalf of the insurer. Hierarchies (agent within agency within MGA) are expressed through parent_producer_id.",
+  "type": "object",
   "x-primaryKey": ["producer_id"],
   "x-unique": [
     ["producer_code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "producer_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "Company-assigned producer number."
-    },
-    "producer_type": {
-      "$ref": "enums/producer_type.schema.json"
-    },
-    "producer_status": {
-      "$ref": "enums/producer_status.schema.json"
-    },
-    "parent_producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "producer.producer_id"
-    },
-    "national_producer_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20,
-      "description": "NIPR National Producer Number."
-    },
-    "appointed_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "terminated_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
-  },
   "required": ["producer_id", "party_id", "producer_code", "producer_type", "producer_status"],
-  "unevaluatedProperties": false
+  "properties": {
+    "producer_id": { "type": "string", "format": "uuid" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "producer_code": { "type": "string", "maxLength": 30, "description": "Company-assigned producer number." },
+    "producer_type": {
+      "type": "string",
+      "oneOf": [
+        { "const": "AGENT", "description": "Individual licensed agent" },
+        { "const": "AGENCY", "description": "Independent or captive agency" },
+        { "const": "BROKER" },
+        { "const": "MGA", "description": "Managing general agent" },
+        { "const": "MGU", "description": "Managing general underwriter" },
+        { "const": "WHOLESALER" },
+        { "const": "GENERAL_AGENT", "description": "Life/health general agent" },
+        { "const": "DIRECT", "description": "Carrier direct channel (call center, web)" },
+        { "const": "EXCHANGE", "description": "Health insurance marketplace" }
+      ]
+    },
+    "producer_status": { "type": "string", "enum": ["PROSPECT", "ACTIVE", "SUSPENDED", "TERMINATED"] },
+    "parent_producer_id": { "type": "string", "format": "uuid", "x-references": "producer.producer_id" },
+    "national_producer_number": { "type": "string", "maxLength": 20, "description": "NIPR National Producer Number." },
+    "appointed_on": { "type": "string", "format": "date" },
+    "terminated_on": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
 }

@@ -1,49 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/health_claim_diagnosis.schema.json",
   "title": "health_claim_diagnosis",
   "description": "A diagnosis reported on a health claim.",
+  "type": "object",
   "x-primaryKey": ["health_claim_diagnosis_id"],
   "x-unique": [
     ["health_claim_id", "sequence_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "required": [
+    "health_claim_diagnosis_id", "health_claim_id", "sequence_number", "diagnosis_code_value_id",
+    "diagnosis_qualifier"
   ],
   "properties": {
-    "health_claim_diagnosis_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "health_claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "health_claim.health_claim_id"
-    },
-    "sequence_number": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
+    "health_claim_diagnosis_id": { "type": "string", "format": "uuid" },
+    "health_claim_id": { "type": "string", "format": "uuid", "x-references": "health_claim.health_claim_id" },
+    "sequence_number": { "type": "integer" },
     "diagnosis_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "ICD-10-CM code.",
       "x-references": "code_value.code_value_id",
       "x-sensitivity": "PHI"
     },
     "diagnosis_qualifier": {
-      "$ref": "enums/diagnosis_qualifier.schema.json"
+      "type": "string",
+      "enum": ["PRINCIPAL", "ADMITTING", "SECONDARY", "EXTERNAL_CAUSE", "PATIENT_REASON_FOR_VISIT"]
     },
-    "present_on_admission": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 1
-    }
+    "present_on_admission": { "type": "string", "maxLength": 1 }
   },
-  "required": [
-    "health_claim_diagnosis_id",
-    "health_claim_id",
-    "sequence_number",
-    "diagnosis_code_value_id",
-    "diagnosis_qualifier"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

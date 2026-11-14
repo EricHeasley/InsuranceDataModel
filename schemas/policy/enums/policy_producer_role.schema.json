@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/policy_producer_role.schema.json",
-  "title": "policy_producer_role",
-  "description": "Role of a producer on a policy.",
-  "type": "string",
-  "enum": ["WRITING", "SERVICING", "SPLIT", "OVERRIDE", "WHOLESALE"]
-}

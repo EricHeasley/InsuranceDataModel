@@ -1,80 +1,55 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/dwelling_risk.schema.json",
   "title": "dwelling_risk",
   "description": "Policy-specific rating detail for a dwelling or residence on a homeowners, condo, renters or dwelling fire policy.",
+  "type": "object",
   "x-primaryKey": ["policy_risk_id"],
   "x-subtypeOf": "policy_risk",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["policy_risk_id"],
   "properties": {
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
-    },
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
     "homeowners_form": {
-      "$ref": "enums/homeowners_form.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "HO2", "description": "Broad form" },
+        { "const": "HO3", "description": "Special form" },
+        { "const": "HO4", "description": "Tenants (renters)" },
+        { "const": "HO5", "description": "Comprehensive form" },
+        { "const": "HO6", "description": "Condominium unit owners" },
+        { "const": "HO8", "description": "Modified coverage" },
+        { "const": "DP1", "description": "Dwelling fire basic" },
+        { "const": "DP3", "description": "Dwelling fire special" }
+      ]
     },
     "residence_type": {
-      "$ref": "enums/residence_type.schema.json"
+      "type": "string",
+      "enum": ["SINGLE_FAMILY", "TWO_TO_FOUR_FAMILY", "CONDO_UNIT", "TOWNHOUSE", "APARTMENT", "MOBILE_HOME"]
     },
     "dwelling_occupancy": {
-      "$ref": "enums/dwelling_occupancy.schema.json"
+      "type": "string",
+      "enum": ["OWNER_PRIMARY", "OWNER_SECONDARY", "SEASONAL", "TENANT", "VACANT", "UNDER_CONSTRUCTION"]
     },
-    "replacement_cost_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Estimated cost to rebuild."
-    },
-    "replacement_cost_estimated_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
+    "replacement_cost_amount": { "type": "number", "format": "money", "description": "Estimated cost to rebuild." },
+    "replacement_cost_estimated_on": { "type": "string", "format": "date" },
     "valuation_method": {
-      "$ref": "enums/valuation_method.schema.json"
+      "type": "string",
+      "enum": [
+        "REPLACEMENT_COST", "ACTUAL_CASH_VALUE", "AGREED_VALUE", "STATED_AMOUNT", "FUNCTIONAL_REPLACEMENT_COST",
+        "MARKET_VALUE"
+      ]
     },
-    "protection_class": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 5,
-      "description": "Public protection classification."
-    },
-    "distance_to_fire_station_miles": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "distance_to_hydrant_feet": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "purchase_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "has_swimming_pool": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_trampoline": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_wood_stove": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_restricted_dog_breed": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_wind_mitigation_features": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_water_leak_detection": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "household_member_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "home_business_description": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 200
-    }
+    "protection_class": { "type": "string", "maxLength": 5, "description": "Public protection classification." },
+    "distance_to_fire_station_miles": { "type": "number", "format": "decimal" },
+    "distance_to_hydrant_feet": { "type": "integer" },
+    "purchase_date": { "type": "string", "format": "date" },
+    "has_swimming_pool": { "type": "boolean" },
+    "has_trampoline": { "type": "boolean" },
+    "has_wood_stove": { "type": "boolean" },
+    "has_restricted_dog_breed": { "type": "boolean" },
+    "has_wind_mitigation_features": { "type": "boolean" },
+    "has_water_leak_detection": { "type": "boolean" },
+    "household_member_count": { "type": "integer" },
+    "home_business_description": { "type": "string", "maxLength": 200 }
   },
-  "required": ["policy_risk_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

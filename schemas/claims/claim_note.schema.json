@@ -1,53 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_note.schema.json",
   "title": "claim_note",
   "description": "A file note or diary entry on a claim.",
-  "x-primaryKey": ["claim_note_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["claim_note_id"],
+  "required": ["claim_note_id", "claim_id", "note_text", "written_at"],
   "properties": {
-    "claim_note_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
-    "claim_exposure_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_exposure.claim_exposure_id"
-    },
+    "claim_note_id": { "type": "string", "format": "uuid" },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
+    "claim_exposure_id": { "type": "string", "format": "uuid", "x-references": "claim_exposure.claim_exposure_id" },
     "topic": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 50,
       "description": "COVERAGE, LIABILITY, DAMAGES, MEDICAL, RESERVE, SETTLEMENT, CONTACT, ..."
     },
-    "note_text": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    },
-    "author_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    },
-    "written_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "is_confidential": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Privileged or restricted (legal, SIU, medical)."
-    },
-    "follow_up_due_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "follow_up_completed_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    }
+    "note_text": { "type": "string" },
+    "author_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" },
+    "written_at": { "type": "string", "format": "date-time" },
+    "is_confidential": { "type": "boolean", "description": "Privileged or restricted (legal, SIU, medical)." },
+    "follow_up_due_on": { "type": "string", "format": "date" },
+    "follow_up_completed_at": { "type": "string", "format": "date-time" }
   },
-  "required": ["claim_note_id", "claim_id", "note_text", "written_at"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

@@ -1,77 +1,43 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/life_claim_detail.schema.json",
   "title": "life_claim_detail",
   "description": "Life and annuity specific attributes of a claim.",
+  "type": "object",
   "x-primaryKey": ["claim_id"],
   "x-subtypeOf": "claim",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["claim_id", "life_claim_type", "insured_party_id"],
   "properties": {
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
     "life_claim_type": {
-      "$ref": "enums/life_claim_type.schema.json"
+      "type": "string",
+      "enum": [
+        "DEATH", "ACCIDENTAL_DEATH", "ACCELERATED_DEATH_BENEFIT", "WAIVER_OF_PREMIUM", "CRITICAL_ILLNESS",
+        "LONG_TERM_CARE_RIDER", "ANNUITY_DEATH", "MATURITY"
+      ]
     },
-    "insured_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "person.party_id"
-    },
-    "date_of_death": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "x-sensitivity": "PII"
-    },
+    "insured_party_id": { "type": "string", "format": "uuid", "x-references": "person.party_id" },
+    "date_of_death": { "type": "string", "format": "date", "x-sensitivity": "PII" },
     "manner_of_death": {
-      "$ref": "enums/manner_of_death.schema.json",
+      "type": "string",
+      "enum": ["NATURAL", "ACCIDENT", "SUICIDE", "HOMICIDE", "PENDING", "UNDETERMINED"],
       "x-sensitivity": "PHI"
     },
     "cause_of_death_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "ICD-10 underlying cause of death.",
       "x-references": "code_value.code_value_id",
       "x-sensitivity": "PHI"
     },
-    "death_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "is_within_contestable_period": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "proof_of_loss_received_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "death_certificate_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    },
-    "gross_benefit_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "loan_offset_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "premium_adjustment_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Premium refunded or due at death."
-    },
-    "claim_interest_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Statutory interest on delayed settlement."
-    },
-    "source_of_death_notice": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "BENEFICIARY, AGENT, DEATH_MASTER_FILE_MATCH, ..."
-    }
+    "death_jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "is_within_contestable_period": { "type": "boolean" },
+    "proof_of_loss_received_on": { "type": "string", "format": "date" },
+    "death_certificate_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" },
+    "gross_benefit_amount": { "type": "number", "format": "money" },
+    "loan_offset_amount": { "type": "number", "format": "money" },
+    "premium_adjustment_amount": { "type": "number", "format": "money", "description": "Premium refunded or due at death." },
+    "claim_interest_amount": { "type": "number", "format": "money", "description": "Statutory interest on delayed settlement." },
+    "source_of_death_notice": { "type": "string", "maxLength": 30, "description": "BENEFICIARY, AGENT, DEATH_MASTER_FILE_MATCH, ..." }
   },
-  "required": ["claim_id", "life_claim_type", "insured_party_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

@@ -1,44 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/code_value.schema.json",
   "title": "code_value",
   "description": "A single code within a code set.",
+  "type": "object",
   "x-primaryKey": ["code_value_id"],
   "x-unique": [
     ["code_set_id", "code"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "code_set_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_set.code_set_id"
-    },
-    "code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "description": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    },
-    "parent_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_value.code_value_id"
-    },
-    "valid_from": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "valid_to": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
-  },
   "required": ["code_value_id", "code_set_id", "code"],
-  "unevaluatedProperties": false
+  "properties": {
+    "code_value_id": { "type": "string", "format": "uuid" },
+    "code_set_id": { "type": "string", "format": "uuid", "x-references": "code_set.code_set_id" },
+    "code": { "type": "string", "maxLength": 30 },
+    "description": { "type": "string" },
+    "parent_code_value_id": { "type": "string", "format": "uuid", "x-references": "code_value.code_value_id" },
+    "valid_from": { "type": "string", "format": "date" },
+    "valid_to": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
 }

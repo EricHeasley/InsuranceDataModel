@@ -1,74 +1,64 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/classification_exposure.schema.json",
   "title": "classification_exposure",
   "description": "A rating classification and its exposure amount for a risk and state: a general liability class with its sales or payroll, or a workers' compensation class with its payroll. Estimated at inception, replaced by audited amounts at audit.",
-  "x-primaryKey": ["classification_exposure_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
+  "x-primaryKey": ["classification_exposure_id"],
+  "required": [
+    "classification_exposure_id", "policy_risk_id", "class_code_value_id", "jurisdiction_code", "exposure_basis",
+    "estimated_exposure_amount", "effective_date", "added_by_transaction_id"
   ],
   "properties": {
-    "classification_exposure_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
-    },
-    "policy_coverage_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_coverage.policy_coverage_id"
-    },
+    "classification_exposure_id": { "type": "string", "format": "uuid" },
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
+    "policy_coverage_id": { "type": "string", "format": "uuid", "x-references": "policy_coverage.policy_coverage_id" },
     "class_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "NCCI/state bureau class code or ISO GL class code.",
       "x-references": "code_value.code_value_id"
     },
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
     "exposure_basis": {
-      "$ref": "enums/exposure_basis.schema.json"
+      "type": "string",
+      "enum": [
+        "PAYROLL", "GROSS_SALES", "AREA", "UNITS", "ADMISSIONS", "TOTAL_COST", "EMPLOYEE_COUNT", "VEHICLE_COUNT",
+        "REVENUE", "MILES", "PER_CAPITA", "FLAT", "OTHER"
+      ]
     },
-    "estimated_exposure_amount": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "audited_exposure_amount": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
+    "estimated_exposure_amount": { "type": "number", "format": "decimal" },
+    "audited_exposure_amount": { "type": "number", "format": "decimal" },
     "rate": {
-      "$ref": "../common/types.schema.json#/$defs/rate",
+      "type": "number",
+      "format": "rate",
       "description": "Rate per unit of exposure (e.g. per $100 payroll, per $1,000 sales)."
     },
-    "rate_per_units": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Units of exposure the rate applies to: 100, 1000, ..."
-    },
-    "is_if_any": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Class listed on an 'if any' basis with no estimated exposure."
-    },
+    "rate_per_units": { "type": "integer", "description": "Units of exposure the rate applies to: 100, 1000, ..." },
+    "is_if_any": { "type": "boolean", "description": "Class listed on an 'if any' basis with no estimated exposure." },
     "premium_audit_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Audit that established the audited exposure.",
       "x-references": "premium_audit.premium_audit_id"
+    },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
+    },
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
+    },
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": [
-    "classification_exposure_id",
-    "policy_risk_id",
-    "class_code_value_id",
-    "jurisdiction_code",
-    "exposure_basis",
-    "estimated_exposure_amount"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

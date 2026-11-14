@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/enums/form_usage.schema.json",
-  "title": "form_usage",
-  "description": "When a form attaches to a policy.",
-  "type": "string",
-  "enum": ["MANDATORY", "CONDITIONAL", "OPTIONAL"]
-}

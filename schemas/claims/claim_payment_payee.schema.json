@@ -1,34 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_payment_payee.schema.json",
   "title": "claim_payment_payee",
   "description": "A payee named on a claim payment.",
+  "type": "object",
   "x-primaryKey": ["claim_payment_payee_id"],
   "x-unique": [
     ["claim_payment_id", "party_id"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "claim_payment_payee_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_payment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_payment.claim_payment_id"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "is_primary_payee": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    }
-  },
   "required": ["claim_payment_payee_id", "claim_payment_id", "party_id", "is_primary_payee"],
-  "unevaluatedProperties": false
+  "properties": {
+    "claim_payment_payee_id": { "type": "string", "format": "uuid" },
+    "claim_payment_id": { "type": "string", "format": "uuid", "x-references": "claim_payment.claim_payment_id" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "is_primary_payee": { "type": "boolean" }
+  },
+  "additionalProperties": false
 }

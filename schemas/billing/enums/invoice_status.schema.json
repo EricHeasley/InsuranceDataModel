@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/invoice_status.schema.json",
-  "title": "invoice_status",
-  "description": "Status of an invoice.",
-  "type": "string",
-  "enum": ["PLANNED", "BILLED", "PARTIALLY_PAID", "PAID", "PAST_DUE", "CANCELLED", "WRITTEN_OFF"]
-}

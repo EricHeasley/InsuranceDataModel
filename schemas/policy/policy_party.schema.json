@@ -1,54 +1,63 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_party.schema.json",
   "title": "policy_party",
   "description": "A party's role on a policy, optionally scoped to one risk (e.g. lienholder on a vehicle, mortgagee on a building).",
-  "x-primaryKey": ["policy_party_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
-  ],
+  "x-primaryKey": ["policy_party_id"],
+  "required": ["policy_party_id", "policy_id", "party_id", "policy_party_role", "effective_date", "added_by_transaction_id"],
   "properties": {
-    "policy_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
+    "policy_party_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
     "policy_party_role": {
-      "$ref": "enums/policy_party_role.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "NAMED_INSURED", "description": "First named insured / policyholder" },
+        { "const": "ADDITIONAL_NAMED_INSURED" },
+        { "const": "ADDITIONAL_INSURED" },
+        { "const": "OWNER", "description": "Policy owner (life/annuity)" },
+        { "const": "JOINT_OWNER" },
+        { "const": "INSURED_LIFE", "description": "Person whose life is insured" },
+        { "const": "ANNUITANT" },
+        { "const": "JOINT_ANNUITANT" },
+        { "const": "PAYOR" },
+        { "const": "SUBSCRIBER", "description": "Health contract holder" },
+        { "const": "GROUP_SPONSOR", "description": "Employer or association sponsoring a group contract" },
+        { "const": "MORTGAGEE" },
+        { "const": "LIENHOLDER" },
+        { "const": "LOSS_PAYEE" },
+        { "const": "LESSOR" },
+        { "const": "CERTIFICATE_HOLDER" },
+        { "const": "ASSIGNEE", "description": "Collateral or absolute assignee" },
+        { "const": "TRUSTEE" },
+        { "const": "THIRD_PARTY_DESIGNEE", "description": "Receives lapse/cancellation notices" },
+        { "const": "PRINCIPAL", "description": "Surety bond principal" },
+        { "const": "OBLIGEE", "description": "Surety bond obligee" }
+      ]
     },
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
+    "is_primary": { "type": "boolean" },
+    "interest_rank": { "type": "integer", "description": "Priority among interests of the same role (1st mortgagee, 2nd mortgagee)." },
+    "reference_number": { "type": "string", "maxLength": 50, "description": "Loan number or similar reference of the interested party." },
+    "mailing_address_id": { "type": "string", "format": "uuid", "x-references": "address.address_id" },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "is_primary": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "interest_rank": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Priority among interests of the same role (1st mortgagee, 2nd mortgagee)."
-    },
-    "reference_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "description": "Loan number or similar reference of the interested party."
-    },
-    "mailing_address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "address.address_id"
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["policy_party_id", "policy_id", "party_id", "policy_party_role"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

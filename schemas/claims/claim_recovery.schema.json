@@ -1,58 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_recovery.schema.json",
   "title": "claim_recovery",
   "description": "An effort to recover claim costs from a responsible third party, salvage, the insured's deductible or another source.",
-  "x-primaryKey": ["claim_recovery_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["claim_recovery_id"],
+  "required": ["claim_recovery_id", "claim_id", "claim_recovery_type", "recovery_status"],
   "properties": {
-    "claim_recovery_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
+    "claim_recovery_id": { "type": "string", "format": "uuid" },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
     "claim_recovery_type": {
-      "$ref": "enums/claim_recovery_type.schema.json"
+      "type": "string",
+      "enum": [
+        "SUBROGATION", "SALVAGE", "DEDUCTIBLE", "CONTRIBUTION", "SECOND_INJURY_FUND", "OVERPAYMENT", "RESTITUTION",
+        "OTHER"
+      ]
     },
     "recovery_status": {
-      "$ref": "enums/recovery_status.schema.json"
+      "type": "string",
+      "enum": ["IDENTIFIED", "DEMAND_SENT", "NEGOTIATION", "ARBITRATION", "LITIGATION", "COLLECTED", "CLOSED_NO_RECOVERY"]
     },
     "from_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Responsible party, their carrier or the salvage buyer.",
       "x-references": "party.party_id"
     },
-    "adverse_fault_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "demand_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "demand_sent_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "statute_of_limitations_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "arbitration_forum_reference": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "recovery_vendor_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "closed_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "adverse_fault_percent": { "type": "number", "format": "percent" },
+    "demand_amount": { "type": "number", "format": "money" },
+    "demand_sent_on": { "type": "string", "format": "date" },
+    "statute_of_limitations_date": { "type": "string", "format": "date" },
+    "arbitration_forum_reference": { "type": "string", "maxLength": 50 },
+    "recovery_vendor_party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "closed_on": { "type": "string", "format": "date" }
   },
-  "required": ["claim_recovery_id", "claim_id", "claim_recovery_type", "recovery_status"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

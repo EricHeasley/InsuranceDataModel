@@ -1,57 +1,33 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/organization.schema.json",
   "title": "organization",
   "description": "A legal entity or other organized group.",
+  "type": "object",
   "x-primaryKey": ["party_id"],
   "x-subtypeOf": "party",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["party_id", "legal_name"],
   "properties": {
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "legal_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "dba_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255,
-      "description": "Doing-business-as name."
-    },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "legal_name": { "type": "string", "maxLength": 255 },
+    "dba_name": { "type": "string", "maxLength": 255, "description": "Doing-business-as name." },
     "organization_type": {
-      "$ref": "enums/organization_type.schema.json"
+      "type": "string",
+      "enum": [
+        "CORPORATION", "LLC", "PARTNERSHIP", "SOLE_PROPRIETOR", "NONPROFIT", "GOVERNMENT", "TRUST", "ESTATE",
+        "ASSOCIATION", "OTHER"
+      ]
     },
     "naics_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Primary NAICS industry code.",
       "x-references": "code_value.code_value_id"
     },
-    "formation_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "formation_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "annual_revenue_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "employee_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "website_url": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
-    }
+    "formation_date": { "type": "string", "format": "date" },
+    "formation_jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "annual_revenue_amount": { "type": "number", "format": "money" },
+    "employee_count": { "type": "integer" },
+    "website_url": { "type": "string", "maxLength": 500 }
   },
-  "required": ["party_id", "legal_name"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

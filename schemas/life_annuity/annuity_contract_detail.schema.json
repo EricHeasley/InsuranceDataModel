@@ -1,79 +1,43 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/annuity_contract_detail.schema.json",
   "title": "annuity_contract_detail",
   "description": "Annuity specific attributes of a policy.",
+  "type": "object",
   "x-primaryKey": ["policy_id"],
   "x-subtypeOf": "policy",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "annuity_type": {
-      "$ref": "enums/annuity_type.schema.json"
-    },
-    "annuity_phase": {
-      "$ref": "enums/annuity_phase.schema.json"
-    },
-    "tax_qualification_type": {
-      "$ref": "enums/tax_qualification_type.schema.json"
-    },
-    "issue_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "is_flexible_premium": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "initial_premium_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "maturity_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Latest annuitization date."
-    },
-    "annuitization_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "guaranteed_minimum_interest_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "initial_guarantee_period_years": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "surrender_charge_period_years": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "surrender_charge_end_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "free_withdrawal_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "has_market_value_adjustment": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "premium_bonus_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "rmd_start_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Required beginning date for minimum distributions."
-    },
-    "is_replacement": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "suitability_reviewed_on": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Best-interest / suitability review completed."
-    }
-  },
   "required": ["policy_id", "annuity_type", "annuity_phase", "tax_qualification_type", "issue_date"],
-  "unevaluatedProperties": false
+  "properties": {
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "annuity_type": {
+      "type": "string",
+      "enum": [
+        "FIXED_DEFERRED", "MULTI_YEAR_GUARANTEED", "FIXED_INDEXED", "VARIABLE", "REGISTERED_INDEX_LINKED",
+        "SINGLE_PREMIUM_IMMEDIATE", "DEFERRED_INCOME", "STRUCTURED_SETTLEMENT", "PENSION_RISK_TRANSFER"
+      ]
+    },
+    "annuity_phase": { "type": "string", "enum": ["ACCUMULATION", "PAYOUT"] },
+    "tax_qualification_type": {
+      "type": "string",
+      "enum": [
+        "NON_QUALIFIED", "TRADITIONAL_IRA", "ROTH_IRA", "SEP_IRA", "SIMPLE_IRA", "INHERITED_IRA", "PLAN_401K",
+        "PLAN_403B", "PLAN_457", "PENSION", "QLAC"
+      ]
+    },
+    "issue_date": { "type": "string", "format": "date" },
+    "is_flexible_premium": { "type": "boolean" },
+    "initial_premium_amount": { "type": "number", "format": "money" },
+    "maturity_date": { "type": "string", "format": "date", "description": "Latest annuitization date." },
+    "annuitization_date": { "type": "string", "format": "date" },
+    "guaranteed_minimum_interest_percent": { "type": "number", "format": "percent" },
+    "initial_guarantee_period_years": { "type": "integer" },
+    "surrender_charge_period_years": { "type": "integer" },
+    "surrender_charge_end_date": { "type": "string", "format": "date" },
+    "free_withdrawal_percent": { "type": "number", "format": "percent" },
+    "has_market_value_adjustment": { "type": "boolean" },
+    "premium_bonus_percent": { "type": "number", "format": "percent" },
+    "rmd_start_date": { "type": "string", "format": "date", "description": "Required beginning date for minimum distributions." },
+    "is_replacement": { "type": "boolean" },
+    "suitability_reviewed_on": { "type": "string", "format": "date", "description": "Best-interest / suitability review completed." }
+  },
+  "additionalProperties": false
 }

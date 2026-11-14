@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/enums/jurisdiction_type.schema.json",
-  "title": "jurisdiction_type",
-  "description": "Kind of regulatory jurisdiction.",
-  "type": "string",
-  "enum": ["STATE", "DISTRICT", "TERRITORY", "FEDERAL", "COUNTRY"]
-}

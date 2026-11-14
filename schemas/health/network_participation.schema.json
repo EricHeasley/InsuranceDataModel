@@ -1,57 +1,26 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/network_participation.schema.json",
   "title": "network_participation",
   "description": "Participation of a provider in a network at a practice location over a period, with the reimbursement arrangement.",
-  "x-primaryKey": ["network_participation_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["network_participation_id"],
+  "required": ["network_participation_id", "provider_network_id", "provider_id", "effective_date"],
   "properties": {
-    "network_participation_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "provider_network_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider_network.provider_network_id"
-    },
-    "provider_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider.provider_id"
-    },
-    "practice_address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "address.address_id"
-    },
-    "network_tier": {
-      "$ref": "enums/network_tier.schema.json"
-    },
-    "contract_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
+    "network_participation_id": { "type": "string", "format": "uuid" },
+    "provider_network_id": { "type": "string", "format": "uuid", "x-references": "provider_network.provider_network_id" },
+    "provider_id": { "type": "string", "format": "uuid", "x-references": "provider.provider_id" },
+    "practice_address_id": { "type": "string", "format": "uuid", "x-references": "address.address_id" },
+    "network_tier": { "type": "string", "enum": ["IN_NETWORK", "PREFERRED", "OUT_OF_NETWORK", "ANY"] },
+    "contract_number": { "type": "string", "maxLength": 50 },
     "reimbursement_method": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 30,
       "description": "FEE_SCHEDULE, PERCENT_OF_CHARGES, PERCENT_OF_MEDICARE, DRG, PER_DIEM, CAPITATION, CASE_RATE."
     },
-    "reimbursement_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "fee_schedule_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "termination_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "reimbursement_percent": { "type": "number", "format": "percent" },
+    "fee_schedule_code": { "type": "string", "maxLength": 30 },
+    "effective_date": { "type": "string", "format": "date" },
+    "termination_date": { "type": "string", "format": "date" }
   },
-  "required": ["network_participation_id", "provider_network_id", "provider_id", "effective_date"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

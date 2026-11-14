@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/policy_term_status.schema.json",
-  "title": "policy_term_status",
-  "description": "Status of a policy term.",
-  "type": "string",
-  "enum": ["PENDING", "IN_FORCE", "CANCELLED", "EXPIRED", "VOIDED"]
-}

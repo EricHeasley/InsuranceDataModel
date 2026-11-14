@@ -1,47 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_party.schema.json",
   "title": "claim_party",
   "description": "A party involved in a claim in a given role.",
-  "x-primaryKey": ["claim_party_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["claim_party_id"],
+  "required": ["claim_party_id", "claim_id", "party_id", "claim_party_role"],
   "properties": {
-    "claim_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
+    "claim_party_id": { "type": "string", "format": "uuid" },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
     "claim_party_role": {
-      "$ref": "enums/claim_party_role.schema.json"
+      "type": "string",
+      "enum": [
+        "INSURED", "CLAIMANT", "REPORTER", "INSURED_DRIVER", "OTHER_DRIVER", "PASSENGER", "PEDESTRIAN",
+        "INJURED_WORKER", "EMPLOYER", "WITNESS", "PROPERTY_OWNER", "BENEFICIARY", "CLAIMANT_ATTORNEY",
+        "DEFENSE_ATTORNEY", "OTHER_CARRIER", "MEDICAL_PROVIDER", "REPAIR_FACILITY", "RENTAL_AGENCY", "CONTRACTOR",
+        "INDEPENDENT_ADJUSTER", "APPRAISER", "EXPERT", "LIENHOLDER", "PUBLIC_ADJUSTER", "OTHER_VENDOR"
+      ]
     },
     "represented_by_claim_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Attorney or public adjuster representing this party.",
       "x-references": "claim_party.claim_party_id"
     },
-    "other_carrier_claim_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "is_medicare_beneficiary": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Drives Medicare Secondary Payer (Section 111) reporting."
-    },
-    "notes": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    }
+    "other_carrier_claim_number": { "type": "string", "maxLength": 50 },
+    "is_medicare_beneficiary": { "type": "boolean", "description": "Drives Medicare Secondary Payer (Section 111) reporting." },
+    "notes": { "type": "string" }
   },
-  "required": ["claim_party_id", "claim_id", "party_id", "claim_party_role"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

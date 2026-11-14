@@ -1,39 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/jurisdiction.schema.json",
   "title": "jurisdiction",
   "description": "Regulatory jurisdiction: a US state, district or territory, the federal government, or a foreign country. Drives filings, licensing, statutory reporting and claim handling rules.",
-  "x-primaryKey": ["jurisdiction_code"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "description": "ISO 3166-2 style code, e.g. US-CA; US for federal."
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "jurisdiction_type": {
-      "$ref": "enums/jurisdiction_type.schema.json"
-    },
-    "country_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 2,
-      "x-references": "country.country_code"
-    },
-    "naic_state_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 2,
-      "description": "NAIC numeric state code used in statutory reporting."
-    }
-  },
+  "x-primaryKey": ["jurisdiction_code"],
   "required": ["jurisdiction_code", "name", "jurisdiction_type", "country_code"],
-  "unevaluatedProperties": false
+  "properties": {
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "description": "ISO 3166-2 style code, e.g. US-CA; US for federal." },
+    "name": { "type": "string", "maxLength": 255 },
+    "jurisdiction_type": { "type": "string", "enum": ["STATE", "DISTRICT", "TERRITORY", "FEDERAL", "COUNTRY"] },
+    "country_code": { "type": "string", "maxLength": 2, "x-references": "country.country_code" },
+    "naic_state_code": { "type": "string", "maxLength": 2, "description": "NAIC numeric state code used in statutory reporting." }
+  },
+  "additionalProperties": false
 }

@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/enums/audit_status.schema.json",
-  "title": "audit_status",
-  "description": "Status of a premium audit.",
-  "type": "string",
-  "enum": ["ORDERED", "IN_PROGRESS", "COMPLETED", "DISPUTED", "NON_COMPLIANT", "WAIVED"]
-}

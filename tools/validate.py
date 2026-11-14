@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Validate the model: every schema file is valid JSON Schema and resolves, and the
-model is internally consistent (keys, references, code lists, types).
+"""Validate the model: every schema file is valid JSON Schema, and keys, references,
+types and code lists are consistent.
 
-The JSON Schema checks need the optional `jsonschema` package (4.18+); the
-integrity checks need only the standard library.
+The JSON Schema checks need the optional `jsonschema` package; the integrity
+checks need only the standard library.
 """
 import sys
 
@@ -16,47 +16,35 @@ SAMPLE = {
 }
 
 
-def sample_record(model: dict, entity: dict) -> dict:
+def sample_record(entity: dict) -> dict:
     """The smallest record that should satisfy the entity's schema."""
-    rec = {}
-    for a in entity["attributes"]:
-        if a.get("required"):
-            rec[a["name"]] = next(iter(model["enums"][a["enum"]]["values"])) if "enum" in a else SAMPLE[a["type"]]
-    return rec
+    return {a["name"]: next(iter(a["enum"])) if "enum" in a else SAMPLE[a["type"]]
+            for a in entity["attributes"] if a.get("required")}
 
 
 def schema_errors(model: dict) -> list[str]:
     try:
         import jsonschema
-        from referencing import Registry, Resource
     except ImportError:
-        print("note: jsonschema (4.18+) not installed; skipping JSON Schema checks", file=sys.stderr)
+        print("note: jsonschema not installed; skipping JSON Schema checks", file=sys.stderr)
         return []
-    docs = idm.schema_files()
-    registry = Registry().with_resources((uri, Resource.from_contents(doc)) for uri, doc in docs.items()
-                                         if "$schema" in doc)
     errors = []
-    for uri, doc in docs.items():
-        if "$schema" not in doc:
-            continue
+    for rel, doc in idm.schema_files().items():
         try:
             jsonschema.Draft202012Validator.check_schema(doc)
         except jsonschema.SchemaError as err:
-            errors.append(f"{uri}: not valid JSON Schema: {err.message}")
-    for name, entity in model["entities"].items():
-        uri = f"{idm.SCHEMA_BASE}{entity['domain']}/{name}.schema.json"
-        validator = jsonschema.Draft202012Validator(docs[uri], registry=registry)
-        record = sample_record(model, entity)
-        try:
-            for err in validator.iter_errors(record):
-                errors.append(f"{name}: sample record rejected: {err.message}")
-            if validator.is_valid({**record, "no_such_attribute": 1}):
-                errors.append(f"{name}: schema accepts unknown attributes")
-            for required in list(record):
-                if validator.is_valid({k: v for k, v in record.items() if k != required}):
-                    errors.append(f"{name}: schema accepts a record without required '{required}'")
-        except Exception as err:  # unresolvable $ref and similar
-            errors.append(f"{name}: {type(err).__name__}: {err}")
+            errors.append(f"{rel}: not valid JSON Schema: {err.message}")
+            continue
+        entity = model["entities"][doc["title"]]
+        validator = jsonschema.Draft202012Validator(doc)
+        record = sample_record(entity)
+        for err in validator.iter_errors(record):
+            errors.append(f"{entity['name']}: sample record rejected: {err.message}")
+        if validator.is_valid({**record, "no_such_attribute": 1}):
+            errors.append(f"{entity['name']}: schema accepts unknown attributes")
+        for required in record:
+            if validator.is_valid({k: v for k, v in record.items() if k != required}):
+                errors.append(f"{entity['name']}: schema accepts a record without required '{required}'")
     return errors
 
 
@@ -68,8 +56,8 @@ def main() -> int:
     for err in errors:
         print(f"ERROR {err}")
     attrs = sum(len(e["attributes"]) for e in model["entities"].values())
-    print(f"{len(model['domains'])} domains, {len(model['entities'])} entities, {attrs} attributes, "
-          f"{len(model['enums'])} enums: {'FAILED' if errors else 'OK'} ({len(errors)} errors)")
+    print(f"{len(model['domains'])} domains, {len(model['entities'])} entities, {attrs} attributes: "
+          f"{'FAILED' if errors else 'OK'} ({len(errors)} errors)")
     return 1 if errors else 0
 
 

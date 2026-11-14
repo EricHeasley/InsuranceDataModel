@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/enums/filing_type.schema.json",
-  "title": "filing_type",
-  "description": "Subject of a regulatory filing.",
-  "type": "string",
-  "enum": ["RATE", "RULE", "FORM", "RATE_AND_RULE", "PRODUCT", "ADVERTISING"]
-}

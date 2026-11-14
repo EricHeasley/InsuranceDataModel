@@ -1,97 +1,72 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_contract.schema.json",
   "title": "reinsurance_contract",
   "description": "A reinsurance treaty or facultative certificate for one contract period.",
+  "type": "object",
   "x-primaryKey": ["reinsurance_contract_id"],
   "x-unique": [
     ["contract_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "required": [
+    "reinsurance_contract_id", "contract_number", "name", "reinsurance_contract_type", "reinsurance_direction",
+    "reinsurance_form", "reinsurance_basis", "reinsurance_contract_status", "cedent_insurer_id", "currency_code",
+    "effective_date"
   ],
   "properties": {
-    "reinsurance_contract_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "contract_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
+    "reinsurance_contract_id": { "type": "string", "format": "uuid" },
+    "contract_number": { "type": "string", "maxLength": 50 },
+    "name": { "type": "string", "maxLength": 255 },
     "reinsurance_contract_type": {
-      "$ref": "enums/reinsurance_contract_type.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "TREATY", "description": "Covers a defined book of business automatically" },
+        { "const": "FACULTATIVE", "description": "Covers one policy or risk by individual negotiation" }
+      ]
     },
-    "reinsurance_direction": {
-      "$ref": "enums/reinsurance_direction.schema.json"
-    },
+    "reinsurance_direction": { "type": "string", "enum": ["CEDED", "ASSUMED"] },
     "reinsurance_form": {
-      "$ref": "enums/reinsurance_form.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "QUOTA_SHARE" },
+        { "const": "SURPLUS_SHARE" },
+        { "const": "PER_RISK_EXCESS" },
+        { "const": "PER_OCCURRENCE_EXCESS" },
+        { "const": "CATASTROPHE_EXCESS" },
+        { "const": "AGGREGATE_STOP_LOSS" },
+        { "const": "CLASH" },
+        { "const": "YEARLY_RENEWABLE_TERM", "description": "Life YRT" },
+        { "const": "COINSURANCE", "description": "Life coinsurance" },
+        { "const": "MODIFIED_COINSURANCE", "description": "Life modco" },
+        { "const": "FUNDS_WITHHELD" },
+        { "const": "LOSS_PORTFOLIO_TRANSFER" },
+        { "const": "ADVERSE_DEVELOPMENT_COVER" }
+      ]
     },
-    "reinsurance_basis": {
-      "$ref": "enums/reinsurance_basis.schema.json"
-    },
-    "reinsurance_contract_status": {
-      "$ref": "enums/reinsurance_contract_status.schema.json"
-    },
+    "reinsurance_basis": { "type": "string", "enum": ["LOSSES_OCCURRING", "RISKS_ATTACHING", "CLAIMS_MADE", "IN_FORCE_NEW_AND_RENEWAL"] },
+    "reinsurance_contract_status": { "type": "string", "enum": ["QUOTED", "BOUND", "IN_FORCE", "EXPIRED", "CANCELLED", "RUN_OFF", "COMMUTED"] },
     "cedent_insurer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Ceding company (an internal insurer for ceded contracts).",
       "x-references": "insurer.insurer_id"
     },
     "broker_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Reinsurance intermediary.",
       "x-references": "party.party_id"
     },
-    "currency_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 3,
-      "x-references": "currency.currency_code"
-    },
-    "effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "expiration_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Null for continuous contracts."
-    },
-    "renewal_of_contract_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "reinsurance_contract.reinsurance_contract_id"
-    },
-    "is_inuring_to_other_contracts": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Recoveries reduce the loss subject to other contracts."
-    },
+    "currency_code": { "type": "string", "maxLength": 3, "x-references": "currency.currency_code" },
+    "effective_date": { "type": "string", "format": "date" },
+    "expiration_date": { "type": "string", "format": "date", "description": "Null for continuous contracts." },
+    "renewal_of_contract_id": { "type": "string", "format": "uuid", "x-references": "reinsurance_contract.reinsurance_contract_id" },
+    "is_inuring_to_other_contracts": { "type": "boolean", "description": "Recoveries reduce the loss subject to other contracts." },
     "includes_alae": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 30,
       "description": "Treatment of allocated expense: PRO_RATA, INCLUDED_IN_LIMIT, EXCLUDED."
     },
-    "contract_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    }
+    "contract_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" }
   },
-  "required": [
-    "reinsurance_contract_id",
-    "contract_number",
-    "name",
-    "reinsurance_contract_type",
-    "reinsurance_direction",
-    "reinsurance_form",
-    "reinsurance_basis",
-    "reinsurance_contract_status",
-    "cedent_insurer_id",
-    "currency_code",
-    "effective_date"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

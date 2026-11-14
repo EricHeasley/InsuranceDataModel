@@ -1,79 +1,56 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_financial_transaction.schema.json",
   "title": "claim_financial_transaction",
   "description": "The claim ledger: every reserve change, payment and recovery as a signed amount by exposure and cost category. Paid, outstanding and incurred amounts as of any date are sums over this entity.",
-  "x-primaryKey": ["claim_financial_transaction_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "x-primaryKey": ["claim_financial_transaction_id"],
+  "required": [
+    "claim_financial_transaction_id", "claim_exposure_id", "claim_transaction_type", "claim_cost_category", "amount",
+    "transaction_at", "accounting_date"
   ],
   "properties": {
-    "claim_financial_transaction_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "claim_exposure_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_exposure.claim_exposure_id"
-    },
+    "claim_financial_transaction_id": { "type": "string", "format": "uuid" },
+    "claim_exposure_id": { "type": "string", "format": "uuid", "x-references": "claim_exposure.claim_exposure_id" },
     "claim_transaction_type": {
-      "$ref": "enums/claim_transaction_type.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "RESERVE", "description": "Change in case reserve (signed)" },
+        { "const": "PAYMENT", "description": "Payment made (positive) or voided/reversed (negative)" },
+        { "const": "RECOVERY_RESERVE", "description": "Change in anticipated recovery (signed)" },
+        { "const": "RECOVERY", "description": "Recovery received (positive) or reversed (negative)" }
+      ]
     },
     "claim_cost_category": {
-      "$ref": "enums/claim_cost_category.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "INDEMNITY", "description": "Loss paid to or on behalf of claimants" },
+        { "const": "MEDICAL", "description": "Medical loss (workers' comp, PIP, med pay)" },
+        {
+          "const": "DEFENSE_COST_CONTAINMENT",
+          "description": "Allocated expense: defense and cost containment (DCC)"
+        },
+        { "const": "ADJUSTING_OTHER", "description": "Adjusting and other expense (A&O)" }
+      ]
     },
     "cost_type_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 50,
       "description": "Detailed cost type: REPAIR, RENTAL, TOWING, ATTORNEY_FEE, IME, TEMPORARY_TOTAL_DISABILITY, ..."
     },
-    "amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "transaction_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "accounting_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "claim_payment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_payment.claim_payment_id"
-    },
-    "claim_recovery_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim_recovery.claim_recovery_id"
-    },
+    "amount": { "type": "number", "format": "money" },
+    "transaction_at": { "type": "string", "format": "date-time" },
+    "accounting_date": { "type": "string", "format": "date" },
+    "claim_payment_id": { "type": "string", "format": "uuid", "x-references": "claim_payment.claim_payment_id" },
+    "claim_recovery_id": { "type": "string", "format": "uuid", "x-references": "claim_recovery.claim_recovery_id" },
     "reverses_transaction_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "x-references": "claim_financial_transaction.claim_financial_transaction_id"
     },
-    "service_from_date": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "Start of the period a benefit or expense covers."
-    },
-    "service_to_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "entered_by_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    },
-    "comment": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
-    }
+    "service_from_date": { "type": "string", "format": "date", "description": "Start of the period a benefit or expense covers." },
+    "service_to_date": { "type": "string", "format": "date" },
+    "entered_by_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" },
+    "comment": { "type": "string", "maxLength": 500 }
   },
-  "required": [
-    "claim_financial_transaction_id",
-    "claim_exposure_id",
-    "claim_transaction_type",
-    "claim_cost_category",
-    "amount",
-    "transaction_at",
-    "accounting_date"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

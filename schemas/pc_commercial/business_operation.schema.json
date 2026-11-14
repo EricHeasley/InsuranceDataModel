@@ -1,47 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/business_operation.schema.json",
   "title": "business_operation",
   "description": "The operations of a business as an object of insurance for liability, workers' compensation, professional, cyber and similar coverages.",
+  "type": "object",
   "x-primaryKey": ["insurable_object_id"],
   "x-subtypeOf": "insurable_object",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "insurable_object_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurable_object.insurable_object_id"
-    },
-    "operations_description": {
-      "$ref": "../common/types.schema.json#/$defs/text"
-    },
-    "naics_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_value.code_value_id"
-    },
-    "years_in_business": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "annual_revenue_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "annual_payroll_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "full_time_employee_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "part_time_employee_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "uses_subcontractors": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    }
-  },
   "required": ["insurable_object_id"],
-  "unevaluatedProperties": false
+  "properties": {
+    "insurable_object_id": { "type": "string", "format": "uuid", "x-references": "insurable_object.insurable_object_id" },
+    "operations_description": { "type": "string" },
+    "naics_code_value_id": { "type": "string", "format": "uuid", "x-references": "code_value.code_value_id" },
+    "years_in_business": { "type": "integer" },
+    "annual_revenue_amount": { "type": "number", "format": "money" },
+    "annual_payroll_amount": { "type": "number", "format": "money" },
+    "full_time_employee_count": { "type": "integer" },
+    "part_time_employee_count": { "type": "integer" },
+    "uses_subcontractors": { "type": "boolean" }
+  },
+  "additionalProperties": false
 }

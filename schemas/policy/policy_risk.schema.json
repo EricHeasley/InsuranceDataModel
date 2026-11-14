@@ -1,57 +1,46 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_risk.schema.json",
   "title": "policy_risk",
   "description": "An insurable object as insured under a policy (a risk unit): the vehicle on an auto policy, the building at a location, the insured life, the operations of a business in a state. Supertype for line-specific rating detail.",
-  "x-primaryKey": ["policy_risk_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
-  ],
+  "x-primaryKey": ["policy_risk_id"],
+  "required": ["policy_risk_id", "policy_id", "insurable_object_id", "risk_number", "effective_date", "added_by_transaction_id"],
   "properties": {
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "insurable_object_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurable_object.insurable_object_id"
-    },
+    "policy_risk_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "insurable_object_id": { "type": "string", "format": "uuid", "x-references": "insurable_object.insurable_object_id" },
     "risk_number": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
+      "type": "integer",
       "description": "Stable number of the risk on the policy (vehicle 1, building 2); unchanged across versions."
     },
-    "policy_location_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_location.policy_location_id"
-    },
+    "policy_location_id": { "type": "string", "format": "uuid", "x-references": "policy_location.policy_location_id" },
     "rating_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 6,
       "description": "State the risk is rated and reported in; may differ from the governing state on multi-state policies.",
       "x-references": "jurisdiction.jurisdiction_code"
     },
-    "territory_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20
+    "territory_code": { "type": "string", "maxLength": 20 },
+    "insured_value_amount": { "type": "number", "format": "money", "description": "Total insured value or stated amount, where applicable." },
+    "additional_attributes": { "type": "object", "description": "Policy-specific rating characteristics with no dedicated subtype entity." },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "insured_value_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Total insured value or stated amount, where applicable."
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "additional_attributes": {
-      "$ref": "../common/types.schema.json#/$defs/json",
-      "description": "Policy-specific rating characteristics with no dedicated subtype entity."
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["policy_risk_id", "policy_id", "insurable_object_id", "risk_number"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

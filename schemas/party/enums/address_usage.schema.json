@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/address_usage.schema.json",
-  "title": "address_usage",
-  "description": "What a party uses an address for.",
-  "type": "string",
-  "enum": ["RESIDENCE", "MAILING", "BILLING", "BUSINESS", "PRACTICE", "PAY_TO", "OTHER"]
-}

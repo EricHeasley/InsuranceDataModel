@@ -1,46 +1,20 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/professional_liability_risk.schema.json",
   "title": "professional_liability_risk",
   "description": "Policy-specific rating detail for professional, management (D&O, EPL, fiduciary) and errors & omissions liability.",
+  "type": "object",
   "x-primaryKey": ["policy_risk_id"],
   "x-subtypeOf": "policy_risk",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
-    },
-    "profession_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_value.code_value_id"
-    },
-    "professional_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Number of rated professionals (attorneys, physicians, architects, ...)."
-    },
-    "annual_fees_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "total_assets_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "is_publicly_traded": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "prior_acts_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "defense_inside_limits": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Whether defense costs erode the limit."
-    }
-  },
   "required": ["policy_risk_id"],
-  "unevaluatedProperties": false
+  "properties": {
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
+    "profession_code_value_id": { "type": "string", "format": "uuid", "x-references": "code_value.code_value_id" },
+    "professional_count": { "type": "integer", "description": "Number of rated professionals (attorneys, physicians, architects, ...)." },
+    "annual_fees_amount": { "type": "number", "format": "money" },
+    "total_assets_amount": { "type": "number", "format": "money" },
+    "is_publicly_traded": { "type": "boolean" },
+    "prior_acts_date": { "type": "string", "format": "date" },
+    "defense_inside_limits": { "type": "boolean", "description": "Whether defense costs erode the limit." }
+  },
+  "additionalProperties": false
 }

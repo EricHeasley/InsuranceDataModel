@@ -1,61 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/coordination_of_benefits.schema.json",
   "title": "coordination_of_benefits",
   "description": "Other health coverage a member holds, and the order in which payers are responsible.",
-  "x-primaryKey": ["coordination_of_benefits_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["coordination_of_benefits_id"],
+  "required": ["coordination_of_benefits_id", "member_id", "other_carrier_name", "payer_order", "effective_date"],
   "properties": {
-    "coordination_of_benefits_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "member.member_id"
-    },
-    "other_carrier_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "other_carrier_insurer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurer.insurer_id"
-    },
-    "other_policy_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "x-sensitivity": "PHI"
-    },
+    "coordination_of_benefits_id": { "type": "string", "format": "uuid" },
+    "member_id": { "type": "string", "format": "uuid", "x-references": "member.member_id" },
+    "other_carrier_name": { "type": "string", "maxLength": 255 },
+    "other_carrier_insurer_id": { "type": "string", "format": "uuid", "x-references": "insurer.insurer_id" },
+    "other_policy_number": { "type": "string", "maxLength": 50, "x-sensitivity": "PHI" },
     "other_coverage_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 30,
       "description": "COMMERCIAL, MEDICARE_A, MEDICARE_B, MEDICAID, TRICARE, WORKERS_COMP, AUTO."
     },
-    "payer_order": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "1 primary, 2 secondary, 3 tertiary for the other coverage."
-    },
-    "effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "termination_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "verified_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "payer_order": { "type": "integer", "description": "1 primary, 2 secondary, 3 tertiary for the other coverage." },
+    "effective_date": { "type": "string", "format": "date" },
+    "termination_date": { "type": "string", "format": "date" },
+    "verified_on": { "type": "string", "format": "date" }
   },
-  "required": [
-    "coordination_of_benefits_id",
-    "member_id",
-    "other_carrier_name",
-    "payer_order",
-    "effective_date"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

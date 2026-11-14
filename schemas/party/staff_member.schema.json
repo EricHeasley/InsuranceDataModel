@@ -1,50 +1,31 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/staff_member.schema.json",
   "title": "staff_member",
   "description": "An employee, contractor or system identity that performs work on policies and claims.",
-  "x-primaryKey": ["staff_member_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["staff_member_id"],
+  "required": ["staff_member_id", "user_name", "staff_role", "is_active"],
   "properties": {
-    "staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
+    "staff_member_id": { "type": "string", "format": "uuid" },
     "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Null for system identities.",
       "x-references": "party.party_id"
     },
-    "user_name": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 100
-    },
+    "user_name": { "type": "string", "maxLength": 100 },
     "staff_role": {
-      "$ref": "enums/staff_role.schema.json"
+      "type": "string",
+      "enum": [
+        "UNDERWRITER", "CLAIM_ADJUSTER", "CLAIM_SUPERVISOR", "SIU_INVESTIGATOR", "CUSTOMER_SERVICE",
+        "BILLING_SPECIALIST", "PREMIUM_AUDITOR", "NURSE_CASE_MANAGER", "ACTUARY", "SYSTEM", "OTHER"
+      ]
     },
-    "supervisor_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    },
-    "office_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "payment_authority_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Maximum single claim payment this person may approve."
-    },
-    "reserve_authority_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "is_active": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    }
+    "supervisor_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" },
+    "office_code": { "type": "string", "maxLength": 30 },
+    "payment_authority_amount": { "type": "number", "format": "money", "description": "Maximum single claim payment this person may approve." },
+    "reserve_authority_amount": { "type": "number", "format": "money" },
+    "is_active": { "type": "boolean" }
   },
-  "required": ["staff_member_id", "user_name", "staff_role", "is_active"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

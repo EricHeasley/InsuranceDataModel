@@ -1,44 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/party_consent.schema.json",
   "title": "party_consent",
   "description": "A consent, authorization or communication preference given by a party.",
-  "x-primaryKey": ["party_consent_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "party_consent_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "consent_type": {
-      "$ref": "enums/consent_type.schema.json"
-    },
-    "consent_status": {
-      "$ref": "enums/consent_status.schema.json"
-    },
-    "captured_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "capture_channel": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "expires_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "evidence_document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    }
-  },
+  "x-primaryKey": ["party_consent_id"],
   "required": ["party_consent_id", "party_id", "consent_type", "consent_status", "captured_at"],
-  "unevaluatedProperties": false
+  "properties": {
+    "party_consent_id": { "type": "string", "format": "uuid" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "consent_type": {
+      "type": "string",
+      "enum": [
+        "ELECTRONIC_DELIVERY", "MARKETING", "TELEMATICS", "CREDIT_SCORE", "HIPAA_AUTHORIZATION", "DATA_SHARING",
+        "CALL_RECORDING", "AUTO_DIALER_TCPA"
+      ]
+    },
+    "consent_status": { "type": "string", "enum": ["GRANTED", "DENIED", "REVOKED", "EXPIRED"] },
+    "captured_at": { "type": "string", "format": "date-time" },
+    "capture_channel": { "type": "string", "maxLength": 30 },
+    "expires_on": { "type": "string", "format": "date" },
+    "evidence_document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" }
+  },
+  "additionalProperties": false
 }

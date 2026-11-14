@@ -1,61 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/producer_license.schema.json",
   "title": "producer_license",
   "description": "A state insurance license held by a producer.",
-  "x-primaryKey": ["producer_license_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["producer_license_id"],
+  "required": ["producer_license_id", "producer_id", "jurisdiction_code", "license_number", "license_status"],
   "properties": {
-    "producer_license_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "producer.producer_id"
-    },
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "license_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "license_class": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "description": "E.g. Producer, Surplus Lines, Adjuster."
-    },
+    "producer_license_id": { "type": "string", "format": "uuid" },
+    "producer_id": { "type": "string", "format": "uuid", "x-references": "producer.producer_id" },
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "license_number": { "type": "string", "maxLength": 50 },
+    "license_class": { "type": "string", "maxLength": 50, "description": "E.g. Producer, Surplus Lines, Adjuster." },
     "lines_of_authority": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 500,
       "description": "Comma-separated lines of authority (Property, Casualty, Life, Health, Variable, ...)."
     },
-    "is_resident_license": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "license_status": {
-      "$ref": "enums/license_status.schema.json"
-    },
-    "issued_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "expires_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "is_resident_license": { "type": "boolean" },
+    "license_status": { "type": "string", "enum": ["PENDING", "ACTIVE", "EXPIRED", "SUSPENDED", "REVOKED", "TERMINATED"] },
+    "issued_on": { "type": "string", "format": "date" },
+    "expires_on": { "type": "string", "format": "date" }
   },
-  "required": [
-    "producer_license_id",
-    "producer_id",
-    "jurisdiction_code",
-    "license_number",
-    "license_status"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

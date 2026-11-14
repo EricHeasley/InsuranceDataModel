@@ -1,61 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/invoice.schema.json",
   "title": "invoice",
   "description": "A bill or installment notice issued on a billing account.",
+  "type": "object",
   "x-primaryKey": ["invoice_id"],
   "x-unique": [
     ["invoice_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["invoice_id", "billing_account_id", "invoice_number", "invoice_status", "invoice_date", "due_date", "total_amount"],
   "properties": {
-    "invoice_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "billing_account_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "billing_account.billing_account_id"
-    },
-    "invoice_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
+    "invoice_id": { "type": "string", "format": "uuid" },
+    "billing_account_id": { "type": "string", "format": "uuid", "x-references": "billing_account.billing_account_id" },
+    "invoice_number": { "type": "string", "maxLength": 30 },
     "invoice_status": {
-      "$ref": "enums/invoice_status.schema.json"
+      "type": "string",
+      "enum": ["PLANNED", "BILLED", "PARTIALLY_PAID", "PAID", "PAST_DUE", "CANCELLED", "WRITTEN_OFF"]
     },
-    "invoice_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "due_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "period_start_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "period_end_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "total_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "document_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "document.document_id"
-    }
+    "invoice_date": { "type": "string", "format": "date" },
+    "due_date": { "type": "string", "format": "date" },
+    "period_start_date": { "type": "string", "format": "date" },
+    "period_end_date": { "type": "string", "format": "date" },
+    "total_amount": { "type": "number", "format": "money" },
+    "document_id": { "type": "string", "format": "uuid", "x-references": "document.document_id" }
   },
-  "required": [
-    "invoice_id",
-    "billing_account_id",
-    "invoice_number",
-    "invoice_status",
-    "invoice_date",
-    "due_date",
-    "total_amount"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

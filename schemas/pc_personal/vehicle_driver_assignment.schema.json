@@ -1,42 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/vehicle_driver_assignment.schema.json",
   "title": "vehicle_driver_assignment",
   "description": "Assignment of a driver to a vehicle for rating.",
-  "x-primaryKey": ["vehicle_driver_assignment_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
+  "x-primaryKey": ["vehicle_driver_assignment_id"],
+  "required": [
+    "vehicle_driver_assignment_id", "policy_risk_id", "policy_driver_id", "is_principal_operator", "effective_date",
+    "added_by_transaction_id"
   ],
   "properties": {
-    "vehicle_driver_assignment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
+    "vehicle_driver_assignment_id": { "type": "string", "format": "uuid" },
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "personal_auto_risk.policy_risk_id" },
+    "policy_driver_id": { "type": "string", "format": "uuid", "x-references": "policy_driver.policy_driver_id" },
+    "is_principal_operator": { "type": "boolean" },
+    "usage_percent": { "type": "number", "format": "percent" },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "personal_auto_risk.policy_risk_id"
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "policy_driver_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_driver.policy_driver_id"
-    },
-    "is_principal_operator": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "usage_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": [
-    "vehicle_driver_assignment_id",
-    "policy_risk_id",
-    "policy_driver_id",
-    "is_principal_operator"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

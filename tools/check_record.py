@@ -3,7 +3,8 @@
 
   python3 tools/check_record.py policy record.json      # one object or an array of objects
 
-Needs `jsonschema` 4.18+.
+Needs `jsonschema`. Or skip this tool: each schema file is plain JSON Schema,
+so schemas/policy/policy.schema.json works directly with any validator.
 """
 import json
 import sys
@@ -17,16 +18,12 @@ def main() -> int:
         return 2
     entity, path = sys.argv[1:]
     from jsonschema import Draft202012Validator
-    from referencing import Registry, Resource
 
-    model = idm.load()
-    if entity not in model["entities"]:
+    files = {doc["title"]: doc for doc in idm.schema_files().values()}
+    if entity not in files:
         print(f"unknown entity '{entity}'", file=sys.stderr)
         return 2
-    docs = idm.schema_files()
-    registry = Registry().with_resources((uri, Resource.from_contents(d)) for uri, d in docs.items() if "$schema" in d)
-    uri = f"{idm.SCHEMA_BASE}{model['entities'][entity]['domain']}/{entity}.schema.json"
-    validator = Draft202012Validator(docs[uri], registry=registry)
+    validator = Draft202012Validator(files[entity])
     with open(path, encoding="utf-8") as fh:
         data = json.load(fh)
     records = data if isinstance(data, list) else [data]

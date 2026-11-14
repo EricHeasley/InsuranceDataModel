@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/contact_point_type.schema.json",
-  "title": "contact_point_type",
-  "description": "Channel of a contact point.",
-  "type": "string",
-  "enum": ["EMAIL", "PHONE", "MOBILE", "FAX", "PORTAL", "OTHER"]
-}

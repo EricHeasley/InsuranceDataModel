@@ -1,90 +1,52 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/workers_comp_claim_detail.schema.json",
   "title": "workers_comp_claim_detail",
   "description": "Workers' compensation specific attributes of a claim.",
+  "type": "object",
   "x-primaryKey": ["claim_id"],
   "x-subtypeOf": "claim",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["claim_id", "wc_claim_type", "injured_worker_party_id"],
   "properties": {
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
     "wc_claim_type": {
-      "$ref": "enums/wc_claim_type.schema.json"
+      "type": "string",
+      "enum": [
+        "MEDICAL_ONLY", "TEMPORARY_TOTAL", "TEMPORARY_PARTIAL", "PERMANENT_PARTIAL", "PERMANENT_TOTAL", "FATALITY",
+        "REPORT_ONLY"
+      ]
     },
-    "injured_worker_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "person.party_id"
-    },
-    "jurisdiction_claim_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50,
-      "description": "Number assigned by the state workers' compensation agency."
-    },
+    "injured_worker_party_id": { "type": "string", "format": "uuid", "x-references": "person.party_id" },
+    "jurisdiction_claim_number": { "type": "string", "maxLength": 50, "description": "Number assigned by the state workers' compensation agency." },
     "benefit_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 6,
       "description": "State whose benefits apply.",
       "x-references": "jurisdiction.jurisdiction_code"
     },
-    "employer_notified_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
+    "employer_notified_on": { "type": "string", "format": "date" },
     "class_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Class code of the injured worker.",
       "x-references": "code_value.code_value_id"
     },
     "cause_of_injury_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "WCIO cause-of-injury code.",
       "x-references": "code_value.code_value_id"
     },
-    "hire_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "occupation": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255
-    },
-    "average_weekly_wage_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "x-sensitivity": "SPI"
-    },
-    "compensation_rate_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "first_day_of_disability": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "return_to_work_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "is_modified_duty": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "maximum_medical_improvement_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "impairment_rating_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent",
-      "x-sensitivity": "PHI"
-    },
-    "is_compensability_accepted": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "first_report_of_injury_filed_on": {
-      "$ref": "../common/types.schema.json#/$defs/date",
-      "description": "FROI EDI filing date."
-    }
+    "hire_date": { "type": "string", "format": "date" },
+    "occupation": { "type": "string", "maxLength": 255 },
+    "average_weekly_wage_amount": { "type": "number", "format": "money", "x-sensitivity": "SPI" },
+    "compensation_rate_amount": { "type": "number", "format": "money" },
+    "first_day_of_disability": { "type": "string", "format": "date" },
+    "return_to_work_date": { "type": "string", "format": "date" },
+    "is_modified_duty": { "type": "boolean" },
+    "maximum_medical_improvement_date": { "type": "string", "format": "date" },
+    "impairment_rating_percent": { "type": "number", "format": "percent", "x-sensitivity": "PHI" },
+    "is_compensability_accepted": { "type": "boolean" },
+    "first_report_of_injury_filed_on": { "type": "string", "format": "date", "description": "FROI EDI filing date." }
   },
-  "required": ["claim_id", "wc_claim_type", "injured_worker_party_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

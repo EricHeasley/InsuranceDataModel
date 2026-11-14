@@ -1,78 +1,48 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/structure.schema.json",
   "title": "structure",
   "description": "A building: a dwelling insured on a homeowners policy or a building insured on a commercial property policy.",
+  "type": "object",
   "x-primaryKey": ["insurable_object_id"],
   "x-subtypeOf": "insurable_object",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "insurable_object_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurable_object.insurable_object_id"
-    },
-    "year_built": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "construction_type": {
-      "$ref": "enums/construction_type.schema.json"
-    },
-    "story_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "square_footage": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "unit_count": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "roof_type": {
-      "$ref": "enums/roof_type.schema.json"
-    },
-    "roof_year": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Year the roof was last replaced."
-    },
-    "foundation_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "heating_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "electrical_updated_year": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "plumbing_updated_year": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "is_sprinklered": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_central_fire_alarm": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_central_burglar_alarm": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "flood_zone": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 10,
-      "description": "FEMA flood zone."
-    },
-    "distance_to_coast_miles": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "wildfire_risk_score": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    }
-  },
   "required": ["insurable_object_id"],
-  "unevaluatedProperties": false
+  "properties": {
+    "insurable_object_id": { "type": "string", "format": "uuid", "x-references": "insurable_object.insurable_object_id" },
+    "year_built": { "type": "integer" },
+    "construction_type": {
+      "type": "string",
+      "oneOf": [
+        { "const": "FRAME", "description": "ISO class 1" },
+        { "const": "JOISTED_MASONRY", "description": "ISO class 2" },
+        { "const": "NON_COMBUSTIBLE", "description": "ISO class 3" },
+        { "const": "MASONRY_NON_COMBUSTIBLE", "description": "ISO class 4" },
+        { "const": "MODIFIED_FIRE_RESISTIVE", "description": "ISO class 5" },
+        { "const": "FIRE_RESISTIVE", "description": "ISO class 6" },
+        { "const": "MANUFACTURED", "description": "Mobile or manufactured home" },
+        { "const": "OTHER" }
+      ]
+    },
+    "story_count": { "type": "integer" },
+    "square_footage": { "type": "integer" },
+    "unit_count": { "type": "integer" },
+    "roof_type": {
+      "type": "string",
+      "enum": [
+        "ASPHALT_SHINGLE", "ARCHITECTURAL_SHINGLE", "WOOD_SHAKE", "TILE", "SLATE", "METAL", "FLAT_BUILT_UP",
+        "MEMBRANE", "OTHER"
+      ]
+    },
+    "roof_year": { "type": "integer", "description": "Year the roof was last replaced." },
+    "foundation_type": { "type": "string", "maxLength": 30 },
+    "heating_type": { "type": "string", "maxLength": 30 },
+    "electrical_updated_year": { "type": "integer" },
+    "plumbing_updated_year": { "type": "integer" },
+    "is_sprinklered": { "type": "boolean" },
+    "has_central_fire_alarm": { "type": "boolean" },
+    "has_central_burglar_alarm": { "type": "boolean" },
+    "flood_zone": { "type": "string", "maxLength": 10, "description": "FEMA flood zone." },
+    "distance_to_coast_miles": { "type": "number", "format": "decimal" },
+    "wildfire_risk_score": { "type": "number", "format": "decimal" }
+  },
+  "additionalProperties": false
 }

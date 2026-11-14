@@ -1,69 +1,41 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/billing_account.schema.json",
   "title": "billing_account",
   "description": "An account through which a payor is billed for one or more policies.",
+  "type": "object",
   "x-primaryKey": ["billing_account_id"],
   "x-unique": [
     ["account_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["billing_account_id", "account_number", "payor_party_id", "bill_method", "billing_account_status", "currency_code"],
   "properties": {
-    "billing_account_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "account_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "payor_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
+    "billing_account_id": { "type": "string", "format": "uuid" },
+    "account_number": { "type": "string", "maxLength": 30 },
+    "payor_party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
     "bill_method": {
-      "$ref": "enums/bill_method.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "DIRECT_BILL", "description": "Insurer bills the insured" },
+        { "const": "AGENCY_BILL", "description": "Producer collects and remits net of commission" },
+        { "const": "LIST_BILL", "description": "One bill to a group or employer for many members" },
+        { "const": "PAYROLL_DEDUCTION" },
+        { "const": "MORTGAGEE_BILL", "description": "Billed to the mortgage servicer's escrow" },
+        { "const": "PAY_AS_YOU_GO", "description": "Premium reported and paid with each payroll (workers' comp)" },
+        { "const": "PREMIUM_FINANCE", "description": "Paid by a premium finance company" }
+      ]
     },
-    "billing_account_status": {
-      "$ref": "enums/billing_account_status.schema.json"
-    },
-    "currency_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 3,
-      "x-references": "currency.currency_code"
-    },
+    "billing_account_status": { "type": "string", "enum": ["ACTIVE", "DELINQUENT", "SUSPENDED", "COLLECTIONS", "CLOSED"] },
+    "currency_code": { "type": "string", "maxLength": 3, "x-references": "currency.currency_code" },
     "producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Remitting producer for agency-bill accounts.",
       "x-references": "producer.producer_id"
     },
-    "billing_address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "address.address_id"
-    },
-    "preferred_due_day": {
-      "$ref": "../common/types.schema.json#/$defs/integer",
-      "description": "Day of month invoices fall due."
-    },
-    "is_paperless": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "autopay_payment_instrument_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "payment_instrument.payment_instrument_id"
-    }
+    "billing_address_id": { "type": "string", "format": "uuid", "x-references": "address.address_id" },
+    "preferred_due_day": { "type": "integer", "description": "Day of month invoices fall due." },
+    "is_paperless": { "type": "boolean" },
+    "autopay_payment_instrument_id": { "type": "string", "format": "uuid", "x-references": "payment_instrument.payment_instrument_id" }
   },
-  "required": [
-    "billing_account_id",
-    "account_number",
-    "payor_party_id",
-    "bill_method",
-    "billing_account_status",
-    "currency_code"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

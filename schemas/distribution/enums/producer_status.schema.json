@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/enums/producer_status.schema.json",
-  "title": "producer_status",
-  "description": "Status of a producer relationship.",
-  "type": "string",
-  "enum": ["PROSPECT", "ACTIVE", "SUSPENDED", "TERMINATED"]
-}

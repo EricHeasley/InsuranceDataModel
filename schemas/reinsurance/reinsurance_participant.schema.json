@@ -1,56 +1,25 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_participant.schema.json",
   "title": "reinsurance_participant",
   "description": "A reinsurer's participation in a layer.",
+  "type": "object",
   "x-primaryKey": ["reinsurance_participant_id"],
   "x-unique": [
     ["reinsurance_layer_id", "reinsurer_party_id"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["reinsurance_participant_id", "reinsurance_layer_id", "reinsurer_party_id", "signed_share_percent"],
   "properties": {
-    "reinsurance_participant_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "reinsurance_layer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "reinsurance_layer.reinsurance_layer_id"
-    },
-    "reinsurer_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "organization.party_id"
-    },
-    "signed_share_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent",
-      "description": "Share of the layer."
-    },
+    "reinsurance_participant_id": { "type": "string", "format": "uuid" },
+    "reinsurance_layer_id": { "type": "string", "format": "uuid", "x-references": "reinsurance_layer.reinsurance_layer_id" },
+    "reinsurer_party_id": { "type": "string", "format": "uuid", "x-references": "organization.party_id" },
+    "signed_share_percent": { "type": "number", "format": "percent", "description": "Share of the layer." },
     "is_authorized": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "type": "boolean",
       "description": "Authorized or certified reinsurer in the cedent's domicile (Schedule F treatment)."
     },
-    "collateral_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "LETTER_OF_CREDIT, TRUST, FUNDS_WITHHELD."
-    },
-    "collateral_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "financial_strength_rating": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 10
-    }
+    "collateral_type": { "type": "string", "maxLength": 30, "description": "LETTER_OF_CREDIT, TRUST, FUNDS_WITHHELD." },
+    "collateral_amount": { "type": "number", "format": "money" },
+    "financial_strength_rating": { "type": "string", "maxLength": 10 }
   },
-  "required": [
-    "reinsurance_participant_id",
-    "reinsurance_layer_id",
-    "reinsurer_party_id",
-    "signed_share_percent"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

@@ -1,61 +1,40 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/policy_driver.schema.json",
   "title": "policy_driver",
   "description": "A driver listed on an auto policy, with rating characteristics.",
-  "x-primaryKey": ["policy_driver_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
-  ],
+  "x-primaryKey": ["policy_driver_id"],
+  "required": ["policy_driver_id", "policy_id", "party_id", "driver_status", "effective_date", "added_by_transaction_id"],
   "properties": {
-    "policy_driver_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
+    "policy_driver_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "person.party_id" },
+    "driver_status": { "type": "string", "enum": ["RATED", "EXCLUDED", "LISTED_NOT_RATED", "PERMIT"] },
+    "relationship_to_insured": { "type": "string", "maxLength": 30 },
+    "license_jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "first_licensed_date": { "type": "string", "format": "date" },
+    "has_good_student_discount": { "type": "boolean" },
+    "has_defensive_driver_course": { "type": "boolean" },
+    "requires_financial_responsibility_filing": { "type": "boolean", "description": "SR-22 / FR-44 filing required." },
+    "insurance_score_tier": { "type": "string", "maxLength": 20, "x-sensitivity": "SPI" },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "person.party_id"
-    },
-    "driver_status": {
-      "$ref": "enums/driver_status.schema.json"
-    },
-    "relationship_to_insured": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "license_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "first_licensed_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "has_good_student_discount": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "has_defensive_driver_course": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "requires_financial_responsibility_filing": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "SR-22 / FR-44 filing required."
-    },
-    "insurance_score_tier": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20,
-      "x-sensitivity": "SPI"
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["policy_driver_id", "policy_id", "party_id", "driver_status"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

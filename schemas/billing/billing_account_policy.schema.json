@@ -1,38 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/billing_account_policy.schema.json",
   "title": "billing_account_policy",
   "description": "Assignment of a policy to a billing account and payment plan over a period.",
-  "x-primaryKey": ["billing_account_policy_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "billing_account_policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "billing_account_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "billing_account.billing_account_id"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "payment_plan_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "payment_plan.payment_plan_id"
-    },
-    "effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "end_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
-  },
+  "x-primaryKey": ["billing_account_policy_id"],
   "required": ["billing_account_policy_id", "billing_account_id", "policy_id", "effective_date"],
-  "unevaluatedProperties": false
+  "properties": {
+    "billing_account_policy_id": { "type": "string", "format": "uuid" },
+    "billing_account_id": { "type": "string", "format": "uuid", "x-references": "billing_account.billing_account_id" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "payment_plan_id": { "type": "string", "format": "uuid", "x-references": "payment_plan.payment_plan_id" },
+    "effective_date": { "type": "string", "format": "date" },
+    "end_date": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
 }

@@ -309,6 +309,8 @@ erDiagram
     uuid policy_risk_id FK
     uuid coverage_definition_id FK
     string asl_code FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   policy_coverage_term {
     uuid policy_coverage_term_id PK
@@ -321,11 +323,15 @@ erDiagram
     uuid form_id FK
     uuid policy_coverage_id FK
     uuid policy_risk_id FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   policy_location {
     uuid policy_location_id PK
     uuid policy_id FK
     uuid address_id FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   policy_party {
     uuid policy_party_id PK
@@ -333,6 +339,8 @@ erDiagram
     uuid party_id FK
     uuid policy_risk_id FK
     uuid mailing_address_id FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   policy_producer {
     uuid policy_producer_id PK
@@ -345,6 +353,8 @@ erDiagram
     uuid policy_risk_id FK
     uuid policy_coverage_id FK
     string jurisdiction_code FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   policy_risk {
     uuid policy_risk_id PK
@@ -352,6 +362,8 @@ erDiagram
     uuid insurable_object_id FK
     uuid policy_location_id FK
     string rating_jurisdiction_code FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   policy_term {
     uuid policy_term_id PK
@@ -397,6 +409,8 @@ erDiagram
     uuid policy_id FK
     uuid internal_policy_id FK
     string line_of_business_code FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   underwriting_decision {
     uuid underwriting_decision_id PK
@@ -409,20 +423,32 @@ erDiagram
   policy o|--o{ policy : "replaces_policy_id"
   policy ||--o{ policy_coverage : "policy_id"
   policy_risk o|--o{ policy_coverage : "policy_risk_id"
+  policy_transaction ||--o{ policy_coverage : "added_by_transaction_id"
+  policy_transaction o|--o{ policy_coverage : "removed_by_transaction_id"
   policy_coverage ||--o{ policy_coverage_term : "policy_coverage_id"
   policy ||--o{ policy_form : "policy_id"
   policy_coverage o|--o{ policy_form : "policy_coverage_id"
   policy_risk o|--o{ policy_form : "policy_risk_id"
+  policy_transaction ||--o{ policy_form : "added_by_transaction_id"
+  policy_transaction o|--o{ policy_form : "removed_by_transaction_id"
   policy ||--o{ policy_location : "policy_id"
+  policy_transaction ||--o{ policy_location : "added_by_transaction_id"
+  policy_transaction o|--o{ policy_location : "removed_by_transaction_id"
   policy ||--o{ policy_party : "policy_id"
   policy_risk o|--o{ policy_party : "policy_risk_id"
+  policy_transaction ||--o{ policy_party : "added_by_transaction_id"
+  policy_transaction o|--o{ policy_party : "removed_by_transaction_id"
   policy ||--o{ policy_producer : "policy_id"
   policy ||--o{ policy_rating_modifier : "policy_id"
   policy_risk o|--o{ policy_rating_modifier : "policy_risk_id"
   policy_coverage o|--o{ policy_rating_modifier : "policy_coverage_id"
+  policy_transaction ||--o{ policy_rating_modifier : "added_by_transaction_id"
+  policy_transaction o|--o{ policy_rating_modifier : "removed_by_transaction_id"
   policy ||--o{ policy_risk : "policy_id"
   insurable_object ||--o{ policy_risk : "insurable_object_id"
   policy_location o|--o{ policy_risk : "policy_location_id"
+  policy_transaction ||--o{ policy_risk : "added_by_transaction_id"
+  policy_transaction o|--o{ policy_risk : "removed_by_transaction_id"
   policy ||--o{ policy_term : "policy_id"
   policy_term ||--o{ policy_transaction : "policy_term_id"
   policy_transaction o|--o{ policy_transaction : "reverses_transaction_id"
@@ -435,6 +461,8 @@ erDiagram
   policy o|--o{ submission : "renewal_of_policy_id"
   policy ||--o{ underlying_policy : "policy_id"
   policy o|--o{ underlying_policy : "internal_policy_id"
+  policy_transaction ||--o{ underlying_policy : "added_by_transaction_id"
+  policy_transaction o|--o{ underlying_policy : "removed_by_transaction_id"
   submission o|--o{ underwriting_decision : "submission_id"
   policy_transaction o|--o{ underwriting_decision : "policy_transaction_id"
 ```
@@ -461,6 +489,8 @@ erDiagram
     uuid policy_id FK
     uuid party_id FK
     string license_jurisdiction_code FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   scheduled_item {
     uuid insurable_object_id PK,FK
@@ -477,6 +507,8 @@ erDiagram
     uuid vehicle_driver_assignment_id PK
     uuid policy_risk_id FK
     uuid policy_driver_id FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   watercraft {
     uuid insurable_object_id PK,FK
@@ -510,6 +542,8 @@ erDiagram
     uuid class_code_value_id FK
     string jurisdiction_code FK
     uuid premium_audit_id FK
+    uuid added_by_transaction_id FK
+    uuid removed_by_transaction_id FK
   }
   commercial_auto_risk {
     uuid policy_risk_id PK,FK

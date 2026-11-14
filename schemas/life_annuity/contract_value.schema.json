@@ -1,68 +1,33 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/contract_value.schema.json",
   "title": "contract_value",
   "description": "Snapshot of a life or annuity contract's values on a valuation date (anniversary, month-end or on demand).",
+  "type": "object",
   "x-primaryKey": ["contract_value_id"],
   "x-unique": [
     ["policy_id", "valuation_date"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["contract_value_id", "policy_id", "valuation_date"],
   "properties": {
-    "contract_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "valuation_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "account_value_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "cash_surrender_value_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "surrender_charge_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "loan_balance_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "death_benefit_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "net_amount_at_risk_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "cost_basis_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
-      "description": "Investment in the contract for tax purposes."
-    },
-    "cumulative_premium_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "paid_up_additions_face_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "dividend_accumulation_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
+    "contract_value_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "valuation_date": { "type": "string", "format": "date" },
+    "account_value_amount": { "type": "number", "format": "money" },
+    "cash_surrender_value_amount": { "type": "number", "format": "money" },
+    "surrender_charge_amount": { "type": "number", "format": "money" },
+    "loan_balance_amount": { "type": "number", "format": "money" },
+    "death_benefit_amount": { "type": "number", "format": "money" },
+    "net_amount_at_risk_amount": { "type": "number", "format": "money" },
+    "cost_basis_amount": { "type": "number", "format": "money", "description": "Investment in the contract for tax purposes." },
+    "cumulative_premium_amount": { "type": "number", "format": "money" },
+    "paid_up_additions_face_amount": { "type": "number", "format": "money" },
+    "dividend_accumulation_amount": { "type": "number", "format": "money" },
     "guaranteed_benefit_base_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money",
+      "type": "number",
+      "format": "money",
       "description": "Benefit base of a guaranteed living or death benefit rider."
     },
-    "free_withdrawal_remaining_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    }
+    "free_withdrawal_remaining_amount": { "type": "number", "format": "money" }
   },
-  "required": ["contract_value_id", "policy_id", "valuation_date"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

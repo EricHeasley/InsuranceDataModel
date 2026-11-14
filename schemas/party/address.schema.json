@@ -1,72 +1,29 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/address.schema.json",
   "title": "address",
   "description": "A postal or physical location. Shared by parties, insured locations and loss locations.",
-  "x-primaryKey": ["address_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["address_id"],
+  "required": ["address_id", "line_1", "city", "postal_code", "country_code"],
   "properties": {
-    "address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "line_1": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255,
-      "x-sensitivity": "PII"
-    },
-    "line_2": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 255,
-      "x-sensitivity": "PII"
-    },
-    "city": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 100
-    },
-    "county": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 100
-    },
+    "address_id": { "type": "string", "format": "uuid" },
+    "line_1": { "type": "string", "maxLength": 255, "x-sensitivity": "PII" },
+    "line_2": { "type": "string", "maxLength": 255, "x-sensitivity": "PII" },
+    "city": { "type": "string", "maxLength": 100 },
+    "county": { "type": "string", "maxLength": 100 },
     "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 6,
       "description": "State or equivalent.",
       "x-references": "jurisdiction.jurisdiction_code"
     },
-    "postal_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20
-    },
-    "country_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 2,
-      "x-references": "country.country_code"
-    },
-    "latitude": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "longitude": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "geocode_precision": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "description": "ROOFTOP, PARCEL, STREET, POSTAL_CODE, ..."
-    },
-    "census_block_fips": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 15
-    },
-    "is_validated": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "True when standardized against a postal reference (e.g. USPS CASS)."
-    }
+    "postal_code": { "type": "string", "maxLength": 20 },
+    "country_code": { "type": "string", "maxLength": 2, "x-references": "country.country_code" },
+    "latitude": { "type": "number", "format": "decimal" },
+    "longitude": { "type": "number", "format": "decimal" },
+    "geocode_precision": { "type": "string", "maxLength": 30, "description": "ROOFTOP, PARCEL, STREET, POSTAL_CODE, ..." },
+    "census_block_fips": { "type": "string", "maxLength": 15 },
+    "is_validated": { "type": "boolean", "description": "True when standardized against a postal reference (e.g. USPS CASS)." }
   },
-  "required": ["address_id", "line_1", "city", "postal_code", "country_code"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

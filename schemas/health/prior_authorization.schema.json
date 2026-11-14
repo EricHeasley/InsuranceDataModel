@@ -1,92 +1,39 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/prior_authorization.schema.json",
   "title": "prior_authorization",
   "description": "A request for approval of services before they are rendered, and the utilization management decision.",
+  "type": "object",
   "x-primaryKey": ["prior_authorization_id"],
   "x-unique": [
     ["authorization_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["prior_authorization_id", "authorization_number", "enrollment_id", "authorization_status", "requested_at"],
   "properties": {
-    "prior_authorization_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "authorization_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "enrollment_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "enrollment.enrollment_id"
-    },
-    "requesting_provider_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider.provider_id"
-    },
-    "servicing_provider_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "provider.provider_id"
-    },
+    "prior_authorization_id": { "type": "string", "format": "uuid" },
+    "authorization_number": { "type": "string", "maxLength": 30 },
+    "enrollment_id": { "type": "string", "format": "uuid", "x-references": "enrollment.enrollment_id" },
+    "requesting_provider_id": { "type": "string", "format": "uuid", "x-references": "provider.provider_id" },
+    "servicing_provider_id": { "type": "string", "format": "uuid", "x-references": "provider.provider_id" },
     "authorization_status": {
-      "$ref": "enums/authorization_status.schema.json"
+      "type": "string",
+      "enum": ["REQUESTED", "PENDED", "APPROVED", "PARTIALLY_APPROVED", "DENIED", "WITHDRAWN", "EXPIRED"]
     },
     "service_type": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 50,
       "description": "INPATIENT, OUTPATIENT_SURGERY, IMAGING, DME, SPECIALTY_DRUG, ..."
     },
-    "is_urgent": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "procedure_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_value.code_value_id",
-      "x-sensitivity": "PHI"
-    },
-    "diagnosis_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "code_value.code_value_id",
-      "x-sensitivity": "PHI"
-    },
-    "requested_units": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "approved_units": {
-      "$ref": "../common/types.schema.json#/$defs/decimal"
-    },
-    "requested_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "decided_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "valid_from": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "valid_to": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "denial_reason": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 200
-    },
-    "reviewer_staff_member_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    }
+    "is_urgent": { "type": "boolean" },
+    "procedure_code_value_id": { "type": "string", "format": "uuid", "x-references": "code_value.code_value_id", "x-sensitivity": "PHI" },
+    "diagnosis_code_value_id": { "type": "string", "format": "uuid", "x-references": "code_value.code_value_id", "x-sensitivity": "PHI" },
+    "requested_units": { "type": "number", "format": "decimal" },
+    "approved_units": { "type": "number", "format": "decimal" },
+    "requested_at": { "type": "string", "format": "date-time" },
+    "decided_at": { "type": "string", "format": "date-time" },
+    "valid_from": { "type": "string", "format": "date" },
+    "valid_to": { "type": "string", "format": "date" },
+    "denial_reason": { "type": "string", "maxLength": 200 },
+    "reviewer_staff_member_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" }
   },
-  "required": [
-    "prior_authorization_id",
-    "authorization_number",
-    "enrollment_id",
-    "authorization_status",
-    "requested_at"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

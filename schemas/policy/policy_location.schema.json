@@ -1,46 +1,36 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_location.schema.json",
   "title": "policy_location",
   "description": "A premises or location scheduled on a policy.",
-  "x-primaryKey": ["policy_location_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    },
-    {
-      "$ref": "../common/policy_versioned.schema.json"
-    }
-  ],
+  "x-primaryKey": ["policy_location_id"],
+  "required": ["policy_location_id", "policy_id", "location_number", "address_id", "effective_date", "added_by_transaction_id"],
   "properties": {
-    "policy_location_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
+    "policy_location_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "location_number": { "type": "integer" },
+    "address_id": { "type": "string", "format": "uuid", "x-references": "address.address_id" },
+    "is_primary": { "type": "boolean" },
+    "territory_code": { "type": "string", "maxLength": 20, "description": "Rating territory." },
+    "description": { "type": "string", "maxLength": 500 },
+    "effective_date": { "type": "string", "format": "date", "description": "First business date this row applies." },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
     },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
+    "added_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     },
-    "location_number": {
-      "$ref": "../common/types.schema.json#/$defs/integer"
-    },
-    "address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "address.address_id"
-    },
-    "is_primary": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "territory_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20,
-      "description": "Rating territory."
-    },
-    "description": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
+    "removed_by_transaction_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
     }
   },
-  "required": ["policy_location_id", "policy_id", "location_number", "address_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

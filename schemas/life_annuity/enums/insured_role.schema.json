@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/insured_role.schema.json",
-  "title": "insured_role",
-  "description": "Role of a life on a coverage.",
-  "type": "string",
-  "enum": ["PRIMARY", "JOINT", "SPOUSE", "CHILD", "OTHER_INSURED"]
-}

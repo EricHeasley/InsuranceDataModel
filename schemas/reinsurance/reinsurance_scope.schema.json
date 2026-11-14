@@ -1,55 +1,20 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_scope.schema.json",
   "title": "reinsurance_scope",
   "description": "Business included in or excluded from a reinsurance contract by line, statutory line, state or product.",
-  "x-primaryKey": ["reinsurance_scope_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "reinsurance_scope_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "reinsurance_contract_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "reinsurance_contract.reinsurance_contract_id"
-    },
-    "scope_inclusion": {
-      "$ref": "enums/scope_inclusion.schema.json"
-    },
-    "line_of_business_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "line_of_business.line_of_business_code"
-    },
-    "asl_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 10,
-      "x-references": "annual_statement_line.asl_code"
-    },
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "product_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "product.product_id"
-    },
-    "cause_of_loss_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30,
-      "x-references": "cause_of_loss.cause_of_loss_code"
-    },
-    "description": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 500
-    }
-  },
+  "x-primaryKey": ["reinsurance_scope_id"],
   "required": ["reinsurance_scope_id", "reinsurance_contract_id", "scope_inclusion"],
-  "unevaluatedProperties": false
+  "properties": {
+    "reinsurance_scope_id": { "type": "string", "format": "uuid" },
+    "reinsurance_contract_id": { "type": "string", "format": "uuid", "x-references": "reinsurance_contract.reinsurance_contract_id" },
+    "scope_inclusion": { "type": "string", "enum": ["INCLUDE", "EXCLUDE"] },
+    "line_of_business_code": { "type": "string", "maxLength": 30, "x-references": "line_of_business.line_of_business_code" },
+    "asl_code": { "type": "string", "maxLength": 10, "x-references": "annual_statement_line.asl_code" },
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "product_id": { "type": "string", "format": "uuid", "x-references": "product.product_id" },
+    "cause_of_loss_code": { "type": "string", "maxLength": 30, "x-references": "cause_of_loss.cause_of_loss_code" },
+    "description": { "type": "string", "maxLength": 500 }
+  },
+  "additionalProperties": false
 }

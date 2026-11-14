@@ -1,60 +1,44 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_loss_cession.schema.json",
   "title": "reinsurance_loss_cession",
   "description": "Loss and expense ceded to (or assumed under) a layer, traceable to the claim ledger where computed per claim.",
-  "x-primaryKey": ["reinsurance_loss_cession_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
+  "x-primaryKey": ["reinsurance_loss_cession_id"],
+  "required": [
+    "reinsurance_loss_cession_id", "reinsurance_layer_id", "loss_cession_type", "claim_cost_category", "ceded_amount",
+    "accounting_date"
   ],
   "properties": {
-    "reinsurance_loss_cession_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "reinsurance_layer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "reinsurance_layer.reinsurance_layer_id"
-    },
-    "claim_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "claim.claim_id"
-    },
+    "reinsurance_loss_cession_id": { "type": "string", "format": "uuid" },
+    "reinsurance_layer_id": { "type": "string", "format": "uuid", "x-references": "reinsurance_layer.reinsurance_layer_id" },
+    "claim_id": { "type": "string", "format": "uuid", "x-references": "claim.claim_id" },
     "claim_financial_transaction_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "x-references": "claim_financial_transaction.claim_financial_transaction_id"
     },
     "catastrophe_event_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "Event for occurrence-level cessions.",
       "x-references": "catastrophe_event.catastrophe_event_id"
     },
-    "loss_cession_type": {
-      "$ref": "enums/loss_cession_type.schema.json"
-    },
+    "loss_cession_type": { "type": "string", "enum": ["PAID", "CASE_RESERVE", "RECOVERY"] },
     "claim_cost_category": {
-      "$ref": "../claims/enums/claim_cost_category.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "INDEMNITY", "description": "Loss paid to or on behalf of claimants" },
+        { "const": "MEDICAL", "description": "Medical loss (workers' comp, PIP, med pay)" },
+        {
+          "const": "DEFENSE_COST_CONTAINMENT",
+          "description": "Allocated expense: defense and cost containment (DCC)"
+        },
+        { "const": "ADJUSTING_OTHER", "description": "Adjusting and other expense (A&O)" }
+      ]
     },
-    "ceded_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "accounting_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "reinsurance_statement_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "reinsurance_statement.reinsurance_statement_id"
-    }
+    "ceded_amount": { "type": "number", "format": "money" },
+    "accounting_date": { "type": "string", "format": "date" },
+    "reinsurance_statement_id": { "type": "string", "format": "uuid", "x-references": "reinsurance_statement.reinsurance_statement_id" }
   },
-  "required": [
-    "reinsurance_loss_cession_id",
-    "reinsurance_layer_id",
-    "loss_cession_type",
-    "claim_cost_category",
-    "ceded_amount",
-    "accounting_date"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

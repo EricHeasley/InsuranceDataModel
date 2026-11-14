@@ -1,44 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/producer_agreement.schema.json",
   "title": "producer_agreement",
   "description": "Contract between a producer and the insurer that governs authority and compensation.",
+  "type": "object",
   "x-primaryKey": ["producer_agreement_id"],
   "x-unique": [
     ["agreement_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "producer_agreement_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "producer.producer_id"
-    },
-    "insurer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "insurer.insurer_id"
-    },
-    "agreement_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 50
-    },
-    "has_binding_authority": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "effective_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "terminated_on": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
-  },
   "required": ["producer_agreement_id", "producer_id", "agreement_number", "effective_on"],
-  "unevaluatedProperties": false
+  "properties": {
+    "producer_agreement_id": { "type": "string", "format": "uuid" },
+    "producer_id": { "type": "string", "format": "uuid", "x-references": "producer.producer_id" },
+    "insurer_id": { "type": "string", "format": "uuid", "x-references": "insurer.insurer_id" },
+    "agreement_number": { "type": "string", "maxLength": 50 },
+    "has_binding_authority": { "type": "boolean" },
+    "effective_on": { "type": "string", "format": "date" },
+    "terminated_on": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
 }

@@ -1,59 +1,35 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/commercial_auto_risk.schema.json",
   "title": "commercial_auto_risk",
   "description": "Policy-specific rating detail for a vehicle on a commercial auto policy.",
+  "type": "object",
   "x-primaryKey": ["policy_risk_id"],
   "x-subtypeOf": "policy_risk",
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["policy_risk_id"],
   "properties": {
-    "policy_risk_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy_risk.policy_risk_id"
-    },
+    "policy_risk_id": { "type": "string", "format": "uuid", "x-references": "policy_risk.policy_risk_id" },
     "vehicle_class_code_value_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "type": "string",
+      "format": "uuid",
       "description": "ISO commercial auto classification code.",
       "x-references": "code_value.code_value_id"
     },
-    "commercial_vehicle_use": {
-      "$ref": "enums/commercial_vehicle_use.schema.json"
-    },
+    "commercial_vehicle_use": { "type": "string", "enum": ["SERVICE", "RETAIL", "COMMERCIAL"] },
     "radius_of_operation": {
-      "$ref": "enums/radius_of_operation.schema.json"
+      "type": "string",
+      "oneOf": [
+        { "const": "LOCAL", "description": "Up to 50 miles" },
+        { "const": "INTERMEDIATE", "description": "51 to 200 miles" },
+        { "const": "LONG_DISTANCE", "description": "Over 200 miles" }
+      ]
     },
-    "ownership_type": {
-      "$ref": "../pc_personal/enums/ownership_type.schema.json"
-    },
-    "garaging_address_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "address.address_id"
-    },
-    "stated_amount": {
-      "$ref": "../common/types.schema.json#/$defs/money"
-    },
-    "is_fleet": {
-      "$ref": "../common/types.schema.json#/$defs/boolean"
-    },
-    "covered_auto_symbol": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20,
-      "description": "Covered auto designation symbols (1-9, 19)."
-    },
-    "has_interstate_filing": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "Federal or state motor carrier filing (e.g. MCS-90) required."
-    },
-    "usdot_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 20
-    }
+    "ownership_type": { "type": "string", "enum": ["OWNED", "FINANCED", "LEASED", "NON_OWNED", "HIRED"] },
+    "garaging_address_id": { "type": "string", "format": "uuid", "x-references": "address.address_id" },
+    "stated_amount": { "type": "number", "format": "money" },
+    "is_fleet": { "type": "boolean" },
+    "covered_auto_symbol": { "type": "string", "maxLength": 20, "description": "Covered auto designation symbols (1-9, 19)." },
+    "has_interstate_filing": { "type": "boolean", "description": "Federal or state motor carrier filing (e.g. MCS-90) required." },
+    "usdot_number": { "type": "string", "maxLength": 20 }
   },
-  "required": ["policy_risk_id"],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

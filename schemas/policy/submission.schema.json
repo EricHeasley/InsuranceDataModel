@@ -1,81 +1,35 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/submission.schema.json",
   "title": "submission",
   "description": "A request for insurance received from an applicant or producer, prior to and independent of any policy.",
+  "type": "object",
   "x-primaryKey": ["submission_id"],
   "x-unique": [
     ["submission_number"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "required": ["submission_id", "submission_number", "applicant_party_id", "product_id", "submission_status", "received_at"],
   "properties": {
-    "submission_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "submission_number": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 30
-    },
-    "applicant_party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "product_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "product.product_id"
-    },
-    "producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "producer.producer_id"
-    },
-    "jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "submission_status": {
-      "$ref": "enums/submission_status.schema.json"
-    },
-    "is_renewal": {
-      "$ref": "../common/types.schema.json#/$defs/boolean",
-      "description": "True for renewal re-underwriting of an existing policy."
-    },
-    "renewal_of_policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
+    "submission_id": { "type": "string", "format": "uuid" },
+    "submission_number": { "type": "string", "maxLength": 30 },
+    "applicant_party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "product_id": { "type": "string", "format": "uuid", "x-references": "product.product_id" },
+    "producer_id": { "type": "string", "format": "uuid", "x-references": "producer.producer_id" },
+    "jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "submission_status": { "type": "string", "enum": ["RECEIVED", "IN_REVIEW", "QUOTED", "BOUND", "DECLINED", "WITHDRAWN", "EXPIRED"] },
+    "is_renewal": { "type": "boolean", "description": "True for renewal re-underwriting of an existing policy." },
+    "renewal_of_policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
     "channel": {
-      "$ref": "../common/types.schema.json#/$defs/string",
+      "type": "string",
       "maxLength": 30,
       "description": "AGENT_PORTAL, DIRECT_WEB, CALL_CENTER, API, EXCHANGE, PAPER, ..."
     },
-    "received_at": {
-      "$ref": "../common/types.schema.json#/$defs/timestamp"
-    },
-    "requested_effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "assigned_underwriter_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "staff_member.staff_member_id"
-    },
+    "received_at": { "type": "string", "format": "date-time" },
+    "requested_effective_date": { "type": "string", "format": "date" },
+    "assigned_underwriter_id": { "type": "string", "format": "uuid", "x-references": "staff_member.staff_member_id" },
     "application_data": {
-      "$ref": "../common/types.schema.json#/$defs/json",
+      "type": "object",
       "description": "Application answers not modeled as attributes (underwriting questionnaires)."
     }
   },
-  "required": [
-    "submission_id",
-    "submission_number",
-    "applicant_party_id",
-    "product_id",
-    "submission_status",
-    "received_at"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

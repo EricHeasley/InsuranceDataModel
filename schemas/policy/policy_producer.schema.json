@@ -1,46 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_producer.schema.json",
   "title": "policy_producer",
   "description": "A producer credited with a policy, with their share of commission.",
-  "x-primaryKey": ["policy_producer_id"],
   "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
+  "x-primaryKey": ["policy_producer_id"],
+  "required": ["policy_producer_id", "policy_id", "producer_id", "policy_producer_role", "effective_date"],
   "properties": {
-    "policy_producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "policy_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "policy.policy_id"
-    },
-    "producer_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "producer.producer_id"
-    },
-    "policy_producer_role": {
-      "$ref": "enums/policy_producer_role.schema.json"
-    },
-    "commission_split_percent": {
-      "$ref": "../common/types.schema.json#/$defs/percent"
-    },
-    "effective_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "expiration_date": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
+    "policy_producer_id": { "type": "string", "format": "uuid" },
+    "policy_id": { "type": "string", "format": "uuid", "x-references": "policy.policy_id" },
+    "producer_id": { "type": "string", "format": "uuid", "x-references": "producer.producer_id" },
+    "policy_producer_role": { "type": "string", "enum": ["WRITING", "SERVICING", "SPLIT", "OVERRIDE", "WHOLESALE"] },
+    "commission_split_percent": { "type": "number", "format": "percent" },
+    "effective_date": { "type": "string", "format": "date" },
+    "expiration_date": { "type": "string", "format": "date" }
   },
-  "required": [
-    "policy_producer_id",
-    "policy_id",
-    "producer_id",
-    "policy_producer_role",
-    "effective_date"
-  ],
-  "unevaluatedProperties": false
+  "additionalProperties": false
 }

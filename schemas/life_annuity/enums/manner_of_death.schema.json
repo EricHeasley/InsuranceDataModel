@@ -1,8 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/manner_of_death.schema.json",
-  "title": "manner_of_death",
-  "description": "Manner of death from the death certificate.",
-  "type": "string",
-  "enum": ["NATURAL", "ACCIDENT", "SUICIDE", "HOMICIDE", "PENDING", "UNDETERMINED"]
-}

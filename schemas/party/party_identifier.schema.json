@@ -1,47 +1,38 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/party_identifier.schema.json",
   "title": "party_identifier",
   "description": "An identifier issued to a party by an external authority (SSN, FEIN, driver license, NPI, NPN, ...).",
+  "type": "object",
   "x-primaryKey": ["party_identifier_id"],
   "x-unique": [
     ["identifier_type", "identifier_value", "issuing_jurisdiction_code", "party_id"]
   ],
-  "type": "object",
-  "allOf": [
-    {
-      "$ref": "../common/audit.schema.json"
-    }
-  ],
-  "properties": {
-    "party_identifier_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid"
-    },
-    "party_id": {
-      "$ref": "../common/types.schema.json#/$defs/uuid",
-      "x-references": "party.party_id"
-    },
-    "identifier_type": {
-      "$ref": "enums/identifier_type.schema.json"
-    },
-    "identifier_value": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 100,
-      "description": "Store encrypted or tokenized.",
-      "x-sensitivity": "PII"
-    },
-    "issuing_jurisdiction_code": {
-      "$ref": "../common/types.schema.json#/$defs/string",
-      "maxLength": 6,
-      "x-references": "jurisdiction.jurisdiction_code"
-    },
-    "valid_from": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    },
-    "valid_to": {
-      "$ref": "../common/types.schema.json#/$defs/date"
-    }
-  },
   "required": ["party_identifier_id", "party_id", "identifier_type", "identifier_value"],
-  "unevaluatedProperties": false
+  "properties": {
+    "party_identifier_id": { "type": "string", "format": "uuid" },
+    "party_id": { "type": "string", "format": "uuid", "x-references": "party.party_id" },
+    "identifier_type": {
+      "type": "string",
+      "oneOf": [
+        { "const": "SSN", "description": "Social Security number" },
+        { "const": "ITIN", "description": "Individual taxpayer identification number" },
+        { "const": "FEIN", "description": "Federal employer identification number" },
+        { "const": "DRIVER_LICENSE" },
+        { "const": "PASSPORT" },
+        { "const": "STATE_ID" },
+        { "const": "NPI", "description": "National Provider Identifier" },
+        { "const": "NPN", "description": "National Producer Number" },
+        { "const": "NAIC_COMPANY_CODE" },
+        { "const": "DUNS" },
+        { "const": "MEDICARE_BENEFICIARY_ID" },
+        { "const": "MEDICAID_ID" },
+        { "const": "OTHER" }
+      ]
+    },
+    "identifier_value": { "type": "string", "maxLength": 100, "description": "Store encrypted or tokenized.", "x-sensitivity": "PII" },
+    "issuing_jurisdiction_code": { "type": "string", "maxLength": 6, "x-references": "jurisdiction.jurisdiction_code" },
+    "valid_from": { "type": "string", "format": "date" },
+    "valid_to": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
 }
