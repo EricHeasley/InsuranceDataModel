@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enrollment.schema.json",
+  "title": "enrollment",
+  "description": "A span of a member's coverage in a plan under a policy (individual policy or group master). Subscribers and dependents each have their own spans; dependents point to the subscriber.",
+  "x-primaryKey": ["enrollment_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "enrollment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "health_plan_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "health_plan.health_plan_id"
+    },
+    "member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "member.member_id"
+    },
+    "subscriber_member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "member.member_id"
+    },
+    "member_relationship": {
+      "$ref": "enums/member_relationship.schema.json"
+    },
+    "coverage_tier": {
+      "$ref": "enums/coverage_tier.schema.json"
+    },
+    "group_subgroup_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "group_subgroup.group_subgroup_id"
+    },
+    "enrollment_status": {
+      "$ref": "enums/enrollment_status.schema.json"
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "termination_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "termination_reason": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "enrollment_source": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "EDI_834, EXCHANGE, PORTAL, PAPER, ..."
+    },
+    "qualifying_event": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "Special enrollment or COBRA qualifying event."
+    },
+    "primary_care_provider_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "provider.provider_id"
+    },
+    "exchange_subscriber_id": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "paid_through_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": [
+    "enrollment_id",
+    "policy_id",
+    "health_plan_id",
+    "member_id",
+    "subscriber_member_id",
+    "member_relationship",
+    "enrollment_status",
+    "effective_date"
+  ],
+  "unevaluatedProperties": false
+}

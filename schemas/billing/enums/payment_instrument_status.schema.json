@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/payment_instrument_status.schema.json",
+  "title": "payment_instrument_status",
+  "description": "Status of a stored payment instrument.",
+  "type": "string",
+  "enum": ["ACTIVE", "EXPIRED", "REVOKED", "FAILED_VERIFICATION"]
+}

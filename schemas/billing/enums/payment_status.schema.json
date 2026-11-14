@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/payment_status.schema.json",
+  "title": "payment_status",
+  "description": "Status of an incoming payment.",
+  "type": "string",
+  "enum": ["PENDING", "SETTLED", "RETURNED", "REVERSED", "REFUNDED", "SUSPENSE"]
+}

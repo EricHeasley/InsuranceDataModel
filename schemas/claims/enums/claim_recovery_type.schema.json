@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/claim_recovery_type.schema.json",
+  "title": "claim_recovery_type",
+  "description": "Source of a recovery.",
+  "type": "string",
+  "enum": [
+    "SUBROGATION",
+    "SALVAGE",
+    "DEDUCTIBLE",
+    "CONTRIBUTION",
+    "SECOND_INJURY_FUND",
+    "OVERPAYMENT",
+    "RESTITUTION",
+    "OTHER"
+  ]
+}

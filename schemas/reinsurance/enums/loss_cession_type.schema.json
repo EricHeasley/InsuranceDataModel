@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/enums/loss_cession_type.schema.json",
+  "title": "loss_cession_type",
+  "description": "Kind of ceded loss amount.",
+  "type": "string",
+  "enum": ["PAID", "CASE_RESERVE", "RECOVERY"]
+}

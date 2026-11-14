@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/enums/reinsurance_basis.schema.json",
+  "title": "reinsurance_basis",
+  "description": "Which losses attach to a contract period.",
+  "type": "string",
+  "enum": ["LOSSES_OCCURRING", "RISKS_ATTACHING", "CLAIMS_MADE", "IN_FORCE_NEW_AND_RENEWAL"]
+}

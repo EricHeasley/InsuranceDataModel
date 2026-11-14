@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enums/member_relationship.schema.json",
+  "title": "member_relationship",
+  "description": "Relationship of a member to the subscriber.",
+  "type": "string",
+  "enum": ["SELF", "SPOUSE", "DOMESTIC_PARTNER", "CHILD", "DISABLED_DEPENDENT", "OTHER_DEPENDENT"]
+}

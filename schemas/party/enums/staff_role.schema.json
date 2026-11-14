@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/staff_role.schema.json",
+  "title": "staff_role",
+  "description": "Primary function of a staff member.",
+  "type": "string",
+  "enum": [
+    "UNDERWRITER",
+    "CLAIM_ADJUSTER",
+    "CLAIM_SUPERVISOR",
+    "SIU_INVESTIGATOR",
+    "CUSTOMER_SERVICE",
+    "BILLING_SPECIALIST",
+    "PREMIUM_AUDITOR",
+    "NURSE_CASE_MANAGER",
+    "ACTUARY",
+    "SYSTEM",
+    "OTHER"
+  ]
+}

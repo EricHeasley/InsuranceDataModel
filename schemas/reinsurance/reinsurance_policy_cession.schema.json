@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_policy_cession.schema.json",
+  "title": "reinsurance_policy_cession",
+  "description": "Attachment of a policy or coverage to a reinsurance layer: every facultative placement, and treaty cessions where the share varies by risk (surplus share, life automatic cessions).",
+  "x-primaryKey": ["reinsurance_policy_cession_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "reinsurance_policy_cession_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "reinsurance_layer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "reinsurance_layer.reinsurance_layer_id"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "policy_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_coverage.policy_coverage_id"
+    },
+    "policy_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_risk.policy_risk_id"
+    },
+    "ceded_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "retained_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "ceded_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Ceded limit or net amount at risk."
+    },
+    "certificate_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "Facultative certificate number."
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["reinsurance_policy_cession_id", "reinsurance_layer_id", "policy_id", "effective_date"],
+  "unevaluatedProperties": false
+}

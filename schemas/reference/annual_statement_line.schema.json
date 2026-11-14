@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/annual_statement_line.schema.json",
+  "title": "annual_statement_line",
+  "description": "NAIC annual statement line of business (e.g. 19.2 Other Private Passenger Auto Liability) used for statutory reporting such as Schedule P and the state page.",
+  "x-primaryKey": ["asl_code"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "asl_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "statement_type": {
+      "$ref": "enums/statement_type.schema.json"
+    }
+  },
+  "required": ["asl_code", "name", "statement_type"],
+  "unevaluatedProperties": false
+}

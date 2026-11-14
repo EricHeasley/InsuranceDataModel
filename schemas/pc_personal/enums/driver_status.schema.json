@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/enums/driver_status.schema.json",
+  "title": "driver_status",
+  "description": "How a driver is treated on the policy.",
+  "type": "string",
+  "enum": ["RATED", "EXCLUDED", "LISTED_NOT_RATED", "PERMIT"]
+}

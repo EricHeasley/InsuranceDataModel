@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/billing_adjustment_type.schema.json",
+  "title": "billing_adjustment_type",
+  "description": "Kind of non-cash adjustment to a billing account.",
+  "type": "string",
+  "enum": [
+    "WRITE_OFF",
+    "FEE_WAIVER",
+    "LATE_FEE",
+    "NSF_FEE",
+    "REINSTATEMENT_FEE",
+    "SMALL_BALANCE",
+    "TRANSFER",
+    "CREDIT"
+  ]
+}

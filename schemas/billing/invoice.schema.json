@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/invoice.schema.json",
+  "title": "invoice",
+  "description": "A bill or installment notice issued on a billing account.",
+  "x-primaryKey": ["invoice_id"],
+  "x-unique": [
+    ["invoice_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "invoice_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "billing_account_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "billing_account.billing_account_id"
+    },
+    "invoice_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "invoice_status": {
+      "$ref": "enums/invoice_status.schema.json"
+    },
+    "invoice_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "due_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "period_start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "period_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "total_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "document_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "document.document_id"
+    }
+  },
+  "required": [
+    "invoice_id",
+    "billing_account_id",
+    "invoice_number",
+    "invoice_status",
+    "invoice_date",
+    "due_date",
+    "total_amount"
+  ],
+  "unevaluatedProperties": false
+}

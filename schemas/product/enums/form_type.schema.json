@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/enums/form_type.schema.json",
+  "title": "form_type",
+  "description": "Kind of policy form.",
+  "type": "string",
+  "enum": [
+    "POLICY_JACKET",
+    "COVERAGE_FORM",
+    "DECLARATIONS",
+    "ENDORSEMENT",
+    "RIDER",
+    "NOTICE",
+    "APPLICATION",
+    "CERTIFICATE"
+  ]
+}

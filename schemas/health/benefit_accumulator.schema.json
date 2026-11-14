@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/benefit_accumulator.schema.json",
+  "title": "benefit_accumulator",
+  "description": "Running total toward a deductible, out-of-pocket maximum or benefit limit for a member or family in a benefit period.",
+  "x-primaryKey": ["benefit_accumulator_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "benefit_accumulator_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "enrollment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "enrollment.enrollment_id"
+    },
+    "accumulator_type": {
+      "$ref": "enums/accumulator_type.schema.json"
+    },
+    "accumulator_level": {
+      "$ref": "enums/accumulator_level.schema.json"
+    },
+    "network_tier": {
+      "$ref": "enums/network_tier.schema.json"
+    },
+    "plan_benefit_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Benefit a limit accumulator belongs to.",
+      "x-references": "plan_benefit.plan_benefit_id"
+    },
+    "period_start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "period_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "accumulated_amount": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "limit_amount": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "last_health_claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "health_claim.health_claim_id"
+    }
+  },
+  "required": [
+    "benefit_accumulator_id",
+    "enrollment_id",
+    "accumulator_type",
+    "accumulator_level",
+    "network_tier",
+    "period_start_date",
+    "period_end_date",
+    "accumulated_amount"
+  ],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/claim_transaction_type.schema.json",
+  "title": "claim_transaction_type",
+  "description": "Kind of entry in the claim financial ledger.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "RESERVE",
+      "description": "Change in case reserve (signed)"
+    },
+    {
+      "const": "PAYMENT",
+      "description": "Payment made (positive) or voided/reversed (negative)"
+    },
+    {
+      "const": "RECOVERY_RESERVE",
+      "description": "Change in anticipated recovery (signed)"
+    },
+    {
+      "const": "RECOVERY",
+      "description": "Recovery received (positive) or reversed (negative)"
+    }
+  ]
+}

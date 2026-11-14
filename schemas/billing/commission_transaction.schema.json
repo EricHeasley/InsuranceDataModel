@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/commission_transaction.schema.json",
+  "title": "commission_transaction",
+  "description": "Commission earned or charged back for a producer on a premium transaction or payment.",
+  "x-primaryKey": ["commission_transaction_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "commission_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "producer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "producer.producer_id"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "premium_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "premium_transaction.premium_transaction_id"
+    },
+    "payment_application_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Collected premium that triggered commission, when paid on a collected basis.",
+      "x-references": "payment_application.payment_application_id"
+    },
+    "commission_schedule_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "commission_schedule.commission_schedule_id"
+    },
+    "commission_transaction_type": {
+      "$ref": "enums/commission_transaction_type.schema.json"
+    },
+    "commission_basis": {
+      "$ref": "../distribution/enums/commission_basis.schema.json"
+    },
+    "commissionable_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "commission_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "accounting_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "commission_statement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "commission_statement.commission_statement_id"
+    }
+  },
+  "required": [
+    "commission_transaction_id",
+    "producer_id",
+    "policy_id",
+    "commission_transaction_type",
+    "amount",
+    "accounting_date"
+  ],
+  "unevaluatedProperties": false
+}

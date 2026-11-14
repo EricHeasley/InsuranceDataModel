@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/contact_point.schema.json",
+  "title": "contact_point",
+  "description": "An email address, phone number or other channel for reaching a party.",
+  "x-primaryKey": ["contact_point_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "contact_point_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "contact_point_type": {
+      "$ref": "enums/contact_point_type.schema.json"
+    },
+    "contact_value": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 320,
+      "x-sensitivity": "PII"
+    },
+    "contact_usage": {
+      "$ref": "enums/contact_usage.schema.json"
+    },
+    "is_primary": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_verified": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "do_not_contact": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    }
+  },
+  "required": ["contact_point_id", "party_id", "contact_point_type", "contact_value", "is_primary"],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/employer_group.schema.json",
+  "title": "employer_group",
+  "description": "Group-specific attributes of a group master policy: the employer or association sponsoring coverage for its members.",
+  "x-primaryKey": ["policy_id"],
+  "x-subtypeOf": "policy",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "group_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "sponsor_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "organization.party_id"
+    },
+    "market_segment": {
+      "$ref": "enums/market_segment.schema.json"
+    },
+    "eligible_employee_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "enrolled_employee_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "new_hire_waiting_period_days": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "employer_contribution_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "plan_year_start_month": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "is_erisa_plan": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_cobra_eligible": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "funding_arrangement": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "FULLY_INSURED, LEVEL_FUNDED, ASO, MINIMUM_PREMIUM."
+    },
+    "stop_loss_specific_attachment_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "stop_loss_aggregate_attachment_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    }
+  },
+  "required": ["policy_id", "group_number", "sponsor_party_id", "market_segment"],
+  "unevaluatedProperties": false
+}

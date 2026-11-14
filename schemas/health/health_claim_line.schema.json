@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/health_claim_line.schema.json",
+  "title": "health_claim_line",
+  "description": "A service line of a health claim with its adjudicated amounts.",
+  "x-primaryKey": ["health_claim_line_id"],
+  "x-unique": [
+    ["health_claim_id", "line_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "health_claim_line_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "health_claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "health_claim.health_claim_id"
+    },
+    "line_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "claim_line_status": {
+      "$ref": "enums/claim_line_status.schema.json"
+    },
+    "service_from_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "x-sensitivity": "PHI"
+    },
+    "service_to_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "x-sensitivity": "PHI"
+    },
+    "procedure_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "CPT, HCPCS or CDT code.",
+      "x-references": "code_value.code_value_id",
+      "x-sensitivity": "PHI"
+    },
+    "modifier_1": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 2
+    },
+    "modifier_2": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 2
+    },
+    "modifier_3": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 2
+    },
+    "modifier_4": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 2
+    },
+    "revenue_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 4
+    },
+    "ndc_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 11,
+      "description": "National Drug Code.",
+      "x-sensitivity": "PHI"
+    },
+    "tooth_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 5
+    },
+    "place_of_service_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 2
+    },
+    "diagnosis_pointers": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "Sequence numbers of related diagnoses."
+    },
+    "rendering_provider_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "provider.provider_id"
+    },
+    "plan_benefit_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Benefit the line was adjudicated under.",
+      "x-references": "plan_benefit.plan_benefit_id"
+    },
+    "units": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "days_supply": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "billed_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "allowed_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "not_covered_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "deductible_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "copay_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "coinsurance_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "other_payer_paid_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "paid_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    }
+  },
+  "required": [
+    "health_claim_line_id",
+    "health_claim_id",
+    "line_number",
+    "claim_line_status",
+    "service_from_date",
+    "billed_amount"
+  ],
+  "unevaluatedProperties": false
+}

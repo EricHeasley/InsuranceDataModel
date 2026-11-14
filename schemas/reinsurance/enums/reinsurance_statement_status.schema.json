@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/enums/reinsurance_statement_status.schema.json",
+  "title": "reinsurance_statement_status",
+  "description": "Status of a reinsurance account statement.",
+  "type": "string",
+  "enum": ["DRAFT", "ISSUED", "AGREED", "DISPUTED", "SETTLED"]
+}

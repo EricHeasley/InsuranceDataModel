@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/investment_fund.schema.json",
+  "title": "investment_fund",
+  "description": "An investment option available within life and annuity products: fixed account, variable subaccount or index crediting strategy.",
+  "x-primaryKey": ["investment_fund_id"],
+  "x-unique": [
+    ["fund_code"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "investment_fund_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "fund_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "fund_type": {
+      "$ref": "enums/fund_type.schema.json"
+    },
+    "underlying_cusip": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 9
+    },
+    "index_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100,
+      "description": "Reference index for indexed strategies."
+    },
+    "crediting_method": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "ANNUAL_POINT_TO_POINT, MONTHLY_AVERAGE, ... for indexed strategies."
+    },
+    "expense_ratio_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "opened_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "closed_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["investment_fund_id", "fund_code", "name", "fund_type"],
+  "unevaluatedProperties": false
+}

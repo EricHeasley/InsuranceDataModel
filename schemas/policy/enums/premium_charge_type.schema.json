@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/premium_charge_type.schema.json",
+  "title": "premium_charge_type",
+  "description": "Kind of amount charged on a policy.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "PREMIUM",
+      "description": "Risk premium"
+    },
+    {
+      "const": "MINIMUM_PREMIUM_ADJUSTMENT"
+    },
+    {
+      "const": "POLICY_FEE"
+    },
+    {
+      "const": "INSTALLMENT_FEE"
+    },
+    {
+      "const": "INSPECTION_FEE"
+    },
+    {
+      "const": "BROKER_FEE"
+    },
+    {
+      "const": "PREMIUM_TAX"
+    },
+    {
+      "const": "SURPLUS_LINES_TAX"
+    },
+    {
+      "const": "STAMPING_FEE"
+    },
+    {
+      "const": "STATE_SURCHARGE",
+      "description": "Statutory assessment or surcharge (e.g. FIGA, FHCF, WC assessments)"
+    },
+    {
+      "const": "TERRORISM_PREMIUM",
+      "description": "TRIA premium"
+    },
+    {
+      "const": "EXPENSE_CONSTANT"
+    },
+    {
+      "const": "OTHER_FEE"
+    }
+  ]
+}

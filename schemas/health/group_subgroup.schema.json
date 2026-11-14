@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/group_subgroup.schema.json",
+  "title": "group_subgroup",
+  "description": "A division, class or billing unit within an employer group, with the plans offered to it.",
+  "x-primaryKey": ["group_subgroup_id"],
+  "x-unique": [
+    ["policy_id", "subgroup_code"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "group_subgroup_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "employer_group.policy_id"
+    },
+    "subgroup_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "eligibility_class": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "E.g. salaried, hourly, executives, retirees."
+    },
+    "billing_account_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "billing_account.billing_account_id"
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "termination_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["group_subgroup_id", "policy_id", "subgroup_code", "name", "effective_date"],
+  "unevaluatedProperties": false
+}

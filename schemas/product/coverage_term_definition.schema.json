@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/coverage_term_definition.schema.json",
+  "title": "coverage_term_definition",
+  "description": "A limit, deductible, coinsurance, waiting period or other quantitative term that a coverage can carry, with its allowed range.",
+  "x-primaryKey": ["coverage_term_definition_id"],
+  "x-unique": [
+    ["coverage_definition_id", "term_code"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "coverage_term_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "coverage_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "coverage_definition.coverage_definition_id"
+    },
+    "term_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "coverage_term_type": {
+      "$ref": "enums/coverage_term_type.schema.json"
+    },
+    "coverage_term_basis": {
+      "$ref": "enums/coverage_term_basis.schema.json"
+    },
+    "term_value_type": {
+      "$ref": "enums/term_value_type.schema.json"
+    },
+    "default_value": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "minimum_value": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "maximum_value": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "is_required": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    }
+  },
+  "required": [
+    "coverage_term_definition_id",
+    "coverage_definition_id",
+    "term_code",
+    "name",
+    "coverage_term_type",
+    "coverage_term_basis",
+    "term_value_type",
+    "is_required"
+  ],
+  "unevaluatedProperties": false
+}

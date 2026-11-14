@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/code_set.schema.json",
+  "title": "code_set",
+  "description": "An externally published code system and version, e.g. ICD-10-CM 2026, CPT, HCPCS, NDC, NAICS 2022, NCCI class codes, ISO GL class codes, WCIO injury codes, CARC, NUCC taxonomy.",
+  "x-primaryKey": ["code_set_id"],
+  "x-unique": [
+    ["code_set_code", "version"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "code_set_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "code_set_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "Short identifier such as ICD10CM, CPT, NAICS, NCCI_CLASS."
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "publisher": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "version": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    }
+  },
+  "required": ["code_set_id", "code_set_code", "name", "version"],
+  "unevaluatedProperties": false
+}

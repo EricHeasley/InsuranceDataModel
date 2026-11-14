@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/recovery_status.schema.json",
+  "title": "recovery_status",
+  "description": "Status of a recovery effort.",
+  "type": "string",
+  "enum": [
+    "IDENTIFIED",
+    "DEMAND_SENT",
+    "NEGOTIATION",
+    "ARBITRATION",
+    "LITIGATION",
+    "COLLECTED",
+    "CLOSED_NO_RECOVERY"
+  ]
+}

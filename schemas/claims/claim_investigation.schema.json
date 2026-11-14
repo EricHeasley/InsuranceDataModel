@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_investigation.schema.json",
+  "title": "claim_investigation",
+  "description": "A special investigation of suspected fraud on a claim.",
+  "x-primaryKey": ["claim_investigation_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "claim_investigation_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim.claim_id"
+    },
+    "investigation_status": {
+      "$ref": "enums/investigation_status.schema.json"
+    },
+    "referral_source": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "ADJUSTER, MODEL, HOTLINE, NICB, ..."
+    },
+    "fraud_score": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "indicators": {
+      "$ref": "../common/types.schema.json#/$defs/text",
+      "description": "Fraud indicators observed."
+    },
+    "investigator_staff_member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "staff_member.staff_member_id"
+    },
+    "referred_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "closed_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "reported_to_authorities_on": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "State fraud bureau / NICB report date."
+    },
+    "savings_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    }
+  },
+  "required": ["claim_investigation_id", "claim_id", "investigation_status", "referred_on"],
+  "unevaluatedProperties": false
+}

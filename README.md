@@ -1,6 +1,6 @@
 # InsuranceDataModel
 
-A normalized operational data model for insurance carriers, covering P&C personal, P&C commercial, life & annuity, and health lines under US market conventions. The model is defined in JSON; everything else in the repository is generated from it.
+A normalized operational data model for insurance carriers, covering P&C personal, P&C commercial, life & annuity, and health lines under US market conventions. The model is a set of standard JSON Schema (draft 2020-12) files, one per entity; everything else in the repository is generated from them.
 
 Version 0.1.0: 12 domains, 137 entities, 135 code lists.
 
@@ -8,13 +8,15 @@ Version 0.1.0: 12 domains, 137 entities, 135 code lists.
 
 | Path | Contents |
 |---|---|
-| `model/model.json` | Manifest: conventions, data types, mixins, list of domain files |
-| `model/domains/*.json` | **The model.** One file per domain: entities, attributes, keys, relationships, code lists |
-| `schema/*.schema.json` | JSON Schema for the model files themselves |
-| `tools/validate.py` | Checks structure and integrity (every reference, key, type and code list resolves) |
+| `schemas/<domain>/<entity>.schema.json` | **The model.** One JSON Schema per entity: attributes, types, required fields, keys, foreign keys |
+| `schemas/<domain>/enums/<code_list>.schema.json` | One JSON Schema per code list |
+| `schemas/common/` | Shared logical types (`types.schema.json`) and attribute groups (`audit`, `policy_versioned`) |
+| `schemas/catalog.json` | Name, version, conventions and the ordered list of domains (not a schema) |
+| `tools/validate.py` | Checks every schema is valid and resolves, and that keys, references, types and code lists are consistent |
+| `tools/check_record.py` | Validates your own JSON records against an entity's schema |
 | `tools/build.py` | Regenerates everything under `dist/` and `docs/` |
+| `dist/insurance-data-model.schema.json` | Generated: all entity schemas bundled in one file |
 | `dist/insurance-data-model.json` | Generated: the whole model in one resolved file, for tools to consume |
-| `dist/insurance-data-model.schema.json` | Generated: JSON Schema for records of every entity |
 | `dist/postgres/schema.sql` | Generated: PostgreSQL DDL |
 | `docs/data-dictionary.md` | Generated: every entity, attribute and code list |
 | `docs/diagrams.md` | Generated: Mermaid ER diagram per domain, plus domain dependencies |
@@ -54,44 +56,57 @@ Version 0.1.0: 12 domains, 137 entities, 135 code lists.
 
 **External codes stay external.** ICD-10, CPT/HCPCS, NAICS, NCCI and ISO class codes, WCIO, CARC/RARC and NUCC taxonomy live in `code_set` / `code_value` with versions, rather than as hard-coded lists.
 
-**Sensitive data is tagged.** 54 attributes carry a `sensitivity` tag (PII, PHI, PCI, SPI) that flows into the generated JSON Schema (`x-sensitivity`) for masking and access policy. Card and bank numbers are never stored, only processor tokens.
+**Sensitive data is tagged.** 54 attributes are tagged PII, PHI, PCI or SPI (`x-sensitivity` in the schema), for masking and access policy. Card and bank numbers are never stored, only processor tokens.
 
-The full conventions (naming, money, percent, time) are in `model/model.json`.
+The full conventions (naming, money, percent, time) are in `schemas/catalog.json`.
 
-## Model file format
+## Schema files
+
+Each entity is an ordinary JSON Schema, so any JSON Schema tool can validate records against it. `schemas/policy/policy_coverage.schema.json` (abridged):
 
 ```json
 {
-  "name": "policy_coverage",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_coverage.schema.json",
+  "title": "policy_coverage",
   "description": "A coverage, benefit or rider in force on a policy, either at policy level or for one risk.",
-  "primaryKey": ["policy_coverage_id"],
-  "mixins": ["audit", "policy_versioned"],
-  "attributes": [
-    { "name": "policy_coverage_id", "type": "uuid", "required": true },
-    { "name": "policy_id", "type": "uuid", "required": true, "references": "policy.policy_id" },
-    { "name": "coverage_trigger", "type": "string", "enum": "coverage_trigger" }
-  ]
+  "x-primaryKey": ["policy_coverage_id"],
+  "type": "object",
+  "allOf": [
+    { "$ref": "../common/audit.schema.json" },
+    { "$ref": "../common/policy_versioned.schema.json" }
+  ],
+  "properties": {
+    "policy_coverage_id": { "$ref": "../common/types.schema.json#/$defs/uuid" },
+    "policy_id": { "$ref": "../common/types.schema.json#/$defs/uuid", "x-references": "policy.policy_id" },
+    "coverage_trigger": { "$ref": "enums/coverage_trigger.schema.json" }
+  },
+  "required": ["policy_coverage_id", "policy_id"],
+  "unevaluatedProperties": false
 }
 ```
 
-- `type` is one of the logical types in `model/model.json` (`uuid`, `string`, `text`, `integer`, `decimal`, `money`, `percent`, `rate`, `date`, `timestamp`, `boolean`, `json`).
-- `references` is a foreign key written as `entity.attribute`.
-- `enum` names a code list defined in any domain file.
-- `subtypeOf` marks a subtype sharing its supertype's primary key.
-- `mixins` adds shared attribute groups. Every entity gets `audit` by default; policy contents add `policy_versioned`.
-- `sensitivity` is `PII`, `PHI`, `PCI` or `SPI`.
+- Types are `$ref`s to the logical types in `common/types.schema.json` (`uuid`, `string`, `text`, `integer`, `decimal`, `money`, `percent`, `rate`, `date`, `timestamp`, `boolean`, `json`). Each type carries its PostgreSQL column type as `x-postgres`. Strings always give `maxLength`.
+- Code lists are `$ref`s to `enums/<name>.schema.json`, which hold the allowed values (`enum`, or `oneOf` of `const` + `description` when the values are documented).
+- Mixins are `allOf` references: every entity gets `audit`; policy contents also get `policy_versioned`.
+- An optional attribute is simply left out of a record when it has no value. A required one must be present.
+- Entity-level extensions: `x-primaryKey`, `x-unique` (alternate keys) and `x-subtypeOf` (shares the supertype's primary key). Attribute-level: `x-references` (foreign key, `entity.attribute`) and `x-sensitivity` (`PII`, `PHI`, `PCI` or `SPI`). Validators ignore `x-` keywords; `tools/` and the generated SQL and docs use them.
+- The file name, `title` and `$id` must agree, and a file lives in the directory of its domain.
 
 ## Working with it
 
 ```sh
-python3 tools/validate.py        # check the model
-python3 tools/build.py           # regenerate dist/ and docs/
-python3 tools/build.py --check   # fail if generated files are stale
+python3 tools/validate.py                         # check the schemas and the model's integrity
+python3 tools/check_record.py policy policy.json  # validate a record (or array of records)
+python3 tools/build.py                            # regenerate dist/ and docs/
+python3 tools/build.py --check                    # fail if generated files are stale
 ```
 
-Python 3.9+ with no required dependencies; if `jsonschema` is installed the validator also checks the model files against `schema/`.
+`validate.py` and `build.py` run on the Python 3.9+ standard library alone. If `jsonschema` 4.18+ is installed, `validate.py` also checks that every schema is valid draft 2020-12, that every `$ref` resolves, and that a minimal record is accepted while unknown or missing attributes are rejected. `check_record.py` needs `jsonschema`.
 
-To change the model, edit files under `model/`, run `validate.py`, then `build.py`, and commit both source and generated files.
+To validate records from your own code, load every file under `schemas/` into a `referencing.Registry` keyed by `$id` (see `tools/check_record.py`), since entity schemas `$ref` the shared type, mixin and code-list files.
+
+To change the model, edit files under `schemas/`, run `validate.py`, then `build.py`, and commit both source and generated files.
 
 ## Not in scope yet
 

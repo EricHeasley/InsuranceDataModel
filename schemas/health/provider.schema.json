@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/provider.schema.json",
+  "title": "provider",
+  "description": "A health care practitioner, group or facility that renders or bills services.",
+  "x-primaryKey": ["provider_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "provider_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "npi": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "National Provider Identifier."
+    },
+    "provider_type": {
+      "$ref": "enums/provider_type.schema.json"
+    },
+    "taxonomy_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "NUCC health care provider taxonomy code.",
+      "x-references": "code_value.code_value_id"
+    },
+    "specialty": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100
+    },
+    "billing_group_provider_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Group practice the practitioner bills under.",
+      "x-references": "provider.provider_id"
+    },
+    "credentialed_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "recredential_due_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "is_accepting_new_patients": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_sanctioned": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "Excluded from federal programs (OIG/SAM)."
+    }
+  },
+  "required": ["provider_id", "party_id", "provider_type"],
+  "unevaluatedProperties": false
+}

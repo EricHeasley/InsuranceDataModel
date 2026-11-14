@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/tobacco_status.schema.json",
+  "title": "tobacco_status",
+  "description": "Tobacco classification.",
+  "type": "string",
+  "enum": ["NON_TOBACCO", "TOBACCO", "UNISMOKE"]
+}

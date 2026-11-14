@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/life_plan_type.schema.json",
+  "title": "life_plan_type",
+  "description": "Kind of life insurance plan.",
+  "type": "string",
+  "enum": [
+    "TERM",
+    "WHOLE_LIFE",
+    "UNIVERSAL_LIFE",
+    "INDEXED_UNIVERSAL_LIFE",
+    "VARIABLE_UNIVERSAL_LIFE",
+    "VARIABLE_LIFE",
+    "FINAL_EXPENSE",
+    "GROUP_TERM",
+    "CREDIT_LIFE",
+    "ENDOWMENT"
+  ]
+}

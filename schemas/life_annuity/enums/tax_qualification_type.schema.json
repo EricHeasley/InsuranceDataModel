@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/tax_qualification_type.schema.json",
+  "title": "tax_qualification_type",
+  "description": "Tax status of a life or annuity contract.",
+  "type": "string",
+  "enum": [
+    "NON_QUALIFIED",
+    "TRADITIONAL_IRA",
+    "ROTH_IRA",
+    "SEP_IRA",
+    "SIMPLE_IRA",
+    "INHERITED_IRA",
+    "PLAN_401K",
+    "PLAN_403B",
+    "PLAN_457",
+    "PENSION",
+    "QLAC"
+  ]
+}

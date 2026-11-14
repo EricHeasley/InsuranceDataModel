@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/policy_party_role.schema.json",
+  "title": "policy_party_role",
+  "description": "Role a party plays on a policy.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "NAMED_INSURED",
+      "description": "First named insured / policyholder"
+    },
+    {
+      "const": "ADDITIONAL_NAMED_INSURED"
+    },
+    {
+      "const": "ADDITIONAL_INSURED"
+    },
+    {
+      "const": "OWNER",
+      "description": "Policy owner (life/annuity)"
+    },
+    {
+      "const": "JOINT_OWNER"
+    },
+    {
+      "const": "INSURED_LIFE",
+      "description": "Person whose life is insured"
+    },
+    {
+      "const": "ANNUITANT"
+    },
+    {
+      "const": "JOINT_ANNUITANT"
+    },
+    {
+      "const": "PAYOR"
+    },
+    {
+      "const": "SUBSCRIBER",
+      "description": "Health contract holder"
+    },
+    {
+      "const": "GROUP_SPONSOR",
+      "description": "Employer or association sponsoring a group contract"
+    },
+    {
+      "const": "MORTGAGEE"
+    },
+    {
+      "const": "LIENHOLDER"
+    },
+    {
+      "const": "LOSS_PAYEE"
+    },
+    {
+      "const": "LESSOR"
+    },
+    {
+      "const": "CERTIFICATE_HOLDER"
+    },
+    {
+      "const": "ASSIGNEE",
+      "description": "Collateral or absolute assignee"
+    },
+    {
+      "const": "TRUSTEE"
+    },
+    {
+      "const": "THIRD_PARTY_DESIGNEE",
+      "description": "Receives lapse/cancellation notices"
+    },
+    {
+      "const": "PRINCIPAL",
+      "description": "Surety bond principal"
+    },
+    {
+      "const": "OBLIGEE",
+      "description": "Surety bond obligee"
+    }
+  ]
+}

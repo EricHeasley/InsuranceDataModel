@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/annuity_payout.schema.json",
+  "title": "annuity_payout",
+  "description": "A stream of periodic payments from an annuitized contract, an immediate annuity, a structured settlement or a settlement option on life proceeds.",
+  "x-primaryKey": ["annuity_payout_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "annuity_payout_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "payee_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "payout_option": {
+      "$ref": "enums/payout_option.schema.json"
+    },
+    "payout_status": {
+      "$ref": "enums/payout_status.schema.json"
+    },
+    "payment_frequency": {
+      "$ref": "enums/premium_mode.schema.json"
+    },
+    "payment_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "certain_period_months": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "certain_period_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "survivor_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent",
+      "description": "Share continuing to the survivor under joint options."
+    },
+    "annual_increase_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent",
+      "description": "Cost-of-living adjustment."
+    },
+    "exclusion_ratio_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent",
+      "description": "Non-taxable share of each payment."
+    },
+    "end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "payment_instrument_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "payment_instrument.payment_instrument_id"
+    }
+  },
+  "required": [
+    "annuity_payout_id",
+    "policy_id",
+    "payee_party_id",
+    "payout_option",
+    "payout_status",
+    "payment_frequency",
+    "payment_amount",
+    "start_date"
+  ],
+  "unevaluatedProperties": false
+}

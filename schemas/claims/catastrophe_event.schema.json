@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/catastrophe_event.schema.json",
+  "title": "catastrophe_event",
+  "description": "A catastrophe to which many claims are attributed, such as a named hurricane, wildfire or hailstorm.",
+  "x-primaryKey": ["catastrophe_event_id"],
+  "x-unique": [
+    ["catastrophe_code"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "catastrophe_event_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "catastrophe_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "Company catastrophe code."
+    },
+    "pcs_serial_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "Verisk PCS catastrophe serial number."
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "cause_of_loss_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "x-references": "cause_of_loss.cause_of_loss_code"
+    },
+    "start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "affected_jurisdictions": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 500,
+      "description": "Comma-separated jurisdiction codes."
+    }
+  },
+  "required": ["catastrophe_event_id", "catastrophe_code", "name", "start_date"],
+  "unevaluatedProperties": false
+}

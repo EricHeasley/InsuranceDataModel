@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/enums/homeowners_form.schema.json",
+  "title": "homeowners_form",
+  "description": "Homeowners policy form type.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "HO2",
+      "description": "Broad form"
+    },
+    {
+      "const": "HO3",
+      "description": "Special form"
+    },
+    {
+      "const": "HO4",
+      "description": "Tenants (renters)"
+    },
+    {
+      "const": "HO5",
+      "description": "Comprehensive form"
+    },
+    {
+      "const": "HO6",
+      "description": "Condominium unit owners"
+    },
+    {
+      "const": "HO8",
+      "description": "Modified coverage"
+    },
+    {
+      "const": "DP1",
+      "description": "Dwelling fire basic"
+    },
+    {
+      "const": "DP3",
+      "description": "Dwelling fire special"
+    }
+  ]
+}

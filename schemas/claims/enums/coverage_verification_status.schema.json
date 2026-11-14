@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/coverage_verification_status.schema.json",
+  "title": "coverage_verification_status",
+  "description": "Outcome of coverage verification.",
+  "type": "string",
+  "enum": ["PENDING", "CONFIRMED", "RESERVATION_OF_RIGHTS", "DENIED", "PARTIAL"]
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enums/diagnosis_qualifier.schema.json",
+  "title": "diagnosis_qualifier",
+  "description": "Role of a diagnosis on a claim.",
+  "type": "string",
+  "enum": ["PRINCIPAL", "ADMITTING", "SECONDARY", "EXTERNAL_CAUSE", "PATIENT_REASON_FOR_VISIT"]
+}

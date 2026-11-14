@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/enums/coverage_term_type.schema.json",
+  "title": "coverage_term_type",
+  "description": "Kind of quantitative term attached to a coverage.",
+  "type": "string",
+  "enum": [
+    "LIMIT",
+    "SUBLIMIT",
+    "DEDUCTIBLE",
+    "SELF_INSURED_RETENTION",
+    "COINSURANCE",
+    "COPAY",
+    "OUT_OF_POCKET_MAX",
+    "WAITING_PERIOD",
+    "ELIMINATION_PERIOD",
+    "BENEFIT_PERIOD",
+    "BENEFIT_AMOUNT",
+    "FACE_AMOUNT",
+    "OPTION"
+  ]
+}

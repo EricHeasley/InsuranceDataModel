@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/cyber_risk.schema.json",
+  "title": "cyber_risk",
+  "description": "Policy-specific rating detail for cyber liability and privacy coverage.",
+  "x-primaryKey": ["policy_risk_id"],
+  "x-subtypeOf": "policy_risk",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_risk.policy_risk_id"
+    },
+    "sensitive_record_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "Number of PII/PHI/PCI records held."
+    },
+    "annual_online_revenue_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "has_multi_factor_authentication": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_endpoint_detection": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_offline_backups": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_incident_response_plan": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "pci_compliance_level": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10
+    },
+    "security_rating_score": {
+      "$ref": "../common/types.schema.json#/$defs/decimal",
+      "description": "External security posture score."
+    },
+    "security_assessed_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["policy_risk_id"],
+  "unevaluatedProperties": false
+}

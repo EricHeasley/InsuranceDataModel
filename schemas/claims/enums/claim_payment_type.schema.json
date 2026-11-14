@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/claim_payment_type.schema.json",
+  "title": "claim_payment_type",
+  "description": "Kind of claim payment.",
+  "type": "string",
+  "enum": ["PARTIAL", "FINAL", "SUPPLEMENTAL", "ADVANCE", "RECURRING"]
+}

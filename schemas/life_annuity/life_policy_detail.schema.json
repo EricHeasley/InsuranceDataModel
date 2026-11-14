@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/life_policy_detail.schema.json",
+  "title": "life_policy_detail",
+  "description": "Life insurance specific attributes of a policy.",
+  "x-primaryKey": ["policy_id"],
+  "x-subtypeOf": "policy",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "life_plan_type": {
+      "$ref": "enums/life_plan_type.schema.json"
+    },
+    "face_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Current base face amount."
+    },
+    "death_benefit_option": {
+      "$ref": "enums/death_benefit_option.schema.json"
+    },
+    "premium_mode": {
+      "$ref": "enums/premium_mode.schema.json"
+    },
+    "modal_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "planned_periodic_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Planned premium for flexible-premium plans."
+    },
+    "level_term_period_years": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "issue_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "maturity_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "paid_to_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "tax_qualification_type": {
+      "$ref": "enums/tax_qualification_type.schema.json"
+    },
+    "is_participating": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "dividend_option": {
+      "$ref": "enums/dividend_option.schema.json"
+    },
+    "nonforfeiture_option": {
+      "$ref": "enums/nonforfeiture_option.schema.json"
+    },
+    "is_modified_endowment_contract": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "IRC 7702A MEC status."
+    },
+    "seven_pay_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "guideline_single_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "IRC 7702 guideline single premium."
+    },
+    "guideline_level_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "definition_of_life_insurance_test": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "GPT or CVAT."
+    },
+    "contestability_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "suicide_exclusion_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "no_lapse_guarantee_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "is_replacement": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "Policy replaced existing coverage (replacement regulation applies)."
+    }
+  },
+  "required": ["policy_id", "life_plan_type", "face_amount", "premium_mode", "issue_date"],
+  "unevaluatedProperties": false
+}

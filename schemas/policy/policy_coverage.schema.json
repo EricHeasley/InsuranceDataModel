@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_coverage.schema.json",
+  "title": "policy_coverage",
+  "description": "A coverage, benefit or rider in force on a policy, either at policy level or for one risk.",
+  "x-primaryKey": ["policy_coverage_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    },
+    {
+      "$ref": "../common/policy_versioned.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "policy_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Null for policy-level coverages.",
+      "x-references": "policy_risk.policy_risk_id"
+    },
+    "coverage_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "coverage_definition.coverage_definition_id"
+    },
+    "coverage_trigger": {
+      "$ref": "enums/coverage_trigger.schema.json"
+    },
+    "retroactive_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Claims-made retroactive date."
+    },
+    "extended_reporting_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "End of tail coverage, if purchased."
+    },
+    "asl_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "Overrides the coverage definition's statutory line.",
+      "x-references": "annual_statement_line.asl_code"
+    },
+    "annualized_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Full-term premium for this version of the coverage as rated."
+    }
+  },
+  "required": ["policy_coverage_id", "policy_id", "coverage_definition_id"],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/invoice_line.schema.json",
+  "title": "invoice_line",
+  "description": "A charge on an invoice: an installment of premium, a fee or a tax for one policy, traceable to the premium transaction it bills.",
+  "x-primaryKey": ["invoice_line_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "invoice_line_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "invoice_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "invoice.invoice_id"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "premium_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "premium_transaction.premium_transaction_id"
+    },
+    "enrollment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Member line on a list bill.",
+      "x-references": "enrollment.enrollment_id"
+    },
+    "premium_charge_type": {
+      "$ref": "../policy/enums/premium_charge_type.schema.json"
+    },
+    "installment_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "description": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 200
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    }
+  },
+  "required": ["invoice_line_id", "invoice_id", "premium_charge_type", "amount"],
+  "unevaluatedProperties": false
+}

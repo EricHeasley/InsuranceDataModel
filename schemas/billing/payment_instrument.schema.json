@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/payment_instrument.schema.json",
+  "title": "payment_instrument",
+  "description": "A tokenized bank account or card a party has authorized for payments or payouts. Raw account and card numbers are never stored.",
+  "x-primaryKey": ["payment_instrument_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "payment_instrument_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "payment_method": {
+      "$ref": "enums/payment_method.schema.json"
+    },
+    "payment_instrument_status": {
+      "$ref": "enums/payment_instrument_status.schema.json"
+    },
+    "token": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 200,
+      "description": "Token issued by the payment processor or vault.",
+      "x-sensitivity": "PCI"
+    },
+    "last_four": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 4,
+      "x-sensitivity": "PCI"
+    },
+    "institution_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100
+    },
+    "card_brand": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20
+    },
+    "expiry_month": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "expiry_year": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "authorization_document_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "document.document_id"
+    }
+  },
+  "required": [
+    "payment_instrument_id",
+    "party_id",
+    "payment_method",
+    "payment_instrument_status",
+    "token"
+  ],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/structure.schema.json",
+  "title": "structure",
+  "description": "A building: a dwelling insured on a homeowners policy or a building insured on a commercial property policy.",
+  "x-primaryKey": ["insurable_object_id"],
+  "x-subtypeOf": "insurable_object",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "insurable_object_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "insurable_object.insurable_object_id"
+    },
+    "year_built": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "construction_type": {
+      "$ref": "enums/construction_type.schema.json"
+    },
+    "story_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "square_footage": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "unit_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "roof_type": {
+      "$ref": "enums/roof_type.schema.json"
+    },
+    "roof_year": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "Year the roof was last replaced."
+    },
+    "foundation_type": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "heating_type": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "electrical_updated_year": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "plumbing_updated_year": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "is_sprinklered": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_central_fire_alarm": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_central_burglar_alarm": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "flood_zone": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "FEMA flood zone."
+    },
+    "distance_to_coast_miles": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "wildfire_risk_score": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    }
+  },
+  "required": ["insurable_object_id"],
+  "unevaluatedProperties": false
+}

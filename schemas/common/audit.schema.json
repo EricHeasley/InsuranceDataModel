@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/common/audit.schema.json",
+  "title": "audit",
+  "description": "Row-level audit columns, applied to every entity by default.",
+  "type": "object",
+  "properties": {
+    "created_at": {
+      "$ref": "types.schema.json#/$defs/timestamp",
+      "description": "When the row was created."
+    },
+    "created_by": {
+      "$ref": "types.schema.json#/$defs/string",
+      "maxLength": 100,
+      "description": "User or system that created the row."
+    },
+    "updated_at": {
+      "$ref": "types.schema.json#/$defs/timestamp",
+      "description": "When the row was last changed."
+    },
+    "updated_by": {
+      "$ref": "types.schema.json#/$defs/string",
+      "maxLength": 100,
+      "description": "User or system that last changed the row."
+    },
+    "row_version": {
+      "$ref": "types.schema.json#/$defs/integer",
+      "description": "Optimistic-locking counter, incremented on every update."
+    }
+  },
+  "required": ["created_at", "row_version"]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enums/provider_type.schema.json",
+  "title": "provider_type",
+  "description": "Kind of health care provider.",
+  "type": "string",
+  "enum": [
+    "INDIVIDUAL_PRACTITIONER",
+    "GROUP_PRACTICE",
+    "HOSPITAL",
+    "AMBULATORY_FACILITY",
+    "SKILLED_NURSING",
+    "HOME_HEALTH",
+    "PHARMACY",
+    "LABORATORY",
+    "DME_SUPPLIER",
+    "DENTAL",
+    "VISION",
+    "BEHAVIORAL_HEALTH",
+    "OTHER"
+  ]
+}

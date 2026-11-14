@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/annuity_phase.schema.json",
+  "title": "annuity_phase",
+  "description": "Phase of an annuity contract.",
+  "type": "string",
+  "enum": ["ACCUMULATION", "PAYOUT"]
+}

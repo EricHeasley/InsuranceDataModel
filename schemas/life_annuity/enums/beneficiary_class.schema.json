@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/beneficiary_class.schema.json",
+  "title": "beneficiary_class",
+  "description": "Order of entitlement of a beneficiary.",
+  "type": "string",
+  "enum": ["PRIMARY", "CONTINGENT", "TERTIARY"]
+}

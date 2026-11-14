@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/enums/roof_type.schema.json",
+  "title": "roof_type",
+  "description": "Roof covering material.",
+  "type": "string",
+  "enum": [
+    "ASPHALT_SHINGLE",
+    "ARCHITECTURAL_SHINGLE",
+    "WOOD_SHAKE",
+    "TILE",
+    "SLATE",
+    "METAL",
+    "FLAT_BUILT_UP",
+    "MEMBRANE",
+    "OTHER"
+  ]
+}

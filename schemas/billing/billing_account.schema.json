@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/billing_account.schema.json",
+  "title": "billing_account",
+  "description": "An account through which a payor is billed for one or more policies.",
+  "x-primaryKey": ["billing_account_id"],
+  "x-unique": [
+    ["account_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "billing_account_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "account_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "payor_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "bill_method": {
+      "$ref": "enums/bill_method.schema.json"
+    },
+    "billing_account_status": {
+      "$ref": "enums/billing_account_status.schema.json"
+    },
+    "currency_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 3,
+      "x-references": "currency.currency_code"
+    },
+    "producer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Remitting producer for agency-bill accounts.",
+      "x-references": "producer.producer_id"
+    },
+    "billing_address_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "address.address_id"
+    },
+    "preferred_due_day": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "Day of month invoices fall due."
+    },
+    "is_paperless": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "autopay_payment_instrument_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "payment_instrument.payment_instrument_id"
+    }
+  },
+  "required": [
+    "billing_account_id",
+    "account_number",
+    "payor_party_id",
+    "bill_method",
+    "billing_account_status",
+    "currency_code"
+  ],
+  "unevaluatedProperties": false
+}

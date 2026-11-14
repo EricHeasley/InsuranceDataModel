@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/prior_coverage.schema.json",
+  "title": "prior_coverage",
+  "description": "Insurance an applicant held previously with any carrier, as declared or verified at underwriting.",
+  "x-primaryKey": ["prior_coverage_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "prior_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "submission_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "submission.submission_id"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "carrier_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "carrier_insurer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "insurer.insurer_id"
+    },
+    "prior_policy_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "line_of_business_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "x-references": "line_of_business.line_of_business_code"
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "expiration_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "limits_description": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 200
+    },
+    "claim_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "incurred_loss_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "had_lapse": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    }
+  },
+  "required": ["prior_coverage_id", "carrier_name"],
+  "unevaluatedProperties": false
+}

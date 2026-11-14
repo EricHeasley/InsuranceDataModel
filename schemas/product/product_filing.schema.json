@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/product_filing.schema.json",
+  "title": "product_filing",
+  "description": "A rate, rule or form filing made with a regulator for a product (typically via SERFF).",
+  "x-primaryKey": ["product_filing_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "product_filing_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "product_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "product.product_id"
+    },
+    "jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "insurer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "insurer.insurer_id"
+    },
+    "filing_type": {
+      "$ref": "enums/filing_type.schema.json"
+    },
+    "filing_status": {
+      "$ref": "enums/filing_status.schema.json"
+    },
+    "tracking_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "SERFF or state tracking number."
+    },
+    "overall_rate_change_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "submitted_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "disposition_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "new_business_effective_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "renewal_effective_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["product_filing_id", "product_id", "jurisdiction_code", "filing_type", "filing_status"],
+  "unevaluatedProperties": false
+}

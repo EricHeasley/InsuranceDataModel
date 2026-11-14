@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/product_jurisdiction.schema.json",
+  "title": "product_jurisdiction",
+  "description": "Availability of a product in a jurisdiction through a specific writing company.",
+  "x-primaryKey": ["product_jurisdiction_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "product_jurisdiction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "product_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "product.product_id"
+    },
+    "jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "insurer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "insurer.insurer_id"
+    },
+    "new_business_effective_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "renewal_effective_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "closed_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": [
+    "product_jurisdiction_id",
+    "product_id",
+    "jurisdiction_code",
+    "insurer_id",
+    "new_business_effective_on"
+  ],
+  "unevaluatedProperties": false
+}

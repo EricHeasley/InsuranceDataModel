@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/person.schema.json",
+  "title": "person",
+  "description": "A natural person.",
+  "x-primaryKey": ["party_id"],
+  "x-subtypeOf": "party",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "first_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100,
+      "x-sensitivity": "PII"
+    },
+    "middle_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100,
+      "x-sensitivity": "PII"
+    },
+    "last_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100,
+      "x-sensitivity": "PII"
+    },
+    "name_suffix": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20
+    },
+    "birth_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "x-sensitivity": "PII"
+    },
+    "death_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "x-sensitivity": "PII"
+    },
+    "gender": {
+      "$ref": "enums/gender.schema.json",
+      "x-sensitivity": "SPI"
+    },
+    "marital_status": {
+      "$ref": "enums/marital_status.schema.json",
+      "x-sensitivity": "SPI"
+    },
+    "occupation": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    }
+  },
+  "required": ["party_id", "last_name"],
+  "unevaluatedProperties": false
+}

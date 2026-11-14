@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/enums/license_status.schema.json",
+  "title": "license_status",
+  "description": "Status of a license or appointment.",
+  "type": "string",
+  "enum": ["PENDING", "ACTIVE", "EXPIRED", "SUSPENDED", "REVOKED", "TERMINATED"]
+}

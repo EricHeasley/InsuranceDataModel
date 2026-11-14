@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_premium_cession.schema.json",
+  "title": "reinsurance_premium_cession",
+  "description": "Premium and commission ceded to (or assumed under) a layer, at policy or bulk level.",
+  "x-primaryKey": ["reinsurance_premium_cession_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "reinsurance_premium_cession_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "reinsurance_layer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "reinsurance_layer.reinsurance_layer_id"
+    },
+    "premium_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Null for bulk entries such as deposit, adjustment and reinstatement premium.",
+      "x-references": "premium_transaction.premium_transaction_id"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "premium_type": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "CEDED_WRITTEN, DEPOSIT, ADJUSTMENT, REINSTATEMENT, MINIMUM."
+    },
+    "ceded_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "ceding_commission_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "earning_start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "earning_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "accounting_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "reinsurance_statement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "reinsurance_statement.reinsurance_statement_id"
+    }
+  },
+  "required": [
+    "reinsurance_premium_cession_id",
+    "reinsurance_layer_id",
+    "premium_type",
+    "ceded_premium_amount",
+    "accounting_date"
+  ],
+  "unevaluatedProperties": false
+}

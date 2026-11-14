@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/enums/term_value_type.schema.json",
+  "title": "term_value_type",
+  "description": "How the value of a coverage term is expressed.",
+  "type": "string",
+  "enum": ["AMOUNT", "PERCENT", "DAYS", "MONTHS", "COUNT", "CODE"]
+}

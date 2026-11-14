@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/commission_statement.schema.json",
+  "title": "commission_statement",
+  "description": "Periodic statement of commissions earned by and payable to a producer.",
+  "x-primaryKey": ["commission_statement_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "commission_statement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "producer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "producer.producer_id"
+    },
+    "period_start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "period_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "total_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "disbursement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "disbursement.disbursement_id"
+    },
+    "issued_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": [
+    "commission_statement_id",
+    "producer_id",
+    "period_start_date",
+    "period_end_date",
+    "total_amount"
+  ],
+  "unevaluatedProperties": false
+}

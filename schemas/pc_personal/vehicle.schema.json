@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/vehicle.schema.json",
+  "title": "vehicle",
+  "description": "A motor vehicle or trailer, personal or commercial.",
+  "x-primaryKey": ["insurable_object_id"],
+  "x-subtypeOf": "insurable_object",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "insurable_object_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "insurable_object.insurable_object_id"
+    },
+    "vin": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 17,
+      "description": "Vehicle identification number."
+    },
+    "model_year": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "make": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "model": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "body_style": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "vehicle_type": {
+      "$ref": "enums/vehicle_type.schema.json"
+    },
+    "gross_vehicle_weight": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "Pounds."
+    },
+    "cost_new_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "symbol_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "ISO or company vehicle rating symbol."
+    },
+    "has_anti_theft_device": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_advanced_driver_assistance": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "registration_jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "license_plate": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 15,
+      "x-sensitivity": "PII"
+    }
+  },
+  "required": ["insurable_object_id", "vehicle_type"],
+  "unevaluatedProperties": false
+}

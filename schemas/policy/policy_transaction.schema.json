@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_transaction.schema.json",
+  "title": "policy_transaction",
+  "description": "A dated change to a policy: new business, endorsement, renewal, cancellation, reinstatement, audit and so on. The unit of policy versioning and the source of all written premium.",
+  "x-primaryKey": ["policy_transaction_id"],
+  "x-unique": [
+    ["policy_term_id", "sequence_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_term_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_term.policy_term_id"
+    },
+    "sequence_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "Order of processing within the term."
+    },
+    "policy_transaction_type": {
+      "$ref": "enums/policy_transaction_type.schema.json"
+    },
+    "policy_transaction_status": {
+      "$ref": "enums/policy_transaction_status.schema.json"
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Business date the change takes effect."
+    },
+    "processed_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp",
+      "description": "When the change was recorded (transaction time)."
+    },
+    "accounting_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Date the transaction is booked for financial reporting."
+    },
+    "is_out_of_sequence": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "True when effective earlier than a previously processed transaction in the term."
+    },
+    "reverses_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_transaction.policy_transaction_id"
+    },
+    "reason_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "description": {
+      "$ref": "../common/types.schema.json#/$defs/text"
+    },
+    "processed_by_staff_member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "staff_member.staff_member_id"
+    }
+  },
+  "required": [
+    "policy_transaction_id",
+    "policy_term_id",
+    "sequence_number",
+    "policy_transaction_type",
+    "policy_transaction_status",
+    "effective_date",
+    "processed_at"
+  ],
+  "unevaluatedProperties": false
+}

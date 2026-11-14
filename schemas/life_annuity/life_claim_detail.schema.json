@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/life_claim_detail.schema.json",
+  "title": "life_claim_detail",
+  "description": "Life and annuity specific attributes of a claim.",
+  "x-primaryKey": ["claim_id"],
+  "x-subtypeOf": "claim",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim.claim_id"
+    },
+    "life_claim_type": {
+      "$ref": "enums/life_claim_type.schema.json"
+    },
+    "insured_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "person.party_id"
+    },
+    "date_of_death": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "x-sensitivity": "PII"
+    },
+    "manner_of_death": {
+      "$ref": "enums/manner_of_death.schema.json",
+      "x-sensitivity": "PHI"
+    },
+    "cause_of_death_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "ICD-10 underlying cause of death.",
+      "x-references": "code_value.code_value_id",
+      "x-sensitivity": "PHI"
+    },
+    "death_jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "is_within_contestable_period": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "proof_of_loss_received_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "death_certificate_document_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "document.document_id"
+    },
+    "gross_benefit_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "loan_offset_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "premium_adjustment_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Premium refunded or due at death."
+    },
+    "claim_interest_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Statutory interest on delayed settlement."
+    },
+    "source_of_death_notice": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "BENEFICIARY, AGENT, DEATH_MASTER_FILE_MATCH, ..."
+    }
+  },
+  "required": ["claim_id", "life_claim_type", "insured_party_id"],
+  "unevaluatedProperties": false
+}

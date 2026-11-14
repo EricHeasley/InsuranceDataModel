@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/underwriting_case_status.schema.json",
+  "title": "underwriting_case_status",
+  "description": "Status of a medical underwriting case.",
+  "type": "string",
+  "enum": [
+    "OPEN",
+    "PENDING_REQUIREMENTS",
+    "IN_REVIEW",
+    "DECIDED",
+    "ISSUED",
+    "CLOSED_INCOMPLETE",
+    "WITHDRAWN"
+  ]
+}

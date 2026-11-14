@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/annuity_contract_detail.schema.json",
+  "title": "annuity_contract_detail",
+  "description": "Annuity specific attributes of a policy.",
+  "x-primaryKey": ["policy_id"],
+  "x-subtypeOf": "policy",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "annuity_type": {
+      "$ref": "enums/annuity_type.schema.json"
+    },
+    "annuity_phase": {
+      "$ref": "enums/annuity_phase.schema.json"
+    },
+    "tax_qualification_type": {
+      "$ref": "enums/tax_qualification_type.schema.json"
+    },
+    "issue_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "is_flexible_premium": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "initial_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "maturity_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Latest annuitization date."
+    },
+    "annuitization_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "guaranteed_minimum_interest_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "initial_guarantee_period_years": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "surrender_charge_period_years": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "surrender_charge_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "free_withdrawal_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "has_market_value_adjustment": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "premium_bonus_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "rmd_start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Required beginning date for minimum distributions."
+    },
+    "is_replacement": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "suitability_reviewed_on": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Best-interest / suitability review completed."
+    }
+  },
+  "required": ["policy_id", "annuity_type", "annuity_phase", "tax_qualification_type", "issue_date"],
+  "unevaluatedProperties": false
+}

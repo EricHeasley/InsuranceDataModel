@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/claim_incident_type.schema.json",
+  "title": "claim_incident_type",
+  "description": "Kind of loss item on a claim.",
+  "type": "string",
+  "enum": [
+    "VEHICLE_DAMAGE",
+    "PROPERTY_DAMAGE",
+    "CONTENTS_LOSS",
+    "BODILY_INJURY",
+    "DEATH",
+    "LOSS_OF_USE",
+    "BUSINESS_INTERRUPTION",
+    "FINANCIAL_LOSS",
+    "DATA_BREACH",
+    "OTHER"
+  ]
+}

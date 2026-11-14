@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/claim_assignment_role.schema.json",
+  "title": "claim_assignment_role",
+  "description": "Role of a staff member on a claim.",
+  "type": "string",
+  "enum": [
+    "OWNER",
+    "FIELD_ADJUSTER",
+    "INJURY_ADJUSTER",
+    "PROPERTY_ADJUSTER",
+    "TOTAL_LOSS",
+    "SUBROGATION",
+    "SIU",
+    "LITIGATION",
+    "NURSE_CASE_MANAGER",
+    "SUPERVISOR"
+  ]
+}

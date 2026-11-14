@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/payment.schema.json",
+  "title": "payment",
+  "description": "Money received from or on behalf of a payor.",
+  "x-primaryKey": ["payment_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "payment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "billing_account_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Null while unidentified cash sits in suspense.",
+      "x-references": "billing_account.billing_account_id"
+    },
+    "payer_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "payment_method": {
+      "$ref": "enums/payment_method.schema.json"
+    },
+    "payment_status": {
+      "$ref": "enums/payment_status.schema.json"
+    },
+    "payment_instrument_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "payment_instrument.payment_instrument_id"
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "received_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    },
+    "deposit_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "accounting_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "reference_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "Check number, processor transaction ID or trace number."
+    },
+    "batch_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "reverses_payment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "payment.payment_id"
+    },
+    "return_reason_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "ACH return or chargeback reason."
+    }
+  },
+  "required": ["payment_id", "payment_method", "payment_status", "amount", "received_at"],
+  "unevaluatedProperties": false
+}

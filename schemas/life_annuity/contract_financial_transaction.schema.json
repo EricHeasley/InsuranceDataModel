@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/contract_financial_transaction.schema.json",
+  "title": "contract_financial_transaction",
+  "description": "The ledger of money moving into, out of and within a life or annuity contract: premiums applied, charges, interest and index credits, withdrawals, loans, transfers and benefits.",
+  "x-primaryKey": ["contract_financial_transaction_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "contract_financial_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "contract_financial_transaction_type": {
+      "$ref": "enums/contract_financial_transaction_type.schema.json"
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Signed: positive increases contract value."
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "processed_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    },
+    "accounting_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "investment_fund_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "investment_fund.investment_fund_id"
+    },
+    "unit_count": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "unit_value": {
+      "$ref": "../common/types.schema.json#/$defs/rate"
+    },
+    "policy_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Coverage or rider a charge relates to.",
+      "x-references": "policy_coverage.policy_coverage_id"
+    },
+    "policy_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_transaction.policy_transaction_id"
+    },
+    "contract_loan_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "contract_loan.contract_loan_id"
+    },
+    "payment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Incoming payment that funded the transaction.",
+      "x-references": "payment.payment_id"
+    },
+    "disbursement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Outgoing payment that settled the transaction.",
+      "x-references": "disbursement.disbursement_id"
+    },
+    "taxable_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "federal_withholding_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "state_withholding_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "tax_distribution_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 5,
+      "description": "IRS Form 1099-R distribution code."
+    },
+    "reverses_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "contract_financial_transaction.contract_financial_transaction_id"
+    }
+  },
+  "required": [
+    "contract_financial_transaction_id",
+    "policy_id",
+    "contract_financial_transaction_type",
+    "amount",
+    "effective_date",
+    "processed_at"
+  ],
+  "unevaluatedProperties": false
+}

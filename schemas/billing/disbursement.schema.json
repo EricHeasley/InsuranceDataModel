@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/disbursement.schema.json",
+  "title": "disbursement",
+  "description": "Money paid out by the insurer for any purpose: claim payment, premium refund, commission, annuity payout, provider remittance.",
+  "x-primaryKey": ["disbursement_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "disbursement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "disbursement_type": {
+      "$ref": "enums/disbursement_type.schema.json"
+    },
+    "disbursement_status": {
+      "$ref": "enums/disbursement_status.schema.json"
+    },
+    "payee_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "payee_name_printed": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 500,
+      "description": "Payee line as issued, including joint payees."
+    },
+    "payment_method": {
+      "$ref": "enums/payment_method.schema.json"
+    },
+    "payment_instrument_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "payment_instrument.payment_instrument_id"
+    },
+    "mailing_address_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "address.address_id"
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "currency_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 3,
+      "x-references": "currency.currency_code"
+    },
+    "issued_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "cleared_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "voided_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "reference_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "Check number or EFT trace number."
+    },
+    "billing_account_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Account refunded, for premium refunds.",
+      "x-references": "billing_account.billing_account_id"
+    },
+    "replaces_disbursement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Disbursement this one reissues.",
+      "x-references": "disbursement.disbursement_id"
+    }
+  },
+  "required": [
+    "disbursement_id",
+    "disbursement_type",
+    "disbursement_status",
+    "payee_party_id",
+    "payment_method",
+    "amount",
+    "currency_code"
+  ],
+  "unevaluatedProperties": false
+}

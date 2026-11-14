@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/disbursement_status.schema.json",
+  "title": "disbursement_status",
+  "description": "Status of an outgoing payment.",
+  "type": "string",
+  "enum": [
+    "PENDING",
+    "ISSUED",
+    "CLEARED",
+    "VOIDED",
+    "STOPPED",
+    "RETURNED",
+    "STALE_DATED",
+    "ESCHEATED"
+  ]
+}

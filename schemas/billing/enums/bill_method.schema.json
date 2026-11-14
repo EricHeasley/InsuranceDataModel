@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/bill_method.schema.json",
+  "title": "bill_method",
+  "description": "Who is billed and how.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "DIRECT_BILL",
+      "description": "Insurer bills the insured"
+    },
+    {
+      "const": "AGENCY_BILL",
+      "description": "Producer collects and remits net of commission"
+    },
+    {
+      "const": "LIST_BILL",
+      "description": "One bill to a group or employer for many members"
+    },
+    {
+      "const": "PAYROLL_DEDUCTION"
+    },
+    {
+      "const": "MORTGAGEE_BILL",
+      "description": "Billed to the mortgage servicer's escrow"
+    },
+    {
+      "const": "PAY_AS_YOU_GO",
+      "description": "Premium reported and paid with each payroll (workers' comp)"
+    },
+    {
+      "const": "PREMIUM_FINANCE",
+      "description": "Paid by a premium finance company"
+    }
+  ]
+}

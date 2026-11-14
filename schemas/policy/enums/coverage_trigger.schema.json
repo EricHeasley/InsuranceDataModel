@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/coverage_trigger.schema.json",
+  "title": "coverage_trigger",
+  "description": "What must happen in the policy period for coverage to respond.",
+  "type": "string",
+  "enum": ["OCCURRENCE", "CLAIMS_MADE", "CLAIMS_MADE_AND_REPORTED"]
+}

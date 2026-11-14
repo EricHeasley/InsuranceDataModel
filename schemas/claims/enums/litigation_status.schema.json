@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/litigation_status.schema.json",
+  "title": "litigation_status",
+  "description": "Status of a legal matter.",
+  "type": "string",
+  "enum": [
+    "PRE_SUIT",
+    "FILED",
+    "DISCOVERY",
+    "MEDIATION",
+    "TRIAL",
+    "APPEAL",
+    "SETTLED",
+    "JUDGMENT",
+    "DISMISSED",
+    "CLOSED"
+  ]
+}

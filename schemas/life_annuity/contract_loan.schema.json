@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/contract_loan.schema.json",
+  "title": "contract_loan",
+  "description": "A loan taken against the cash value of a contract.",
+  "x-primaryKey": ["contract_loan_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "contract_loan_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "loan_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "loan_type": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "STANDARD, PREFERRED, AUTOMATIC_PREMIUM_LOAN."
+    },
+    "principal_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "interest_rate_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "is_variable_rate": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "interest_in_advance": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "originated_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "repaid_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": [
+    "contract_loan_id",
+    "policy_id",
+    "loan_number",
+    "principal_amount",
+    "interest_rate_percent",
+    "originated_on"
+  ],
+  "unevaluatedProperties": false
+}

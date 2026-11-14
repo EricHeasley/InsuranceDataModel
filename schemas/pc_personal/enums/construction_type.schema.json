@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/enums/construction_type.schema.json",
+  "title": "construction_type",
+  "description": "Structural construction.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "FRAME",
+      "description": "ISO class 1"
+    },
+    {
+      "const": "JOISTED_MASONRY",
+      "description": "ISO class 2"
+    },
+    {
+      "const": "NON_COMBUSTIBLE",
+      "description": "ISO class 3"
+    },
+    {
+      "const": "MASONRY_NON_COMBUSTIBLE",
+      "description": "ISO class 4"
+    },
+    {
+      "const": "MODIFIED_FIRE_RESISTIVE",
+      "description": "ISO class 5"
+    },
+    {
+      "const": "FIRE_RESISTIVE",
+      "description": "ISO class 6"
+    },
+    {
+      "const": "MANUFACTURED",
+      "description": "Mobile or manufactured home"
+    },
+    {
+      "const": "OTHER"
+    }
+  ]
+}

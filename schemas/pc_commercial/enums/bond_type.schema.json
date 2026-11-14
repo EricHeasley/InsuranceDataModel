@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/enums/bond_type.schema.json",
+  "title": "bond_type",
+  "description": "Class of surety or fidelity bond.",
+  "type": "string",
+  "enum": [
+    "CONTRACT_BID",
+    "CONTRACT_PERFORMANCE",
+    "CONTRACT_PAYMENT",
+    "LICENSE_PERMIT",
+    "COURT",
+    "PUBLIC_OFFICIAL",
+    "FIDUCIARY",
+    "FIDELITY",
+    "MISCELLANEOUS"
+  ]
+}

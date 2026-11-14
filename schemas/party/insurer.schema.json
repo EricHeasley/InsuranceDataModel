@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/insurer.schema.json",
+  "title": "insurer",
+  "description": "A licensed insurance company (underwriting/writing company) of the enterprise, or an external carrier referenced on claims and prior coverage.",
+  "x-primaryKey": ["insurer_id"],
+  "x-unique": [
+    ["party_id"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "insurer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "organization.party_id"
+    },
+    "naic_company_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 5
+    },
+    "naic_group_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 5
+    },
+    "domicile_jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "is_internal": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "True for the enterprise's own writing companies."
+    },
+    "financial_strength_rating": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "E.g. AM Best rating."
+    }
+  },
+  "required": ["insurer_id", "party_id", "is_internal"],
+  "unevaluatedProperties": false
+}

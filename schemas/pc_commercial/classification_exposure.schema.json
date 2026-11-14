@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/classification_exposure.schema.json",
+  "title": "classification_exposure",
+  "description": "A rating classification and its exposure amount for a risk and state: a general liability class with its sales or payroll, or a workers' compensation class with its payroll. Estimated at inception, replaced by audited amounts at audit.",
+  "x-primaryKey": ["classification_exposure_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    },
+    {
+      "$ref": "../common/policy_versioned.schema.json"
+    }
+  ],
+  "properties": {
+    "classification_exposure_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_risk.policy_risk_id"
+    },
+    "policy_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_coverage.policy_coverage_id"
+    },
+    "class_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "NCCI/state bureau class code or ISO GL class code.",
+      "x-references": "code_value.code_value_id"
+    },
+    "jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "exposure_basis": {
+      "$ref": "enums/exposure_basis.schema.json"
+    },
+    "estimated_exposure_amount": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "audited_exposure_amount": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "rate": {
+      "$ref": "../common/types.schema.json#/$defs/rate",
+      "description": "Rate per unit of exposure (e.g. per $100 payroll, per $1,000 sales)."
+    },
+    "rate_per_units": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "Units of exposure the rate applies to: 100, 1000, ..."
+    },
+    "is_if_any": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "Class listed on an 'if any' basis with no estimated exposure."
+    },
+    "premium_audit_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Audit that established the audited exposure.",
+      "x-references": "premium_audit.premium_audit_id"
+    }
+  },
+  "required": [
+    "classification_exposure_id",
+    "policy_risk_id",
+    "class_code_value_id",
+    "jurisdiction_code",
+    "exposure_basis",
+    "estimated_exposure_amount"
+  ],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/distribution/enums/commission_basis.schema.json",
+  "title": "commission_basis",
+  "description": "Business event a commission rate applies to.",
+  "type": "string",
+  "enum": ["NEW_BUSINESS", "RENEWAL", "FIRST_YEAR", "TRAIL", "OVERRIDE", "CONTINGENT", "BONUS"]
+}

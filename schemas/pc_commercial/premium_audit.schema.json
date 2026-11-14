@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/premium_audit.schema.json",
+  "title": "premium_audit",
+  "description": "An audit of actual exposures for an auditable policy term, producing additional or return premium through a PREMIUM_AUDIT policy transaction.",
+  "x-primaryKey": ["premium_audit_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "premium_audit_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_term_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_term.policy_term_id"
+    },
+    "audit_type": {
+      "$ref": "enums/audit_type.schema.json"
+    },
+    "audit_method": {
+      "$ref": "enums/audit_method.schema.json"
+    },
+    "audit_status": {
+      "$ref": "enums/audit_status.schema.json"
+    },
+    "audit_period_start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "audit_period_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "ordered_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "completed_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "auditor_staff_member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "staff_member.staff_member_id"
+    },
+    "audit_vendor_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "policy_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Transaction that booked the audit result.",
+      "x-references": "policy_transaction.policy_transaction_id"
+    }
+  },
+  "required": [
+    "premium_audit_id",
+    "policy_term_id",
+    "audit_type",
+    "audit_status",
+    "audit_period_start_date",
+    "audit_period_end_date"
+  ],
+  "unevaluatedProperties": false
+}

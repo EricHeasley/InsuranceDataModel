@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/member.schema.json",
+  "title": "member",
+  "description": "A person covered or formerly covered by health or group benefits, identified by a member ID.",
+  "x-primaryKey": ["member_id"],
+  "x-unique": [
+    ["member_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "person.party_id"
+    },
+    "member_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "ID printed on the member's card.",
+      "x-sensitivity": "PHI"
+    },
+    "medicare_eligibility_reason": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "AGE, DISABILITY, ESRD."
+    },
+    "is_tobacco_user": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "x-sensitivity": "PHI"
+    }
+  },
+  "required": ["member_id", "party_id", "member_number"],
+  "unevaluatedProperties": false
+}

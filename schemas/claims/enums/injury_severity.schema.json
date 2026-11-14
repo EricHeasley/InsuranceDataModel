@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/injury_severity.schema.json",
+  "title": "injury_severity",
+  "description": "Severity of an injury.",
+  "type": "string",
+  "enum": ["NONE", "MINOR", "MODERATE", "SERIOUS", "SEVERE", "CATASTROPHIC", "FATAL"]
+}

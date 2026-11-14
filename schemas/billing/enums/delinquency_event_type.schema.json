@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/delinquency_event_type.schema.json",
+  "title": "delinquency_event_type",
+  "description": "Step in the delinquency process.",
+  "type": "string",
+  "enum": [
+    "PAST_DUE_NOTICE",
+    "NOTICE_OF_CANCELLATION",
+    "GRACE_PERIOD_START",
+    "CANCELLATION_REQUESTED",
+    "LAPSE_NOTICE",
+    "COLLECTIONS_REFERRAL",
+    "CURED"
+  ]
+}

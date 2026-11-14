@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/policy_status.schema.json",
+  "title": "policy_status",
+  "description": "Current status of a policy.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "PENDING",
+      "description": "Bound or applied for, not yet in force"
+    },
+    {
+      "const": "IN_FORCE"
+    },
+    {
+      "const": "CANCELLED"
+    },
+    {
+      "const": "EXPIRED",
+      "description": "Term ended without renewal"
+    },
+    {
+      "const": "NON_RENEWED"
+    },
+    {
+      "const": "LAPSED",
+      "description": "Terminated for non-payment after grace period (life/health)"
+    },
+    {
+      "const": "REDUCED_PAID_UP"
+    },
+    {
+      "const": "EXTENDED_TERM"
+    },
+    {
+      "const": "SURRENDERED"
+    },
+    {
+      "const": "MATURED"
+    },
+    {
+      "const": "ANNUITIZED"
+    },
+    {
+      "const": "DEATH_CLAIM",
+      "description": "Terminated by death of the insured"
+    },
+    {
+      "const": "CONVERTED",
+      "description": "Converted or exchanged to another policy"
+    },
+    {
+      "const": "RESCINDED"
+    }
+  ]
+}

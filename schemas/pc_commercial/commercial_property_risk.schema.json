@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/commercial_property_risk.schema.json",
+  "title": "commercial_property_risk",
+  "description": "Policy-specific rating detail for a building or business personal property at a location on a commercial property, BOP or package policy.",
+  "x-primaryKey": ["policy_risk_id"],
+  "x-subtypeOf": "policy_risk",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_risk.policy_risk_id"
+    },
+    "building_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "occupancy_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "ISO occupancy / class code.",
+      "x-references": "code_value.code_value_id"
+    },
+    "occupancy_description": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 200
+    },
+    "protection_class": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 5
+    },
+    "building_value_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "business_personal_property_value_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "business_income_value_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "valuation_method": {
+      "$ref": "../pc_personal/enums/valuation_method.schema.json"
+    },
+    "coinsurance_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "is_owner_occupied": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "occupied_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "is_vacant": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "wind_hail_excluded": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "earthquake_zone": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10
+    },
+    "wind_tier": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10
+    },
+    "last_inspection_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["policy_risk_id"],
+  "unevaluatedProperties": false
+}

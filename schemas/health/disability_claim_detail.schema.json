@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/disability_claim_detail.schema.json",
+  "title": "disability_claim_detail",
+  "description": "Disability, long-term care and waiver specific attributes of a claim.",
+  "x-primaryKey": ["claim_id"],
+  "x-subtypeOf": "claim",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim.claim_id"
+    },
+    "disability_type": {
+      "$ref": "enums/disability_type.schema.json"
+    },
+    "claimant_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "person.party_id"
+    },
+    "disability_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "last_day_worked": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "primary_diagnosis_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "code_value.code_value_id",
+      "x-sensitivity": "PHI"
+    },
+    "elimination_period_days": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "benefit_start_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "maximum_benefit_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "gross_benefit_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "benefit_frequency": {
+      "$ref": "../life_annuity/enums/premium_mode.schema.json"
+    },
+    "predisability_earnings_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "x-sensitivity": "SPI"
+    },
+    "offset_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Social Security, workers' comp and other income offsets."
+    },
+    "own_occupation_end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Date the definition of disability changes from own to any occupation."
+    },
+    "expected_return_to_work_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "actual_return_to_work_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "is_work_related": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "ssdi_award_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["claim_id", "disability_type", "claimant_party_id", "disability_date"],
+  "unevaluatedProperties": false
+}

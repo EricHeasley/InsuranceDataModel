@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/quote.schema.json",
+  "title": "quote",
+  "description": "A priced offer made in response to a submission. A submission may have several quote versions or options; at most one is bound into a policy transaction.",
+  "x-primaryKey": ["quote_id"],
+  "x-unique": [
+    ["quote_number", "version_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "quote_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "submission_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "submission.submission_id"
+    },
+    "quote_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "version_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "quote_status": {
+      "$ref": "enums/quote_status.schema.json"
+    },
+    "proposed_effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "proposed_expiration_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "total_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "total_taxes_fees_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "valid_until": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "rated_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    },
+    "quote_data": {
+      "$ref": "../common/types.schema.json#/$defs/json",
+      "description": "Full rated quote payload (risks, coverages, rating worksheet) as produced by the quoting system."
+    },
+    "bound_policy_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_transaction.policy_transaction_id"
+    }
+  },
+  "required": ["quote_id", "submission_id", "quote_number", "version_number", "quote_status"],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/certificate_of_insurance.schema.json",
+  "title": "certificate_of_insurance",
+  "description": "Evidence of coverage issued to a third party (ACORD 25/28 style).",
+  "x-primaryKey": ["certificate_of_insurance_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "certificate_of_insurance_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "holder_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "certificate_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "issued_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "description_of_operations": {
+      "$ref": "../common/types.schema.json#/$defs/text"
+    },
+    "issued_by_producer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "producer.producer_id"
+    },
+    "document_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "document.document_id"
+    }
+  },
+  "required": ["certificate_of_insurance_id", "policy_id", "holder_party_id", "issued_on"],
+  "unevaluatedProperties": false
+}

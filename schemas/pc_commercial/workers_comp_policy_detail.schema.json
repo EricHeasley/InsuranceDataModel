@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/workers_comp_policy_detail.schema.json",
+  "title": "workers_comp_policy_detail",
+  "description": "Workers' compensation specific attributes of a policy.",
+  "x-primaryKey": ["policy_id"],
+  "x-subtypeOf": "policy",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "bureau_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "NCCI or state bureau risk identification number."
+    },
+    "rating_bureau": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "NCCI or independent bureau (WCIRB, NYCIRB, PCRB, ...)."
+    },
+    "anniversary_rating_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "is_experience_rated": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_owner_officer_exclusions": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_assigned_risk": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_retrospectively_rated": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "deductible_program_type": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "NONE, SMALL_DEDUCTIBLE, LARGE_DEDUCTIBLE."
+    },
+    "employee_leasing_arrangement": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "PEO / employee leasing arrangement, if any."
+    }
+  },
+  "required": ["policy_id"],
+  "unevaluatedProperties": false
+}

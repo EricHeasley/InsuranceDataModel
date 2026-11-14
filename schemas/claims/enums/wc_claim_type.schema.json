@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/wc_claim_type.schema.json",
+  "title": "wc_claim_type",
+  "description": "Workers' compensation claim classification.",
+  "type": "string",
+  "enum": [
+    "MEDICAL_ONLY",
+    "TEMPORARY_TOTAL",
+    "TEMPORARY_PARTIAL",
+    "PERMANENT_PARTIAL",
+    "PERMANENT_TOTAL",
+    "FATALITY",
+    "REPORT_ONLY"
+  ]
+}

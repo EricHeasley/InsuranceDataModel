@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/product_form.schema.json",
+  "title": "product_form",
+  "description": "Approval of a form for use with a product in a jurisdiction.",
+  "x-primaryKey": ["product_form_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "product_form_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "product_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "product.product_id"
+    },
+    "form_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "form.form_id"
+    },
+    "jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "description": "Null for countrywide forms.",
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "coverage_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Coverage whose selection triggers the form, if any.",
+      "x-references": "coverage_definition.coverage_definition_id"
+    },
+    "form_usage": {
+      "$ref": "enums/form_usage.schema.json"
+    },
+    "product_filing_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "product_filing.product_filing_id"
+    },
+    "effective_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "expires_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": ["product_form_id", "product_id", "form_id", "form_usage", "effective_on"],
+  "unevaluatedProperties": false
+}

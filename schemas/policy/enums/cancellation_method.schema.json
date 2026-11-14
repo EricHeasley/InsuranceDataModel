@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/cancellation_method.schema.json",
+  "title": "cancellation_method",
+  "description": "How return premium is computed.",
+  "type": "string",
+  "enum": ["PRO_RATA", "SHORT_RATE", "FLAT"]
+}

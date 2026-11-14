@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_coverage_term.schema.json",
+  "title": "policy_coverage_term",
+  "description": "The selected value of a limit, deductible or other term for a coverage on a policy.",
+  "x-primaryKey": ["policy_coverage_term_id"],
+  "x-unique": [
+    ["policy_coverage_id", "coverage_term_definition_id"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_coverage_term_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_coverage.policy_coverage_id"
+    },
+    "coverage_term_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "coverage_term_definition.coverage_term_definition_id"
+    },
+    "term_value": {
+      "$ref": "../common/types.schema.json#/$defs/decimal",
+      "description": "Numeric value: amount, percent, days, months or count per the definition's value type."
+    },
+    "term_code_value": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "Selected option when the term is a coded choice."
+    }
+  },
+  "required": ["policy_coverage_term_id", "policy_coverage_id", "coverage_term_definition_id"],
+  "unevaluatedProperties": false
+}

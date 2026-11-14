@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/dwelling_risk.schema.json",
+  "title": "dwelling_risk",
+  "description": "Policy-specific rating detail for a dwelling or residence on a homeowners, condo, renters or dwelling fire policy.",
+  "x-primaryKey": ["policy_risk_id"],
+  "x-subtypeOf": "policy_risk",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_risk.policy_risk_id"
+    },
+    "homeowners_form": {
+      "$ref": "enums/homeowners_form.schema.json"
+    },
+    "residence_type": {
+      "$ref": "enums/residence_type.schema.json"
+    },
+    "dwelling_occupancy": {
+      "$ref": "enums/dwelling_occupancy.schema.json"
+    },
+    "replacement_cost_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Estimated cost to rebuild."
+    },
+    "replacement_cost_estimated_on": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "valuation_method": {
+      "$ref": "enums/valuation_method.schema.json"
+    },
+    "protection_class": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 5,
+      "description": "Public protection classification."
+    },
+    "distance_to_fire_station_miles": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "distance_to_hydrant_feet": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "purchase_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "has_swimming_pool": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_trampoline": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_wood_stove": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_restricted_dog_breed": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_wind_mitigation_features": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "has_water_leak_detection": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "household_member_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "home_business_description": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 200
+    }
+  },
+  "required": ["policy_risk_id"],
+  "unevaluatedProperties": false
+}

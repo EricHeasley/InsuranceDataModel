@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/payment_application.schema.json",
+  "title": "payment_application",
+  "description": "Application of part of a payment to an invoice line or directly to a policy.",
+  "x-primaryKey": ["payment_application_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "payment_application_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "payment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "payment.payment_id"
+    },
+    "invoice_line_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "invoice_line.invoice_line_id"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "applied_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    },
+    "reverses_payment_application_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "payment_application.payment_application_id"
+    }
+  },
+  "required": ["payment_application_id", "payment_id", "amount", "applied_at"],
+  "unevaluatedProperties": false
+}

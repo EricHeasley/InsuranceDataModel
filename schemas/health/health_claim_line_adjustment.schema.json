@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/health_claim_line_adjustment.schema.json",
+  "title": "health_claim_line_adjustment",
+  "description": "A reason-coded difference between billed and paid amounts on a claim line (X12 835 CAS adjustment).",
+  "x-primaryKey": ["health_claim_line_adjustment_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "health_claim_line_adjustment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "health_claim_line_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "health_claim_line.health_claim_line_id"
+    },
+    "adjustment_group_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 2,
+      "description": "CO contractual, PR patient responsibility, OA other, PI payer initiated."
+    },
+    "reason_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Claim adjustment reason code (CARC).",
+      "x-references": "code_value.code_value_id"
+    },
+    "remark_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Remittance advice remark code (RARC).",
+      "x-references": "code_value.code_value_id"
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    }
+  },
+  "required": [
+    "health_claim_line_adjustment_id",
+    "health_claim_line_id",
+    "adjustment_group_code",
+    "reason_code_value_id",
+    "amount"
+  ],
+  "unevaluatedProperties": false
+}

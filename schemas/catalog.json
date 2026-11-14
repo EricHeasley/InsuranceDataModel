@@ -1,0 +1,68 @@
+{
+  "name": "insurance-data-model",
+  "title": "Insurance Operational Data Model",
+  "version": "0.1.0",
+  "description": "Normalized operational data model covering P&C personal, P&C commercial, life & annuity, and health insurance, following US market conventions (NAIC annual statement lines, state jurisdictions, ACORD/ISO/X12-style coding).",
+  "conventions": {
+    "naming": "snake_case, singular entity names. Surrogate keys are named <entity>_id and typed uuid. Reference tables are keyed by their natural code.",
+    "money": "All 'money' attributes are in the currency of the owning policy, billing account or reinsurance contract (currency_code on that entity; USD by default).",
+    "percent": "'percent' attributes hold percentage points (12.5 means 12.5%). 'rate' attributes hold raw multipliers or per-unit rates.",
+    "time": "'date' attributes are business dates in the governing jurisdiction. 'timestamp' attributes are UTC instants.",
+    "versioning": "Policy contents are versioned by transaction: every row of a policy child entity records the policy_transaction that added it and, if applicable, the one that removed it, plus the business-effective date range. The state of a policy at any date, as known at any time, is reconstructable.",
+    "financials": "Premium, claim, account-value and reinsurance financials are append-only ledgers of signed amounts. Corrections are made with reversing entries (reverses_*_id), never updates. Balances such as outstanding reserve or earned premium are derived, not stored.",
+    "parties": "Every person or organization exists once in 'party'. Involvement in a policy, claim, account or contract is expressed through role entities (policy_party, claim_party, ...), never by copying names and addresses.",
+    "subtypes": "Line-specific detail lives in subtype entities sharing the supertype's primary key (subtypeOf). The core never needs to change to add a line of business.",
+    "externalCodes": "Industry code sets (ICD-10, CPT/HCPCS, NAICS, NCCI/ISO class codes, WCIO, CARC/RARC, ...) are stored in code_set/code_value and referenced by code_value_id.",
+    "sensitivity": "Attributes holding regulated data are tagged: PII (personal identifiers), PHI (HIPAA protected health information), PCI (payment card/bank data), SPI (other sensitive personal information)."
+  },
+  "domains": [
+    {
+      "name": "reference",
+      "description": "Shared reference data: geography, currencies, lines of business, statutory reporting lines and external industry code sets."
+    },
+    {
+      "name": "party",
+      "description": "People and organizations, how to reach them, how they relate to each other, and the enterprise-level roles they hold (insurer, staff)."
+    },
+    {
+      "name": "distribution",
+      "description": "Producers (agents, agencies, brokers, MGAs), their licenses, carrier appointments, agreements and commission schedules."
+    },
+    {
+      "name": "product",
+      "description": "What the insurer sells: products, where they are approved, the coverages they offer, the limits/deductibles/benefit terms each coverage can carry, and policy forms."
+    },
+    {
+      "name": "policy",
+      "description": "The line-neutral policy core: submissions and quotes, the policy contract, its terms and transactions, the parties and producers on it, the risks it insures, the coverages and their terms, attached forms, rating modifiers and the written-premium ledger."
+    },
+    {
+      "name": "pc_personal",
+      "description": "Personal lines detail: vehicles, drivers and their records, dwellings, watercraft and scheduled personal property. Vehicle, structure and scheduled item are shared with commercial lines."
+    },
+    {
+      "name": "pc_commercial",
+      "description": "Commercial lines detail: business operations, commercial property and auto rating detail, classification exposures (general liability, workers' compensation), premium audit, professional and cyber liability, certificates of insurance and surety bonds."
+    },
+    {
+      "name": "life_annuity",
+      "description": "Life insurance and annuity detail: contract attributes, insured lives and their underwriting classes, beneficiaries, medical underwriting cases, account values, funds, the contract-level financial ledger, loans, annuity payouts and life claims."
+    },
+    {
+      "name": "health",
+      "description": "Health and accident & health detail: benefit plans, employer groups, members and enrollment, providers and networks, medical/dental/pharmacy claims with adjudication, prior authorization, accumulators, coordination of benefits and disability claims."
+    },
+    {
+      "name": "claims",
+      "description": "Claims for P&C, life and disability business: catastrophes, the claim (occurrence), involved parties, incidents (what was damaged or who was injured), exposures (one claimant under one coverage), the reserve/payment/recovery ledger, payments, recoveries, litigation, investigation, assignments, notes and workers' compensation detail. Health care claims are modeled separately in the health domain."
+    },
+    {
+      "name": "billing",
+      "description": "Money owed and exchanged with customers and payees: billing accounts, payment plans, invoices, incoming payments and their application, adjustments, delinquency, outgoing disbursements and producer commissions."
+    },
+    {
+      "name": "reinsurance",
+      "description": "Ceded and assumed reinsurance: treaties and facultative certificates, their layers and participants, the business they cover, cessions of premium and loss, and periodic settlement statements."
+    }
+  ]
+}

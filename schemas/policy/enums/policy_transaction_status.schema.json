@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/policy_transaction_status.schema.json",
+  "title": "policy_transaction_status",
+  "description": "Processing status of a policy transaction.",
+  "type": "string",
+  "enum": ["DRAFT", "QUOTED", "BOUND", "ISSUED", "REVERSED", "VOIDED"]
+}

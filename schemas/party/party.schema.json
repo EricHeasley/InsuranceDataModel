@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/party.schema.json",
+  "title": "party",
+  "description": "A person or organization of interest to the business in any capacity. Supertype of person and organization.",
+  "x-primaryKey": ["party_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "party_type": {
+      "$ref": "enums/party_type.schema.json"
+    },
+    "display_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255,
+      "description": "Full name formatted for display and search.",
+      "x-sensitivity": "PII"
+    },
+    "party_status": {
+      "$ref": "enums/party_status.schema.json"
+    },
+    "merged_into_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Surviving record when this one was merged as a duplicate.",
+      "x-references": "party.party_id"
+    },
+    "preferred_language": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "BCP 47 language tag."
+    }
+  },
+  "required": ["party_id", "party_type", "display_name", "party_status"],
+  "unevaluatedProperties": false
+}

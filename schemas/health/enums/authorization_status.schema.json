@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enums/authorization_status.schema.json",
+  "title": "authorization_status",
+  "description": "Status of a prior authorization.",
+  "type": "string",
+  "enum": [
+    "REQUESTED",
+    "PENDED",
+    "APPROVED",
+    "PARTIALLY_APPROVED",
+    "DENIED",
+    "WITHDRAWN",
+    "EXPIRED"
+  ]
+}

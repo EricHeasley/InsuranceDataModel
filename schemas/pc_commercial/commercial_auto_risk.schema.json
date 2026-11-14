@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_commercial/commercial_auto_risk.schema.json",
+  "title": "commercial_auto_risk",
+  "description": "Policy-specific rating detail for a vehicle on a commercial auto policy.",
+  "x-primaryKey": ["policy_risk_id"],
+  "x-subtypeOf": "policy_risk",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_risk_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_risk.policy_risk_id"
+    },
+    "vehicle_class_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "ISO commercial auto classification code.",
+      "x-references": "code_value.code_value_id"
+    },
+    "commercial_vehicle_use": {
+      "$ref": "enums/commercial_vehicle_use.schema.json"
+    },
+    "radius_of_operation": {
+      "$ref": "enums/radius_of_operation.schema.json"
+    },
+    "ownership_type": {
+      "$ref": "../pc_personal/enums/ownership_type.schema.json"
+    },
+    "garaging_address_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "address.address_id"
+    },
+    "stated_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "is_fleet": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "covered_auto_symbol": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "Covered auto designation symbols (1-9, 19)."
+    },
+    "has_interstate_filing": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "Federal or state motor carrier filing (e.g. MCS-90) required."
+    },
+    "usdot_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20
+    }
+  },
+  "required": ["policy_risk_id"],
+  "unevaluatedProperties": false
+}

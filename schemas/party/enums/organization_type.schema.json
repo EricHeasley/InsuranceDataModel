@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/organization_type.schema.json",
+  "title": "organization_type",
+  "description": "Legal form of an organization.",
+  "type": "string",
+  "enum": [
+    "CORPORATION",
+    "LLC",
+    "PARTNERSHIP",
+    "SOLE_PROPRIETOR",
+    "NONPROFIT",
+    "GOVERNMENT",
+    "TRUST",
+    "ESTATE",
+    "ASSOCIATION",
+    "OTHER"
+  ]
+}

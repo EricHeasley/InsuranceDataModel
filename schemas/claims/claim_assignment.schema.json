@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_assignment.schema.json",
+  "title": "claim_assignment",
+  "description": "Assignment of a staff member to a claim or exposure over a period.",
+  "x-primaryKey": ["claim_assignment_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "claim_assignment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim.claim_id"
+    },
+    "claim_exposure_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim_exposure.claim_exposure_id"
+    },
+    "staff_member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "staff_member.staff_member_id"
+    },
+    "claim_assignment_role": {
+      "$ref": "enums/claim_assignment_role.schema.json"
+    },
+    "assigned_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    },
+    "unassigned_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    }
+  },
+  "required": [
+    "claim_assignment_id",
+    "claim_id",
+    "staff_member_id",
+    "claim_assignment_role",
+    "assigned_at"
+  ],
+  "unevaluatedProperties": false
+}

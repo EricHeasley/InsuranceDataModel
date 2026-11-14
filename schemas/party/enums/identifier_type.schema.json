@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/identifier_type.schema.json",
+  "title": "identifier_type",
+  "description": "Kind of externally issued identifier.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "SSN",
+      "description": "Social Security number"
+    },
+    {
+      "const": "ITIN",
+      "description": "Individual taxpayer identification number"
+    },
+    {
+      "const": "FEIN",
+      "description": "Federal employer identification number"
+    },
+    {
+      "const": "DRIVER_LICENSE"
+    },
+    {
+      "const": "PASSPORT"
+    },
+    {
+      "const": "STATE_ID"
+    },
+    {
+      "const": "NPI",
+      "description": "National Provider Identifier"
+    },
+    {
+      "const": "NPN",
+      "description": "National Producer Number"
+    },
+    {
+      "const": "NAIC_COMPANY_CODE"
+    },
+    {
+      "const": "DUNS"
+    },
+    {
+      "const": "MEDICARE_BENEFICIARY_ID"
+    },
+    {
+      "const": "MEDICAID_ID"
+    },
+    {
+      "const": "OTHER"
+    }
+  ]
+}

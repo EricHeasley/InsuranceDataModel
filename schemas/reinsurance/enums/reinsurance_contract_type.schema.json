@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/enums/reinsurance_contract_type.schema.json",
+  "title": "reinsurance_contract_type",
+  "description": "Treaty or facultative.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "TREATY",
+      "description": "Covers a defined book of business automatically"
+    },
+    {
+      "const": "FACULTATIVE",
+      "description": "Covers one policy or risk by individual negotiation"
+    }
+  ]
+}

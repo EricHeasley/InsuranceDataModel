@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/enums/lob_category.schema.json",
+  "title": "lob_category",
+  "description": "Top-level grouping of lines of business.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "PC_PERSONAL",
+      "description": "Personal property & casualty"
+    },
+    {
+      "const": "PC_COMMERCIAL",
+      "description": "Commercial property & casualty"
+    },
+    {
+      "const": "LIFE",
+      "description": "Life insurance"
+    },
+    {
+      "const": "ANNUITY",
+      "description": "Annuities"
+    },
+    {
+      "const": "HEALTH",
+      "description": "Medical, dental, vision"
+    },
+    {
+      "const": "ACCIDENT_HEALTH",
+      "description": "Disability, accident, long-term care, supplemental"
+    }
+  ]
+}

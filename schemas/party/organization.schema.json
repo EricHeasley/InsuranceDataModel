@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/organization.schema.json",
+  "title": "organization",
+  "description": "A legal entity or other organized group.",
+  "x-primaryKey": ["party_id"],
+  "x-subtypeOf": "party",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "legal_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "dba_name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255,
+      "description": "Doing-business-as name."
+    },
+    "organization_type": {
+      "$ref": "enums/organization_type.schema.json"
+    },
+    "naics_code_value_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Primary NAICS industry code.",
+      "x-references": "code_value.code_value_id"
+    },
+    "formation_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "formation_jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "annual_revenue_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "employee_count": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "website_url": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 500
+    }
+  },
+  "required": ["party_id", "legal_name"],
+  "unevaluatedProperties": false
+}

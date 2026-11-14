@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/party_relationship_type.schema.json",
+  "title": "party_relationship_type",
+  "description": "Relationship of from-party to to-party.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "SPOUSE"
+    },
+    {
+      "const": "DOMESTIC_PARTNER"
+    },
+    {
+      "const": "CHILD"
+    },
+    {
+      "const": "PARENT"
+    },
+    {
+      "const": "DEPENDENT"
+    },
+    {
+      "const": "HOUSEHOLD_MEMBER"
+    },
+    {
+      "const": "EMPLOYEE",
+      "description": "From-party is employed by to-party"
+    },
+    {
+      "const": "OWNER",
+      "description": "From-party owns to-party"
+    },
+    {
+      "const": "SUBSIDIARY",
+      "description": "From-party is a subsidiary of to-party"
+    },
+    {
+      "const": "TRUSTEE"
+    },
+    {
+      "const": "GUARDIAN"
+    },
+    {
+      "const": "POWER_OF_ATTORNEY"
+    },
+    {
+      "const": "ATTORNEY",
+      "description": "From-party legally represents to-party"
+    },
+    {
+      "const": "CONTACT",
+      "description": "From-party is a contact person for to-party"
+    },
+    {
+      "const": "OTHER"
+    }
+  ]
+}

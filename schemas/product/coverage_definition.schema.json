@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/coverage_definition.schema.json",
+  "title": "coverage_definition",
+  "description": "A coverage, benefit or rider a product can provide, e.g. Bodily Injury Liability, Dwelling (Coverage A), Employers Liability, Waiver of Premium rider, Guaranteed Lifetime Withdrawal Benefit.",
+  "x-primaryKey": ["coverage_definition_id"],
+  "x-unique": [
+    ["product_id", "coverage_code"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "coverage_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "product_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "product.product_id"
+    },
+    "coverage_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "coverage_category": {
+      "$ref": "enums/coverage_category.schema.json"
+    },
+    "line_of_business_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "Sub-line within a package product.",
+      "x-references": "line_of_business.line_of_business_code"
+    },
+    "asl_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "description": "Default statutory line for premium and loss.",
+      "x-references": "annual_statement_line.asl_code"
+    },
+    "applies_to_object_type": {
+      "$ref": "../policy/enums/insurable_object_type.schema.json",
+      "description": "Kind of risk this coverage attaches to; null for policy-level coverages."
+    },
+    "is_mandatory": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_rider": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "parent_coverage_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Base coverage this sub-coverage or rider depends on.",
+      "x-references": "coverage_definition.coverage_definition_id"
+    }
+  },
+  "required": [
+    "coverage_definition_id",
+    "product_id",
+    "coverage_code",
+    "name",
+    "coverage_category",
+    "is_mandatory"
+  ],
+  "unevaluatedProperties": false
+}

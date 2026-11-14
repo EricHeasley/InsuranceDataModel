@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/common/types.schema.json",
+  "title": "Logical data types",
+  "description": "Logical types shared by every entity. x-postgres gives the PostgreSQL column type.",
+  "$defs": {
+    "uuid": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Universally unique identifier.",
+      "x-postgres": "uuid"
+    },
+    "string": {
+      "type": "string",
+      "description": "Short text; maxLength may be given on the attribute (default 255).",
+      "x-postgres": "varchar"
+    },
+    "text": {
+      "type": "string",
+      "description": "Unbounded text.",
+      "x-postgres": "text"
+    },
+    "integer": {
+      "type": "integer",
+      "description": "Whole number.",
+      "x-postgres": "integer"
+    },
+    "decimal": {
+      "type": "number",
+      "description": "General-purpose exact number (18,6).",
+      "x-postgres": "numeric(18,6)"
+    },
+    "money": {
+      "type": "number",
+      "description": "Monetary amount (18,2), signed.",
+      "x-postgres": "numeric(18,2)"
+    },
+    "percent": {
+      "type": "number",
+      "description": "Percentage points (9,4).",
+      "x-postgres": "numeric(9,4)"
+    },
+    "rate": {
+      "type": "number",
+      "description": "Multiplier or per-unit rate (18,8).",
+      "x-postgres": "numeric(18,8)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Calendar date.",
+      "x-postgres": "date"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC instant.",
+      "x-postgres": "timestamptz"
+    },
+    "boolean": {
+      "type": "boolean",
+      "description": "True/false.",
+      "x-postgres": "boolean"
+    },
+    "json": {
+      "description": "Structured extension data.",
+      "x-postgres": "jsonb"
+    }
+  }
+}

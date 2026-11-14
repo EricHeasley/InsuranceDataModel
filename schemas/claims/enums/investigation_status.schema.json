@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/investigation_status.schema.json",
+  "title": "investigation_status",
+  "description": "Status of a special investigation.",
+  "type": "string",
+  "enum": [
+    "REFERRED",
+    "ACCEPTED",
+    "IN_PROGRESS",
+    "CLOSED_FRAUD_CONFIRMED",
+    "CLOSED_NO_FRAUD",
+    "CLOSED_INCONCLUSIVE",
+    "DECLINED"
+  ]
+}

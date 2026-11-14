@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/disbursement_type.schema.json",
+  "title": "disbursement_type",
+  "description": "Purpose of an outgoing payment.",
+  "type": "string",
+  "enum": [
+    "CLAIM_PAYMENT",
+    "PREMIUM_REFUND",
+    "COMMISSION",
+    "ANNUITY_PAYOUT",
+    "CONTRACT_WITHDRAWAL",
+    "LOAN_PROCEEDS",
+    "DIVIDEND",
+    "PROVIDER_REMITTANCE",
+    "REINSURANCE_SETTLEMENT",
+    "VENDOR_PAYMENT",
+    "ESCHEATMENT"
+  ]
+}

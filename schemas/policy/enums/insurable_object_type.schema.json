@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/enums/insurable_object_type.schema.json",
+  "title": "insurable_object_type",
+  "description": "Kind of thing or exposure that can be insured.",
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "VEHICLE"
+    },
+    {
+      "const": "STRUCTURE",
+      "description": "Dwelling or commercial building"
+    },
+    {
+      "const": "PERSON",
+      "description": "A life or health risk"
+    },
+    {
+      "const": "BUSINESS_OPERATION",
+      "description": "Business operations at a location (liability, workers' comp, cyber, professional)"
+    },
+    {
+      "const": "SCHEDULED_ITEM",
+      "description": "Scheduled personal or business property, equipment, cargo"
+    },
+    {
+      "const": "WATERCRAFT"
+    },
+    {
+      "const": "AIRCRAFT"
+    },
+    {
+      "const": "ANIMAL",
+      "description": "Pet or livestock"
+    },
+    {
+      "const": "BOND_OBLIGATION",
+      "description": "Surety or fidelity obligation"
+    },
+    {
+      "const": "OTHER"
+    }
+  ]
+}

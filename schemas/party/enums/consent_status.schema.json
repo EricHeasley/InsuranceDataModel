@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/consent_status.schema.json",
+  "title": "consent_status",
+  "description": "State of a consent.",
+  "type": "string",
+  "enum": ["GRANTED", "DENIED", "REVOKED", "EXPIRED"]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/beneficiary_designation.schema.json",
+  "title": "beneficiary_designation",
+  "description": "Designation of a party to receive proceeds of a policy or a specific coverage.",
+  "x-primaryKey": ["beneficiary_designation_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "beneficiary_designation_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "policy_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Null when the designation covers the whole policy.",
+      "x-references": "policy_coverage.policy_coverage_id"
+    },
+    "party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "beneficiary_class": {
+      "$ref": "enums/beneficiary_class.schema.json"
+    },
+    "share_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "relationship_to_insured": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "is_irrevocable": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_per_stirpes": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "designation_document_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "document.document_id"
+    }
+  },
+  "required": [
+    "beneficiary_designation_id",
+    "policy_id",
+    "party_id",
+    "beneficiary_class",
+    "share_percent",
+    "is_irrevocable",
+    "effective_date"
+  ],
+  "unevaluatedProperties": false
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/billing/enums/billing_frequency.schema.json",
+  "title": "billing_frequency",
+  "description": "Installment frequency.",
+  "type": "string",
+  "enum": ["FULL_PAY", "SEMI_ANNUAL", "QUARTERLY", "MONTHLY", "BIWEEKLY", "WEEKLY", "PER_PAYROLL"]
+}

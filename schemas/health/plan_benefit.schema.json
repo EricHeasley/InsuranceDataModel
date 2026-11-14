@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/plan_benefit.schema.json",
+  "title": "plan_benefit",
+  "description": "Cost sharing and limits for a category of service under a plan and network tier.",
+  "x-primaryKey": ["plan_benefit_id"],
+  "x-unique": [
+    ["health_plan_id", "benefit_code", "network_tier"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "plan_benefit_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "health_plan_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "health_plan.health_plan_id"
+    },
+    "benefit_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "Service category, e.g. PCP_VISIT, SPECIALIST, ER, INPATIENT, RX_TIER_1, PREVENTIVE_DENTAL."
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "network_tier": {
+      "$ref": "enums/network_tier.schema.json"
+    },
+    "is_covered": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "copay_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "coinsurance_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent",
+      "description": "Member share."
+    },
+    "deductible_applies": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "limit_quantity": {
+      "$ref": "../common/types.schema.json#/$defs/decimal"
+    },
+    "limit_unit": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "VISITS, DAYS, DOLLARS, UNITS."
+    },
+    "limit_period": {
+      "$ref": "../product/enums/coverage_term_basis.schema.json"
+    },
+    "requires_prior_authorization": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "requires_referral": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "waiting_period_days": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    }
+  },
+  "required": [
+    "plan_benefit_id",
+    "health_plan_id",
+    "benefit_code",
+    "name",
+    "network_tier",
+    "is_covered"
+  ],
+  "unevaluatedProperties": false
+}

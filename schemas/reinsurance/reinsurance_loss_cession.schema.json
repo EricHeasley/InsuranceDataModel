@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reinsurance/reinsurance_loss_cession.schema.json",
+  "title": "reinsurance_loss_cession",
+  "description": "Loss and expense ceded to (or assumed under) a layer, traceable to the claim ledger where computed per claim.",
+  "x-primaryKey": ["reinsurance_loss_cession_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "reinsurance_loss_cession_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "reinsurance_layer_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "reinsurance_layer.reinsurance_layer_id"
+    },
+    "claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim.claim_id"
+    },
+    "claim_financial_transaction_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim_financial_transaction.claim_financial_transaction_id"
+    },
+    "catastrophe_event_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Event for occurrence-level cessions.",
+      "x-references": "catastrophe_event.catastrophe_event_id"
+    },
+    "loss_cession_type": {
+      "$ref": "enums/loss_cession_type.schema.json"
+    },
+    "claim_cost_category": {
+      "$ref": "../claims/enums/claim_cost_category.schema.json"
+    },
+    "ceded_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "accounting_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "reinsurance_statement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "reinsurance_statement.reinsurance_statement_id"
+    }
+  },
+  "required": [
+    "reinsurance_loss_cession_id",
+    "reinsurance_layer_id",
+    "loss_cession_type",
+    "claim_cost_category",
+    "ceded_amount",
+    "accounting_date"
+  ],
+  "unevaluatedProperties": false
+}

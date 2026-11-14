@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_term.schema.json",
+  "title": "policy_term",
+  "description": "A contiguous period of coverage under a policy, typically 6 or 12 months for P&C and plan-year for health. Continuous contracts (life, annuity) have a single open-ended term.",
+  "x-primaryKey": ["policy_term_id"],
+  "x-unique": [
+    ["policy_id", "term_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_term_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "term_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "1 for the first term, incremented at each renewal."
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "expiration_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Null for continuous contracts."
+    },
+    "policy_term_status": {
+      "$ref": "enums/policy_term_status.schema.json"
+    },
+    "cancellation_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "cancellation_reason": {
+      "$ref": "enums/cancellation_reason.schema.json"
+    },
+    "cancellation_method": {
+      "$ref": "enums/cancellation_method.schema.json"
+    },
+    "product_filing_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Rate filing edition the term is rated under.",
+      "x-references": "product_filing.product_filing_id"
+    },
+    "is_auditable": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "True when premium is subject to audit of actual exposure."
+    }
+  },
+  "required": ["policy_term_id", "policy_id", "term_number", "effective_date", "policy_term_status"],
+  "unevaluatedProperties": false
+}

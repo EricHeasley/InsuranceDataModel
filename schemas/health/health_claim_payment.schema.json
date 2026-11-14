@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/health_claim_payment.schema.json",
+  "title": "health_claim_payment",
+  "description": "Portion of a disbursement (remittance) that pays a health claim.",
+  "x-primaryKey": ["health_claim_payment_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "health_claim_payment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "health_claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "health_claim.health_claim_id"
+    },
+    "disbursement_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "disbursement.disbursement_id"
+    },
+    "amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "interest_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Prompt-pay interest."
+    },
+    "is_paid_to_member": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    }
+  },
+  "required": ["health_claim_payment_id", "health_claim_id", "disbursement_id", "amount"],
+  "unevaluatedProperties": false
+}

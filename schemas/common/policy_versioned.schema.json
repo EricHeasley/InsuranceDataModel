@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/common/policy_versioned.schema.json",
+  "title": "policy_versioned",
+  "description": "Transaction-based versioning for entities that make up the contents of a policy.",
+  "type": "object",
+  "properties": {
+    "effective_date": {
+      "$ref": "types.schema.json#/$defs/date",
+      "description": "First business date this row applies."
+    },
+    "expiration_date": {
+      "$ref": "types.schema.json#/$defs/date",
+      "description": "Business date this row stops applying (exclusive); null while open-ended."
+    },
+    "added_by_transaction_id": {
+      "$ref": "types.schema.json#/$defs/uuid",
+      "description": "Policy transaction that introduced this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
+    },
+    "removed_by_transaction_id": {
+      "$ref": "types.schema.json#/$defs/uuid",
+      "description": "Policy transaction that removed or superseded this row.",
+      "x-references": "policy_transaction.policy_transaction_id"
+    }
+  },
+  "required": ["effective_date", "added_by_transaction_id"]
+}

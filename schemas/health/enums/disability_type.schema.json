@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enums/disability_type.schema.json",
+  "title": "disability_type",
+  "description": "Kind of disability claim.",
+  "type": "string",
+  "enum": ["SHORT_TERM", "LONG_TERM", "WAIVER_OF_PREMIUM", "LONG_TERM_CARE", "PAID_FAMILY_LEAVE"]
+}

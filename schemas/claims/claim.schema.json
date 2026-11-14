@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim.schema.json",
+  "title": "claim",
+  "description": "A demand for benefits arising from one loss occurrence under one policy. Supertype for line-specific claim detail.",
+  "x-primaryKey": ["claim_id"],
+  "x-unique": [
+    ["claim_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "claim_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Null only while coverage is unverified at first notice.",
+      "x-references": "policy.policy_id"
+    },
+    "policy_term_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Term in force on the loss date (or report date for claims-made).",
+      "x-references": "policy_term.policy_term_id"
+    },
+    "line_of_business_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "x-references": "line_of_business.line_of_business_code"
+    },
+    "claim_status": {
+      "$ref": "enums/claim_status.schema.json"
+    },
+    "loss_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp",
+      "description": "Date and time of loss."
+    },
+    "loss_date_is_estimated": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "reported_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp",
+      "description": "When the insurer first received notice."
+    },
+    "claims_made_date": {
+      "$ref": "../common/types.schema.json#/$defs/date",
+      "description": "Date the claim was first made against the insured (claims-made coverage)."
+    },
+    "fnol_channel": {
+      "$ref": "enums/fnol_channel.schema.json"
+    },
+    "cause_of_loss_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "x-references": "cause_of_loss.cause_of_loss_code"
+    },
+    "loss_description": {
+      "$ref": "../common/types.schema.json#/$defs/text"
+    },
+    "loss_address_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "address.address_id"
+    },
+    "loss_jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "description": "State where the loss occurred.",
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "catastrophe_event_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "catastrophe_event.catastrophe_event_id"
+    },
+    "coverage_verification_status": {
+      "$ref": "enums/coverage_verification_status.schema.json"
+    },
+    "insured_fault_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "police_report_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50
+    },
+    "is_in_litigation": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "is_large_loss": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "handling_office_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30
+    },
+    "third_party_administrator_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "party.party_id"
+    },
+    "closed_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    },
+    "reopened_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    }
+  },
+  "required": ["claim_id", "claim_number", "claim_status", "loss_at", "reported_at"],
+  "unevaluatedProperties": false
+}

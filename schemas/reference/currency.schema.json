@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/reference/currency.schema.json",
+  "title": "currency",
+  "description": "ISO 4217 currency.",
+  "x-primaryKey": ["currency_code"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "currency_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 3,
+      "description": "ISO 4217 alphabetic code."
+    },
+    "name": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 255
+    },
+    "minor_units": {
+      "$ref": "../common/types.schema.json#/$defs/integer",
+      "description": "Number of decimal places."
+    }
+  },
+  "required": ["currency_code", "name", "minor_units"],
+  "unevaluatedProperties": false
+}

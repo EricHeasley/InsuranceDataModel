@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/claim_exposure.schema.json",
+  "title": "claim_exposure",
+  "description": "One claimant's claim under one coverage (also called a feature or sub-claim). The level at which reserves are set, payments are made and losses are reported by coverage and statutory line.",
+  "x-primaryKey": ["claim_exposure_id"],
+  "x-unique": [
+    ["claim_id", "exposure_number"]
+  ],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "claim_exposure_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "claim_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim.claim_id"
+    },
+    "exposure_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "claimant_claim_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim_party.claim_party_id"
+    },
+    "policy_coverage_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy_coverage.policy_coverage_id"
+    },
+    "coverage_definition_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "coverage_definition.coverage_definition_id"
+    },
+    "claim_incident_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "claim_incident.claim_incident_id"
+    },
+    "exposure_status": {
+      "$ref": "enums/claim_status.schema.json"
+    },
+    "jurisdiction_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 6,
+      "description": "State the loss is reported in for statutory purposes.",
+      "x-references": "jurisdiction.jurisdiction_code"
+    },
+    "asl_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 10,
+      "x-references": "annual_statement_line.asl_code"
+    },
+    "is_first_party": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "deductible_applied_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "denial_reason": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 200
+    },
+    "opened_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    },
+    "closed_at": {
+      "$ref": "../common/types.schema.json#/$defs/timestamp"
+    }
+  },
+  "required": [
+    "claim_exposure_id",
+    "claim_id",
+    "exposure_number",
+    "claimant_claim_party_id",
+    "coverage_definition_id",
+    "exposure_status",
+    "opened_at"
+  ],
+  "unevaluatedProperties": false
+}

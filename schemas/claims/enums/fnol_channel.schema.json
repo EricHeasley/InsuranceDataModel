@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/claims/enums/fnol_channel.schema.json",
+  "title": "fnol_channel",
+  "description": "How first notice of loss was received.",
+  "type": "string",
+  "enum": [
+    "PHONE",
+    "WEB",
+    "MOBILE_APP",
+    "AGENT",
+    "EMAIL",
+    "MAIL",
+    "TELEMATICS",
+    "EDI",
+    "THIRD_PARTY_ADMINISTRATOR"
+  ]
+}

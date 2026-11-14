@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/scheduled_item.schema.json",
+  "title": "scheduled_item",
+  "description": "An individually described item of property: jewelry, fine art, a musical instrument, contractor's equipment, a cargo shipment.",
+  "x-primaryKey": ["insurable_object_id"],
+  "x-subtypeOf": "insurable_object",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "insurable_object_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "insurable_object.insurable_object_id"
+    },
+    "item_category": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 50,
+      "description": "JEWELRY, FINE_ART, FURS, CAMERAS, MUSICAL_INSTRUMENT, CONTRACTORS_EQUIPMENT, EDP, CARGO, ..."
+    },
+    "manufacturer": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100
+    },
+    "serial_number": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 100
+    },
+    "appraised_value_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "appraisal_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "appraisal_document_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "document.document_id"
+    }
+  },
+  "required": ["insurable_object_id", "item_category"],
+  "unevaluatedProperties": false
+}

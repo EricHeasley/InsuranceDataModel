@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/party/enums/consent_type.schema.json",
+  "title": "consent_type",
+  "description": "Subject of a consent or preference.",
+  "type": "string",
+  "enum": [
+    "ELECTRONIC_DELIVERY",
+    "MARKETING",
+    "TELEMATICS",
+    "CREDIT_SCORE",
+    "HIPAA_AUTHORIZATION",
+    "DATA_SHARING",
+    "CALL_RECORDING",
+    "AUTO_DIALER_TCPA"
+  ]
+}

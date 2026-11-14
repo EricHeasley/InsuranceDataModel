@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/pc_personal/enums/residence_type.schema.json",
+  "title": "residence_type",
+  "description": "Kind of residence.",
+  "type": "string",
+  "enum": [
+    "SINGLE_FAMILY",
+    "TWO_TO_FOUR_FAMILY",
+    "CONDO_UNIT",
+    "TOWNHOUSE",
+    "APARTMENT",
+    "MOBILE_HOME"
+  ]
+}

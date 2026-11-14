@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/enums/payout_option.schema.json",
+  "title": "payout_option",
+  "description": "Form of annuity or settlement payout.",
+  "type": "string",
+  "enum": [
+    "LIFE_ONLY",
+    "LIFE_WITH_PERIOD_CERTAIN",
+    "PERIOD_CERTAIN",
+    "JOINT_AND_SURVIVOR",
+    "LIFE_WITH_CASH_REFUND",
+    "LIFE_WITH_INSTALLMENT_REFUND",
+    "LUMP_SUM",
+    "INTEREST_ONLY",
+    "FIXED_AMOUNT"
+  ]
+}

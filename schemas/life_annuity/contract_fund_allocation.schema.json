@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/contract_fund_allocation.schema.json",
+  "title": "contract_fund_allocation",
+  "description": "Standing instruction for how premiums, charges or rebalancing are allocated across funds in a contract.",
+  "x-primaryKey": ["contract_fund_allocation_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "contract_fund_allocation_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "investment_fund_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "investment_fund.investment_fund_id"
+    },
+    "allocation_purpose": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "description": "PREMIUM, CHARGE_DEDUCTION, REBALANCE_TARGET."
+    },
+    "allocation_percent": {
+      "$ref": "../common/types.schema.json#/$defs/percent"
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    }
+  },
+  "required": [
+    "contract_fund_allocation_id",
+    "policy_id",
+    "investment_fund_id",
+    "allocation_purpose",
+    "allocation_percent",
+    "effective_date"
+  ],
+  "unevaluatedProperties": false
+}

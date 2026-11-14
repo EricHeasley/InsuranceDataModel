@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/life_annuity/underwriting_case.schema.json",
+  "title": "underwriting_case",
+  "description": "Medical and financial underwriting of one proposed insured for a life, disability or long-term care application.",
+  "x-primaryKey": ["underwriting_case_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "underwriting_case_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "submission_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "submission.submission_id"
+    },
+    "insured_party_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "person.party_id"
+    },
+    "underwriting_case_status": {
+      "$ref": "enums/underwriting_case_status.schema.json"
+    },
+    "requested_face_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "is_accelerated_underwriting": {
+      "$ref": "../common/types.schema.json#/$defs/boolean",
+      "description": "Decided without fluids/exam using data and models."
+    },
+    "underwriter_staff_member_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "staff_member.staff_member_id"
+    },
+    "height_inches": {
+      "$ref": "../common/types.schema.json#/$defs/decimal",
+      "x-sensitivity": "PHI"
+    },
+    "weight_pounds": {
+      "$ref": "../common/types.schema.json#/$defs/decimal",
+      "x-sensitivity": "PHI"
+    },
+    "annual_income_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "x-sensitivity": "SPI"
+    },
+    "net_worth_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "x-sensitivity": "SPI"
+    },
+    "total_inforce_and_applied_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "Coverage in force and applied for with all carriers."
+    },
+    "approved_underwriting_class": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 30,
+      "x-sensitivity": "PHI"
+    },
+    "approved_table_rating": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 5,
+      "x-sensitivity": "PHI"
+    },
+    "underwriting_decision_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "underwriting_decision.underwriting_decision_id"
+    },
+    "reinsurance_contract_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "description": "Facultative reinsurer consulted, if any.",
+      "x-references": "reinsurance_contract.reinsurance_contract_id"
+    }
+  },
+  "required": ["underwriting_case_id", "submission_id", "insured_party_id", "underwriting_case_status"],
+  "unevaluatedProperties": false
+}

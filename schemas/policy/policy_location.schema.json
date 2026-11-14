@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/policy/policy_location.schema.json",
+  "title": "policy_location",
+  "description": "A premises or location scheduled on a policy.",
+  "x-primaryKey": ["policy_location_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    },
+    {
+      "$ref": "../common/policy_versioned.schema.json"
+    }
+  ],
+  "properties": {
+    "policy_location_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "policy_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "policy.policy_id"
+    },
+    "location_number": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "address_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "address.address_id"
+    },
+    "is_primary": {
+      "$ref": "../common/types.schema.json#/$defs/boolean"
+    },
+    "territory_code": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20,
+      "description": "Rating territory."
+    },
+    "description": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 500
+    }
+  },
+  "required": ["policy_location_id", "policy_id", "location_number", "address_id"],
+  "unevaluatedProperties": false
+}

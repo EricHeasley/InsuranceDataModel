@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/health/enrollment_rate.schema.json",
+  "title": "enrollment_rate",
+  "description": "Premium rate for an enrollment over a period, with its split between employer, member and subsidy.",
+  "x-primaryKey": ["enrollment_rate_id"],
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "../common/audit.schema.json"
+    }
+  ],
+  "properties": {
+    "enrollment_rate_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid"
+    },
+    "enrollment_id": {
+      "$ref": "../common/types.schema.json#/$defs/uuid",
+      "x-references": "enrollment.enrollment_id"
+    },
+    "effective_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "end_date": {
+      "$ref": "../common/types.schema.json#/$defs/date"
+    },
+    "monthly_premium_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "employer_contribution_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "member_contribution_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    },
+    "advance_premium_tax_credit_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money",
+      "description": "ACA APTC subsidy."
+    },
+    "rating_area": {
+      "$ref": "../common/types.schema.json#/$defs/string",
+      "maxLength": 20
+    },
+    "rated_age": {
+      "$ref": "../common/types.schema.json#/$defs/integer"
+    },
+    "tobacco_surcharge_amount": {
+      "$ref": "../common/types.schema.json#/$defs/money"
+    }
+  },
+  "required": ["enrollment_rate_id", "enrollment_id", "effective_date", "monthly_premium_amount"],
+  "unevaluatedProperties": false
+}

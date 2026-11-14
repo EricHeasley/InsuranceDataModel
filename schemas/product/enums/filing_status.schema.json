@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/EricHeasley/InsuranceDataModel/schemas/product/enums/filing_status.schema.json",
+  "title": "filing_status",
+  "description": "Disposition of a regulatory filing.",
+  "type": "string",
+  "enum": ["DRAFT", "SUBMITTED", "APPROVED", "ACKNOWLEDGED", "DISAPPROVED", "WITHDRAWN"]
+}
